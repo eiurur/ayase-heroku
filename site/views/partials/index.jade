@@ -1,0 +1,46 @@
+.row
+  .col-md-6
+    h3
+      イベント件数({{(events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件)
+
+  .col-md-6.search-form
+    form.form-horizontal(role='form')
+      .form-group
+        label.col-sm-2.control-label 開催日
+        .col-sm-10
+          select.form-control(ng-model='selectedTerm', ng-options='term.label for term in terms')
+      .form-group
+        label.col-sm-2.control-label ツイート数
+        .col-sm-10
+          select.form-control(ng-model='selectedTweetNum', ng-options='tweetNum.label for tweetNum in tweetsNum')
+      .form-group
+        label.col-sm-2.control-label(for='inputPassword') 検索
+        .col-sm-10
+          .form-search.search-only
+                i.search-icon.glyphicon.glyphicon-search
+                input.form-control(type="text", ng-model="searchWord")
+                //- input.form-control.search-query(type="text", ng-model="searchWord")
+
+
+  div(ng-repeat='event in events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
+    .col-md-6
+      .jumbotron
+        .jumbotron-contents.jumbotron-bg
+          h3
+            a(href="/detail/{{event.eventId}}")
+             | {{event.title}}
+          p
+            p.lead.sub-text
+              span.line 開催時刻： {{event.startedAt}} ~ {{event.endedAt}}
+              span.line.hast-tag # {{event.hashTag}}
+          p
+            a(slide-toggle="#i{{$index}}")
+              i.fa.fa-angle-down.fa-3x.detail-arrow
+            .slideable(id="i{{$index}}")
+              base(target='_blank')
+              span(ng-bind-html="event.description")
+              a(slide-toggle="#i{{$index}}")
+                i.fa.fa-angle-up.fa-3x.detail-arrow
+          span.tweet-number
+            | {{event.tweetNum}}
+

@@ -1,0 +1,41 @@
+div#page-content-wrapper
+  base(target="_blank")
+  div.content-header
+    h3
+      a(href="{{events[0].eventUrl}}") {{events[0].title}}
+      ul.share-buttons.pull-right
+        li
+          a(href='https://www.facebook.com/sharer/sharer.php?u={{absUrl}}', target='_blank')
+            i.fa.fa-facebook-square.fa-2x
+        li
+          a(href='https://twitter.com/intent/tweet?hashtags={{events[0].hashTag}}&url={{absUrl}}&text={{events[0].title}}', target='_blank', title='Tweet')
+            i.fa.fa-twitter-square.fa-2x
+        li
+          a(href='https://plus.google.com/share?url={{absUrl}}', target='_blank', title='Share on Google+')
+            i.fa.fa-google-plus-square.fa-2x
+    p
+      .sub-text
+        開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
+        span.hast-tag ハッシュタグ: # {{events[0].hashTag}}
+  div.page-content.inset
+    div.row
+      div.col-md-12.panel-padding-bottom
+        .panel.panel-primary
+          .panel-heading
+            .panel-title Tweets: {{tweets.length}}
+              span
+                i.fa.fa-arrow-down.fa-2x.pull-right(ng-show="!reverse", ng-click="reverse = !reverse")
+                i.fa.fa-arrow-up.fa-2x.pull-right(ng-show="reverse", ng-click="reverse = !reverse")
+          ul.list-group.panel-scroll-bar-tweet
+            li.list-group-item(ng-repeat='tweet in tweets | orderBy:"tweetId":reverse')
+              .media
+                a.pull-left(href="https://www.twitter.com/{{tweet.screenName}}/")
+                  img.media-object.img-rounded.thumnail-icon.fade(img-preload, ng-src="{{tweet.profileImageUrl}}", alt="{{tweet.screenName}}")
+                .media-body
+                  h4.user-data.media-heading.username {{tweet.userName}}
+                    span
+                      　@{{tweet.screenName}}
+                    span.pull-right
+                      a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/", target="_blank")
+                        {{tweet.createdAt}}
+                  span(ng-bind-html="tweet.text")
