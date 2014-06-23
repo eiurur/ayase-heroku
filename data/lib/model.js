@@ -3,7 +3,9 @@
 
   mongoose = require('mongoose');
 
-  db = mongoose.connect('mongodb://127.0.0.1/Ayase');
+  uri = process.env.MONGOHQ_URL || 'mongodb://127.0.0.1/Ayase';
+
+  db = mongoose.connect(uri);
 
   Schema = mongoose.Schema;
 
