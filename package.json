@@ -1,0 +1,29 @@
+{
+  "name": "Ayase",
+  "version": "0.0.0",
+  "description": "This example app is so cool.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eiurur/ayase-heroku.git"
+  },
+  "keywords": [
+    "heroku"
+  ],
+  "author": "eiurur",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eiurur/ayase-heroku/issues"
+  },
+  "homepage": "https://github.com/eiurur/ayase-heroku",
+  "dependencies": {
+    "logfmt": "^1.1.2",
+    "express": "~3.2.6"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
