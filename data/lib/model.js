@@ -1,5 +1,5 @@
 (function() {
-  var Event, EventProvider, EventSchema, ObjectId, Schema, SeriesSchema, Tweet, TweetProvider, TweetSchema, db, mongoose;
+  var Event, EventProvider, EventSchema, ObjectId, Schema, SeriesSchema, Tweet, TweetProvider, TweetSchema, db, mongoose, uri;
 
   mongoose = require('mongoose');
 

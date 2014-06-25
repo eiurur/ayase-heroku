@@ -9,8 +9,6 @@
 
   aggregate = require('./aggregate');
 
-  s = require('./settings');
-
   my = require('./my');
 
   EventProvider = require('./model').EventProvider;
@@ -18,6 +16,8 @@
   hashTags = void 0;
 
   eventStartAndEndTime = void 0;
+
+  s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.getTweetFromTwitter = function() {
     var assingHasTags, getTweet;

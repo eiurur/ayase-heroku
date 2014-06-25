@@ -1,19 +1,18 @@
 exports.serve = function() {
+
   /**
    * Module dependencies
    */
-
   var express = require('express')
     , routes  = require('./routes')
     , api     = require('./routes/api')
     , http    = require('http')
     , path    = require('path')
     , util    = require('util')
+    , app     = module.exports = express()
+    , server  = http.createServer(app)
+    , io      = require('socket.io').listen(server)
     ;
-
-  var app = module.exports = express();
-  var server = http.createServer(app);
-  var io = require('socket.io').listen(server);
 
   io.set('log level', 1);
 

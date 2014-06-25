@@ -1,9 +1,12 @@
 _             = require 'underscore-node'
 moment        = require 'moment'
 request       = require 'request'
-s             = require './settings'
 my            = require './my'
 EventProvider = require('./model').EventProvider
+s             = if process.env.NODE_ENV is "production"
+  require("./production")
+else
+  require("./development")
 
 exports.save = (json) ->
 

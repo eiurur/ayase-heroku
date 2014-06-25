@@ -1,3 +1,7 @@
 node_modules
 bower_components
 www
+settings.js
+settings.coffee
+development.coffee
+development.js

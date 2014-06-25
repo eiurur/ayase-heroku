@@ -7,11 +7,11 @@
 
   request = require('request');
 
-  s = require('./settings');
-
   my = require('./my');
 
   EventProvider = require('./model').EventProvider;
+
+  s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.save = function(json) {
     var startedDate;

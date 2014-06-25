@@ -7,8 +7,6 @@
 
   request = require('request');
 
-  s = require('./settings');
-
   my = require('./my');
 
   connpass = require('./save-connpass');
@@ -18,6 +16,8 @@
   connpassGetLimitNum = 100;
 
   connpassOrderStarted = 2;
+
+  s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.getEventFromConnpass = function() {
     async.waterfall([

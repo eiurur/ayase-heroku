@@ -2,12 +2,14 @@ _                    = require 'underscore-node'
 moment               = require 'moment'
 request              = require 'request'
 aggregate            = require './aggregate'
-s                    = require './settings'
 my                   = require './my'
 EventProvider        = require('./model').EventProvider
 hashTags             = undefined
 eventStartAndEndTime = undefined
-
+s                    = if process.env.NODE_ENV is "production"
+  require("./production")
+else
+  require("./development")
 
 exports.getTweetFromTwitter = ->
 

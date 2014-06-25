@@ -1,11 +1,14 @@
 _             = require 'underscore-node'
 moment        = require 'moment'
 exception     = require './exception'
-s             = require './settings'
 my            = require './my'
 model         = require './model'
 EventProvider = model.EventProvider
 TweetProvider = model.TweetProvider
+s             = if process.env.NODE_ENV is "production"
+  require("./production")
+else
+  require("./development")
 
 ## TODO
 ## 疑問な命名

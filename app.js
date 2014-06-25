@@ -21,7 +21,7 @@
 
   serve = require('./site/app').serve;
 
-  graceTimeConnpass = 1000 * 1;
+  graceTimeConnpass = 1000 * 10;
 
   graceTimeTwitter = 1000 * 1;
 

@@ -8,8 +8,6 @@
 
   exception = require('./exception');
 
-  s = require('./settings');
-
   my = require('./my');
 
   model = require('./model');
@@ -17,6 +15,8 @@
   EventProvider = model.EventProvider;
 
   TweetProvider = model.TweetProvider;
+
+  s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   Tweet = (function() {
     function Tweet(data, eventStartAndEndTime) {

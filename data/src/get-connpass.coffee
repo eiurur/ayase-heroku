@@ -1,12 +1,15 @@
 _                    = require 'underscore-node'
 moment               = require 'moment'
 request              = require 'request'
-s                    = require './settings'
 my                   = require './my'
 connpass             = require './save-connpass'
 async                = require 'async'
 connpassGetLimitNum  = 100
 connpassOrderStarted = 2
+s                    = if process.env.NODE_ENV is "production"
+  require("./production")
+else
+  require("./development")
 
 exports.getEventFromConnpass = ->
 
