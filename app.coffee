@@ -3,19 +3,14 @@ moment               = require 'moment'
 request              = require 'request'
 cronJob              = require('cron').CronJob
 async                = require 'async'
-s                    = require './data/lib/settings'
 my                   = require './data/lib/my'
 getEventFromConnpass = require('./data/lib/get-connpass').getEventFromConnpass
 getTweetFromTwitter  = require('./data/lib/get-twitter').getTweetFromTwitter
 serve                = require('./site/app').serve
-
-# 猶予時間としてはこれくらいあれば十分(106件なら問題なく保存できた。)
-# graceTimeConnpass = 1000 * 10
-graceTimeConnpass = 1000 * 1
-
-# これらは必要ないかも
-graceTimeTwitter = 1000 * 1
-graceTimeServer  = 1000 * 1
+s                    = if process.env.NODE_ENV is "production"
+  require("./data/lib/production")
+else
+  require("./data/lib/development")
 
 
 ##
@@ -31,7 +26,7 @@ tasks4startUp = [
     # connpassからイベント情報を取得し、MongoDBへデータを格納
     my.c "■ Connpass task start"
     getEventFromConnpass null, "Got Event From Connpass"
-    setTimeout (-> callback(null, "Done! conpass\n")), graceTimeConnpass
+    setTimeout (-> callback(null, "Done! conpass\n")), s.GRACE_TIME_CONNPASS
     return
 
   , (callback) ->
@@ -39,7 +34,7 @@ tasks4startUp = [
     # 当日開催するイベントのツイートをStreaming APIで収集する処理の開始
     my.c "■ Twitter task start"
     getTweetFromTwitter null, "Getting Tweet"
-    setTimeout (-> callback(null, "Go! Twitter\n")), graceTimeTwitter
+    setTimeout (-> callback(null, "Go! Twitter\n")), s.GRACE_TIME_TWITTER
     return
 
   , (callback) ->
@@ -47,7 +42,7 @@ tasks4startUp = [
     # 閲覧用サーバーを起動
     my.c "■ Server task start"
     serve null, "Create Server"
-    setTimeout (-> callback(null, "Create! Server\n")), graceTimeServer
+    setTimeout (-> callback(null, "Create! Server\n")), s.GRACE_TIME_SERVER
     return
 
 ]
@@ -72,7 +67,7 @@ tasks4Cron = [
     # connpassからイベント情報を取得し、MongoDBへデータを格納
     my.c "■ Connpass task start"
     getEventFromConnpass null, "Got Event From Connpass"
-    setTimeout (-> callback(null, "Done! conpass\n")), graceTimeConnpass
+    setTimeout (-> callback(null, "Done! conpass\n")), s.GRACE_TIME_CONNPASS
     return
 
   , (callback) ->
@@ -80,7 +75,7 @@ tasks4Cron = [
     # 当日開催するイベントのツイートをStreaming APIで収集する処理の開始
     my.c "■ Twitter task start"
     getTweetFromTwitter null, "Getting Tweet"
-    setTimeout (-> callback(null, "Go! Twitter\n")), graceTimeTwitter
+    setTimeout (-> callback(null, "Go! Twitter\n")), s.GRACE_TIME_TWITTER
     return
 
 ]

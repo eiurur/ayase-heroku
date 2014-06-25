@@ -1,5 +1,5 @@
 (function() {
-  var async, cronJob, cronTime, getEventFromConnpass, getTweetFromTwitter, graceTimeConnpass, graceTimeServer, graceTimeTwitter, job, moment, my, request, s, serve, tasks4Cron, tasks4startUp, _;
+  var async, cronJob, cronTime, getEventFromConnpass, getTweetFromTwitter, job, moment, my, request, s, serve, tasks4Cron, tasks4startUp, _;
 
   _ = require('underscore-node');
 
@@ -11,8 +11,6 @@
 
   async = require('async');
 
-  s = require('./data/lib/settings');
-
   my = require('./data/lib/my');
 
   getEventFromConnpass = require('./data/lib/get-connpass').getEventFromConnpass;
@@ -21,11 +19,7 @@
 
   serve = require('./site/app').serve;
 
-  graceTimeConnpass = 1000 * 10;
-
-  graceTimeTwitter = 1000 * 1;
-
-  graceTimeServer = 1000 * 1;
+  s = process.env.NODE_ENV === "production" ? require("./data/lib/production") : require("./data/lib/development");
 
   tasks4startUp = [
     function(callback) {
@@ -33,19 +27,19 @@
       getEventFromConnpass(null, "Got Event From Connpass");
       setTimeout((function() {
         return callback(null, "Done! conpass\n");
-      }), graceTimeConnpass);
+      }), s.GRACE_TIME_CONNPASS);
     }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");
       setTimeout((function() {
         return callback(null, "Go! Twitter\n");
-      }), graceTimeTwitter);
+      }), s.GRACE_TIME_TWITTER);
     }, function(callback) {
       my.c("■ Server task start");
       serve(null, "Create Server");
       setTimeout((function() {
         return callback(null, "Create! Server\n");
-      }), graceTimeServer);
+      }), s.GRACE_TIME_SERVER);
     }
   ];
 
@@ -63,13 +57,13 @@
       getEventFromConnpass(null, "Got Event From Connpass");
       setTimeout((function() {
         return callback(null, "Done! conpass\n");
-      }), graceTimeConnpass);
+      }), s.GRACE_TIME_CONNPASS);
     }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");
       setTimeout((function() {
         return callback(null, "Go! Twitter\n");
-      }), graceTimeTwitter);
+      }), s.GRACE_TIME_TWITTER);
     }
   ];
 
