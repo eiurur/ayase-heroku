@@ -47,3 +47,6 @@ exports.twitter = new Twitter
 # イベント開始より一時間前、イベント終了から4時間後の間のツイートだけを収集する。
 exports.ALLOWED_HOURS = 4
 
+exports.GRACE_TIME_CONNPASS = 10 * 1000
+exports.GRACE_TIME_TWITTER = 1 * 1000
+exports.GRACE_TIME_SERVER = 1 * 1000
