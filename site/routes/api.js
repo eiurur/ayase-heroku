@@ -2,10 +2,10 @@ var dir           = '../../data/lib/'
   , moment        = require('moment')
   , _             = require('underscore-node')
   , async         = require('async')
-  , settings      = require(dir + 'settings')
   , my            = require(dir + 'my')
   , EventProvider = require(dir + 'model').EventProvider
   , TweetProvider = require(dir + 'model').TweetProvider
+  , settings      = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
   ;
 
 function tweetTrimer(t) {
