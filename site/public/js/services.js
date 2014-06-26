@@ -45,7 +45,7 @@ angular.module('myApp.services', [])
         , "num": 50
       },
       {
-          "label": "100以上"
+          "label": "100件以上"
         , "num": 100
       }
     ];

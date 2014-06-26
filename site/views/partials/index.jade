@@ -1,9 +1,6 @@
-.row
-  .col-md-6
-    h3
-      イベント件数({{(events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件)
-
+.row.main
   .col-md-6.search-form
+    .ex-title イベント件数: {{(events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件
     form.form-horizontal(role='form')
       .form-group
         label.col-sm-2.control-label 開催日
@@ -19,9 +16,24 @@
           .form-search.search-only
                 i.search-icon.glyphicon.glyphicon-search
                 input.form-control(type="text", ng-model="searchWord")
-                //- input.form-control.search-query(type="text", ng-model="searchWord")
 
+  .col-md-6.hidden-xs
+    .panel.panel-info
+      .panel-heading
+        h3.panel-title 本日開催予定のイベント
+      .panel-body
+        div(ng-repeat='eventOnTheDay in eventsOnTheDay')
+            .panel-heading
+              h4.panel-title
+              a.cursor-pointer(accordion="#event-list-{{$index}}")
+                | {{eventOnTheDay.title}}
+            .panel-collapse.slideable(id="event-list-{{$index}}")
+              .panel-body
+                base(target='_blank')
+                span(ng-bind-html="eventOnTheDay.description")
 
+.row.main
+  .col-md-12
   div(ng-repeat='event in events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
     .col-md-6
       .jumbotron
