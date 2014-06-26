@@ -19,6 +19,9 @@
       if (_.isUndefined(tweet.eventData)) {
         return;
       }
+      if (!tweet.isDomesticTweet()) {
+        return;
+      }
       tweet.formatTweetTime();
       if (!tweet.isRetweeted()) {
         tweet.check();

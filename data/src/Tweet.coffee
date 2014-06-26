@@ -47,6 +47,13 @@ class Tweet
       return unless _.isUndefined @eventData
       @eventData = _.findWhere(@eventStartAndEndTime, hashTag: "#" + val.text)
 
+  isDomesticTweet: ->
+    my.c "ツイートの発生国", @data.user.lang
+    my.c "if @data.user.lang is ja ", @data.user.lang is "ja"
+
+    # user.langが"ja"なら日本国内からのツイートだと仮定
+    if @data.user.lang is "ja" then true else false
+
   isNgUser: ->
 
     ###

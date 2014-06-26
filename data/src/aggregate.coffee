@@ -19,6 +19,8 @@ exports.aggregate = (data, eventStartAndEndTime) ->
 
     return if _.isUndefined(tweet.eventData)
 
+    return unless tweet.isDomesticTweet()
+
     # ツイートの時刻を "YYYY-MM-DD HH:mm:ss" に整形し、
     do tweet.formatTweetTime
 

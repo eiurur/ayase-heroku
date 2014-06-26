@@ -61,6 +61,16 @@
       })(this));
     };
 
+    Tweet.prototype.isDomesticTweet = function() {
+      my.c("ツイートの発生国", this.data.user.lang);
+      my.c("if @data.user.lang is ja ", this.data.user.lang === "ja");
+      if (this.data.user.lang === "ja") {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     Tweet.prototype.isNgUser = function() {
 
       /*
