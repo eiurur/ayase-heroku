@@ -78,6 +78,15 @@ class EventProvider
     Event.find {}, (err, data) ->
       callback null, data
 
+  findOnTheDay: (params, callback) ->
+    console.log "------------- find findOnTheDay ----------------"
+
+    Event.find {startedDate: params['nowDate']}
+         .sort startedAt: -1
+         .limit params["numShow"]
+         .exec (err, data) ->
+           callback null, data
+
   findStartedAtDesc: (params, callback) ->
     console.log "------------------ find new --------------------"
 

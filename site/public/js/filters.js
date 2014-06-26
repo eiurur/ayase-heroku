@@ -46,4 +46,16 @@ angular.module('myApp.filters', []).
     return function(date){
       return moment(date).fromNow();
     };
+  })
+  .filter('extractionOnTheDay', function(){
+    var nowDate = moment().format('YYYY-MM-DD');
+    return function(items) {
+      var result = [];
+      angular.forEach(items, function(item) {
+        if(item.startedDate === nowDate) {
+          result.push(item);
+        }
+      });
+      return result;
+    }
   });

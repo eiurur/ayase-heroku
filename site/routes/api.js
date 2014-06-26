@@ -20,7 +20,6 @@ exports.readEventStartedAtDesc = function (req, res) {
       ,  numShow   = 1000
       ;
 
-    // 該当日(correspondDate)の中から、投稿日が新しい順に10件だけ取得
     EventProvider.findStartedAtDesc({
       numShow: numShow
     }, function(error, eventDatas) {
@@ -33,21 +32,50 @@ exports.readEventStartedAtDesc = function (req, res) {
           ,  description: eventData.description
           ,  eventUrl: eventData.eventUrl
           ,  hashTag: eventData.hashTag
-          ,  startedDate: eventData.startedDate
+          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
           ,  startedDateX: moment(eventData.startedDate).format("X")
           ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
           ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          ,  series: eventData.series
-          ,  ownerId: eventData.ownerId
-          ,  ownerNickname: eventData.ownerNickname
-          ,  ownerDisplayName: eventData.ownerDisplayName
-          ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
+          // ,  series: eventData.series
+          // ,  ownerId: eventData.ownerId
+          // ,  ownerNickname: eventData.ownerNickname
+          // ,  ownerDisplayName: eventData.ownerDisplayName
+          // ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
           ,  tweetNum: eventData.tweetNum
         });
       });
 
       res.json({
           events: events
+      });
+    });
+};
+
+exports.readEventOnTheDay = function (req, res) {
+
+    var numShow = 100;
+
+    // 当日開催するイベントのデータを取得
+    EventProvider.findOnTheDay({
+        numShow: numShow
+      , nowDate: moment().format('YYYY-MM-DD')
+    }, function(error, eventDatas) {
+      var eventsOnTheDay = [];
+      eventDatas.forEach(function (eventData) {
+        eventsOnTheDay.push({
+             eventId: eventData.eventId
+          ,  title: eventData.title
+          ,  catch: eventData.catch
+          ,  description: eventData.description
+          ,  eventUrl: eventData.eventUrl
+          ,  hashTag: eventData.hashTag
+          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
+          ,  tweetNum: eventData.tweetNum
+        });
+      });
+
+      res.json({
+          eventsOnTheDay: eventsOnTheDay
       });
     });
 };
@@ -60,7 +88,6 @@ exports.readEventByEventId = function (req, res) {
 
     console.log("readEventByEventId eventId = " + eventId);
 
-    // 該当日(correspondDate)の中から、投稿日が新しい順に10件だけ取得
     EventProvider.findByEventId({
         eventId: eventId
       , numShow: numShow
@@ -78,11 +105,11 @@ exports.readEventByEventId = function (req, res) {
           ,  startedDateX: moment(eventData.startedDate).format("X")
           ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
           ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          ,  series: eventData.series
-          ,  ownerId: eventData.ownerId
-          ,  ownerNickname: eventData.ownerNickname
-          ,  ownerDisplayName: eventData.ownerDisplayName
-          ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
+          // ,  series: eventData.series
+          // ,  ownerId: eventData.ownerId
+          // ,  ownerNickname: eventData.ownerNickname
+          // ,  ownerDisplayName: eventData.ownerDisplayName
+          // ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
           ,  tweetNum: eventData.tweetNum
         });
       });
@@ -101,8 +128,6 @@ exports.readTweet = function (req, res) {
       , dataCount = 0
       , numShow   = 100
       ;
-
-    console.log("readTweet eventId = " + eventId);
 
     TweetProvider.findByEventId({
       eventId: eventId

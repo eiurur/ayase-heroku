@@ -62,10 +62,9 @@ exports.serve = function() {
 
   // JSON API
   app.get('/api/readEventStartedAtDesc/', api.readEventStartedAtDesc);
+  app.get('/api/readEventOnTheDay/', api.readEventOnTheDay);
   app.get('/api/readTweet/:eventId', api.readTweet);
   app.get('/api/readEventByEventId/:eventId', api.readEventByEventId);
-  // app.get('/api/readRanking/:name', api.readRanking);
-  // app.get('/api/readRankingAllCategory', api.readRankingAllCategory);
 
   app.get('*', routes.index);
 

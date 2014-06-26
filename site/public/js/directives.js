@@ -67,6 +67,31 @@ angular.module('myApp.directives', [])
       }
     }
   })
+  .directive('accordion', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        var target, content, tweetNumber;
+
+        attrs.expanded = false;
+
+        element.bind('click', function() {
+          if (!target) target = document.querySelector(attrs.accordion);
+          if (!content) content = target.querySelector('.slideable_content');
+
+          if(!attrs.expanded) {
+            content.style.border = '1px solid rgba(0,0,0,0)';
+            var y = content.clientHeight;
+            content.style.border = 0;
+            target.style.height = y + 'px';
+          } else {
+            target.style.height = '0px';
+          }
+          attrs.expanded = !attrs.expanded;
+        });
+      }
+    }
+  })
   .directive('timeago', function() {
 
     // Source: http://www.jonathanrowny.com/journal/timeago-directive-and-filter-angular-momentjs

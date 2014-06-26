@@ -1,23 +1,15 @@
 function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, eventsStashService, Page) {
-  console.log(eventsStashService.eventsStash);
-  console.log(eventsStashService.eventsStash.length);
-  if(eventsStashService.eventsStash.length > 0) {
-    $scope.events = eventsStashService.eventsStash;
-  } else {
-    $http.get('/api/readEventStartedAtDesc/').
-      success(function(data) {
-        $scope.events = data.events;
+  $http.get('/api/readEventStartedAtDesc/').
+    success(function(data) {
+      $scope.events = data.events;
+    });
+  $http.get('/api/readEventOnTheDay/').
+    success(function(data) {
+      $scope.eventsOnTheDay = data.eventsOnTheDay;
+    });
 
-        Page.setTitle("Ayase");
-        $rootScope.title = Page.title();
-      });
-    // $http.get('/api/readTweet/').
-    //   success(function(data) {
-    //     $scope.tweets = data.tweets;
-    //   });
-  }
-
-  $scope.searchWord = "";
+  Page.setTitle("Ayase");
+  $rootScope.title = Page.title();
 
   $scope.terms = termsService.terms;
   $scope.selectedTerm = $scope.terms[3];

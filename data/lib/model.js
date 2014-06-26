@@ -69,6 +69,17 @@
       });
     };
 
+    EventProvider.prototype.findOnTheDay = function(params, callback) {
+      console.log("------------- find findOnTheDay ----------------");
+      return Event.find({
+        startedDate: params['nowDate']
+      }).sort({
+        startedAt: -1
+      }).limit(params["numShow"]).exec(function(err, data) {
+        return callback(null, data);
+      });
+    };
+
     EventProvider.prototype.findStartedAtDesc = function(params, callback) {
       console.log("------------------ find new --------------------");
       return Event.find({
