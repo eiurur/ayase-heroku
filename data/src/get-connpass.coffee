@@ -48,11 +48,7 @@ exports.getEventFromConnpass = ->
           for json in body.events
 
             # 終了したイベントは除外
-<<<<<<< HEAD
             return if my.formatX(json.started_at) < now
-=======
-            return if my.formatX(json.ended_at) < now
->>>>>>> 65a02347052384337c35227d37a3bf4e450b8dcc
 
             # twitter用のハッシュタグが登録されていないイベントは除外
             continue if _.isEmpty(json.hash_tag)
