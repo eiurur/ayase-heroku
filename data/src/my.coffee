@@ -28,8 +28,13 @@ exports.formatYMDHms = (time) ->
   moment(new Date(time)).format("YYYY-MM-DD HH:mm:ss")
 
 # UNIXTIMEを返す
+# 引数なし -> 現在時刻のUNIXTIME
+# 引数あり -> 指定時刻のUNIXTIME
 exports.formatX = (time) ->
-  moment(time).format("X")
+  if time?
+    moment(time).format("X")
+  else
+    moment().format("X")
 
 # 1時間後の時刻をYYYY-MM-DD HH:mm:ss　の形式で返す
 exports.addHoursFormatYMDHms = (hours, time) ->

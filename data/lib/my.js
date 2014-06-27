@@ -39,7 +39,11 @@
   };
 
   exports.formatX = function(time) {
-    return moment(time).format("X");
+    if (time != null) {
+      return moment(time).format("X");
+    } else {
+      return moment().format("X");
+    }
   };
 
   exports.addHoursFormatYMDHms = function(hours, time) {

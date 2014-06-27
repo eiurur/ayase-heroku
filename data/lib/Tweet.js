@@ -96,8 +96,8 @@
 
     Tweet.prototype.tweetDubug = function() {
       my.c("ツイート時刻", this.tweetTime);
-      my.c("開始時刻", this.collectionBeginningTime);
-      my.c("終了時刻", this.collectionClosingTime);
+      my.c("収集開始時刻(イベント開始時刻 + " + s.ALLOWED_HOURS + ")", this.collectionBeginningTime);
+      my.c("収集終了時刻(イベント開始時刻 + " + s.ALLOWED_HOURS + ")", this.collectionClosingTime);
       my.c("ツイート者", this.data.user.screen_name);
       my.c("ツイート内容", this.data.text);
       return my.c(" ↓ ");

@@ -1,16 +1,17 @@
 div#page-content-wrapper
+  base(target="_blank")
   div.content-header
     h3
       a(href="{{events[0].eventUrl}}") {{events[0].title}}
       ul.share-buttons.pull-right
         li
-          a(href='https://www.facebook.com/sharer/sharer.php?u={{absUrl}}', target='_blank')
+          a(href='https://www.facebook.com/sharer/sharer.php?u={{absUrl}}')
             i.fa.fa-facebook-square.fa-3x
         li
-          a(href='https://twitter.com/intent/tweet?hashtags={{events[0].hashTag}}&url={{absUrl}}&text={{events[0].title}}', target='_blank', title='Tweet')
+          a(href='https://twitter.com/intent/tweet?hashtags={{events[0].hashTag}}&url={{absUrl}}&text={{events[0].title}}', title='Tweet')
             i.fa.fa-twitter-square.fa-3x
         li
-          a(href='https://plus.google.com/share?url={{absUrl}}', target='_blank', title='Share on Google+')
+          a(href='https://plus.google.com/share?url={{absUrl}}', title='Share on Google+')
             i.fa.fa-google-plus-square.fa-3x
     p
       .sub-text
@@ -35,6 +36,6 @@ div#page-content-wrapper
                     span
                       　@{{tweet.screenName}}
                     span.pull-right
-                      a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/", target="_blank")
+                      a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/")
                         {{tweet.createdAt}}
                   span(ng-bind-html="tweet.text")
