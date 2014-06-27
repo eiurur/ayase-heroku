@@ -193,10 +193,11 @@
 
     Tweet.prototype.debugInAggregate = function() {
       my.c("--------------------------------------------------------------");
+      my.c("今何時? -> ", moment());
       my.c("ツイートタイム -> ", this.data.created_at);
+      my.c("--------------------------------------------------------------");
       my.c("tweet     -> ", this.data.text);
-      my.c("hasttags  -> ", this.data.hashtags);
-      return my.dump(this.data);
+      return my.c("hasttags  -> ", this.data.hashtags);
     };
 
     Tweet.prototype.dump = function() {

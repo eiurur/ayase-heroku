@@ -158,10 +158,12 @@ class Tweet
 
   debugInAggregate: ->
     my.c "--------------------------------------------------------------"
+    my.c "今何時? -> ", moment()
     my.c "ツイートタイム -> ", @data.created_at
+    my.c "--------------------------------------------------------------"
     my.c "tweet     -> ", @data.text
     my.c "hasttags  -> ", @data.hashtags
-    my.dump @data
+    # my.dump @data
 
   dump: ->
     my.dump @data

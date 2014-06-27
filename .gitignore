@@ -3,3 +3,4 @@ settings.js
 settings.coffee
 development.coffee
 development.js
+node_modules/grunt*
