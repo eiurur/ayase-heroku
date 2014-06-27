@@ -54,7 +54,11 @@
             _ref = body.events;
             for (_j = 0, _len = _ref.length; _j < _len; _j++) {
               json = _ref[_j];
+<<<<<<< HEAD
               if (my.formatX(json.started_at) < now) {
+=======
+              if (my.formatX(json.ended_at) < now) {
+>>>>>>> 65a02347052384337c35227d37a3bf4e450b8dcc
                 return;
               }
               if (_.isEmpty(json.hash_tag)) {
