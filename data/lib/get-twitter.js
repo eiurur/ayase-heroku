@@ -58,6 +58,9 @@
             endedAt: num.endedAt
           };
         });
+        eventStartAndEndTime = _.sortBy(eventStartAndEndTime, function(o) {
+          return o.eventId;
+        });
         if (!_.isEmpty(hashTags)) {
           return getTweet();
         }

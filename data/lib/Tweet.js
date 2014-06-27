@@ -108,6 +108,10 @@
       this.collectionBeginningTime = this.subHours();
       this.collectionClosingTime = this.addHours();
       this.tweetDubug();
+      my.c("\n inInTiem 時間確認 ---------------------------");
+      my.c("@data.created_at = ", this.data.created_at);
+      my.c("@tweetTime = ", this.tweetTime);
+      my.c("\n");
       if ((this.collectionBeginningTime <= (_ref = this.tweetTime) && _ref <= this.collectionClosingTime)) {
         my.c("\n(≧▽≦) < 保存します！！！！！！！！！！！！！！！！！！\n");
         return true;

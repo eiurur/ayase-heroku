@@ -90,6 +90,11 @@ class Tweet
 
     do @tweetDubug
 
+    my.c "\n inInTiem 時間確認 ---------------------------"
+    my.c "@data.created_at = ", @data.created_at
+    my.c "@tweetTime = ", @tweetTime
+    my.c "\n"
+
     if @collectionBeginningTime <= @tweetTime <= @collectionClosingTime
       my.c "\n(≧▽≦) < 保存します！！！！！！！！！！！！！！！！！！\n"
       return true

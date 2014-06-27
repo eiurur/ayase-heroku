@@ -64,6 +64,13 @@ exports.getTweetFromTwitter = ->
           startedAt: num.startedAt
           endedAt: num.endedAt
 
+      # イベントIDを基準として昇順に並び替え
+      # 勉強会と懇談会を別のイベントとして登録した上に、同じハッシュタグを登録していた場合、
+      # ツイート保存対象イベントを勉強会にするための処理。
+      # これでダメなら、取得猶予時間を4時間から0に変更してしまおう。
+      eventStartAndEndTime = _.sortBy eventStartAndEndTime, (o) ->
+        o.eventId
+
       # 開催イベントが1件以上あればStreamingAPIの監視を開始する
       do getTweet unless _.isEmpty hashTags
 

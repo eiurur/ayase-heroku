@@ -25,30 +25,6 @@
         li.list-group-item
           a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
 
-        //- div(ng-repeat='eventOnTheDay in eventsOnTheDay')
-        //-     .panel-heading
-        //-       h4.panel-title
-        //-       a.cursor-pointer(accordion="#event-list-{{$index}}")
-        //-         | {{eventOnTheDay.title}}
-        //-     .panel-collapse.slideable(id="event-list-{{$index}}")
-        //-       .panel-body
-        //-         base(target='_blank')
-        //-         span(ng-bind-html="eventOnTheDay.description")
-  //- .col-md-6.hidden-xs
-  //-   .panel.panel-info
-  //-     .panel-heading
-  //-       h3.panel-title 本日開催予定のイベント
-  //-     .panel-body
-  //-       div(ng-repeat='eventOnTheDay in eventsOnTheDay')
-  //-           .panel-heading
-  //-             h4.panel-title
-  //-             a.cursor-pointer(accordion="#event-list-{{$index}}")
-  //-               | {{eventOnTheDay.title}}
-  //-           .panel-collapse.slideable(id="event-list-{{$index}}")
-  //-             .panel-body
-  //-               base(target='_blank')
-  //-               span(ng-bind-html="eventOnTheDay.description")
-
 .row.main
   .col-md-12
   div(ng-repeat='event in events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
