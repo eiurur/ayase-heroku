@@ -14,14 +14,15 @@ function tweetTrimer(t) {
   return tweet.replace(/(?:^|[^ーー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_/>]+)[#＃]([ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/ig, ' <a href="http://twitter.com/search?q=%23$1" target="_blank">#$1</a>');
 }
 
-exports.readEventStartedAtDesc = function (req, res) {
+
+exports.readInitEvent = function (req, res) {
 
     var  dataCount = 0
-      ,  numShow   = 1000
+      ,  numShow   = 20
       ;
 
-    EventProvider.findStartedAtDesc({
-      numShow: numShow
+    EventProvider.findInit({
+        numShow: numShow
     }, function(error, eventDatas) {
       var events = [];
       eventDatas.forEach(function (eventData) {
@@ -36,11 +37,6 @@ exports.readEventStartedAtDesc = function (req, res) {
           ,  startedDateX: moment(eventData.startedDate).format("X")
           ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
           ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          // ,  series: eventData.series
-          // ,  ownerId: eventData.ownerId
-          // ,  ownerNickname: eventData.ownerNickname
-          // ,  ownerDisplayName: eventData.ownerDisplayName
-          // ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
           ,  tweetNum: eventData.tweetNum
         });
       });
@@ -51,6 +47,83 @@ exports.readEventStartedAtDesc = function (req, res) {
     });
 };
 
+
+exports.readRestEvent = function (req, res) {
+
+    var  dataCount = 0
+      ,  numSkip   = 20
+      ;
+
+    EventProvider.findRest({
+      numSkip: numSkip
+    }, function(error, eventDatas) {
+      var events = [];
+      eventDatas.forEach(function (eventData) {
+        events.push({
+             eventId: eventData.eventId
+          ,  title: eventData.title
+          ,  catch: eventData.catch
+          ,  description: eventData.description
+          ,  eventUrl: eventData.eventUrl
+          ,  hashTag: eventData.hashTag
+          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
+          ,  startedDateX: moment(eventData.startedDate).format("X")
+          ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
+          ,  endedAt: moment(eventData.endedAt).format("HH:mm")
+          ,  tweetNum: eventData.tweetNum
+        });
+      });
+
+      res.json({
+          events: events
+      });
+    });
+};
+
+
+// 20件以降の残りのツイートをDBから取得してViewに渡す
+exports.readRestTweet = function (req, res) {
+
+    var eventId   = req.params.eventId
+      , numSkip   = 20
+      ;
+
+    TweetProvider.findRestByEventId({
+        eventId: eventId
+      , numSkip: numSkip
+    }, function(error, tweetDatas) {
+      var tweets = [];
+
+      if(_.isEmpty(tweetDatas)) {
+        console.log("tweetDatas ", tweetDatas);
+        return;
+      }
+
+      tweetDatas.forEach(function (tweetData) {
+        tweets.push({
+             eventId: tweetData.eventId
+          ,  tweetId: tweetData.tweetId
+          ,  tweetIdStr: tweetData.tweetIdStr
+          ,  text: tweetTrimer(tweetData.text)
+          ,  hashTag: tweetData.hashTag
+          ,  tweetUrl: tweetData.tweetUrl
+          ,  hashTag: tweetData.hashTag
+          ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+          ,  userId: tweetData.userId
+          ,  userName: tweetData.userName
+          ,  screenName: tweetData.screenName
+          ,  profileImageUrl: tweetData.profileImageUrl
+        });
+      });
+
+      res.json({
+          tweets: tweets
+      });
+    });
+};
+
+
+// 当日開催するイベントをDBから取得する。
 exports.readEventOnTheDay = function (req, res) {
 
     var numShow = 100;
@@ -80,6 +153,8 @@ exports.readEventOnTheDay = function (req, res) {
     });
 };
 
+
+// イベントに関するツイート一覧表示画面で、そのイベントの詳細情報をDBから取得するためのAPI
 exports.readEventByEventId = function (req, res) {
 
     var eventId   = req.params.eventId
@@ -122,15 +197,59 @@ exports.readEventByEventId = function (req, res) {
     });
 };
 
+
+// 最初の20件分のツイートをDBから取得してViewに渡す
 exports.readTweet = function (req, res) {
 
     var eventId   = req.params.eventId
-      , dataCount = 0
-      , numShow   = 100
+      , numShow   = 20
       ;
 
-    TweetProvider.findByEventId({
-      eventId: eventId
+    TweetProvider.findInitByEventId({
+        eventId: eventId
+      , numShow: numShow
+    }, function(error, tweetDatas) {
+      var tweets = [];
+
+      if(_.isEmpty(tweetDatas)) {
+        console.log("tweetDatas ", tweetDatas);
+        return;
+      }
+
+      tweetDatas.forEach(function (tweetData) {
+        tweets.push({
+             eventId: tweetData.eventId
+          ,  tweetId: tweetData.tweetId
+          ,  tweetIdStr: tweetData.tweetIdStr
+          ,  text: tweetTrimer(tweetData.text)
+          ,  hashTag: tweetData.hashTag
+          ,  tweetUrl: tweetData.tweetUrl
+          ,  hashTag: tweetData.hashTag
+          ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+          ,  userId: tweetData.userId
+          ,  userName: tweetData.userName
+          ,  screenName: tweetData.screenName
+          ,  profileImageUrl: tweetData.profileImageUrl
+        });
+      });
+
+      res.json({
+          tweets: tweets
+      });
+    });
+};
+
+
+// 20件以降の残りのツイートをDBから取得してViewに渡す
+exports.readRestTweet = function (req, res) {
+
+    var eventId   = req.params.eventId
+      , numSkip   = 20
+      ;
+
+    TweetProvider.findRestByEventId({
+        eventId: eventId
+      , numSkip: numSkip
     }, function(error, tweetDatas) {
       var tweets = [];
 

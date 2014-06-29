@@ -80,15 +80,28 @@
       });
     };
 
-    EventProvider.prototype.findStartedAtDesc = function(params, callback) {
-      console.log("------------------ find new --------------------");
+    EventProvider.prototype.findInit = function(params, callback) {
+      console.log("----- find init tweet greater than equal 10 -----");
+      return Event.find({
+        tweetNum: {
+          $gte: 10
+        }
+      }).sort({
+        startedAt: -1
+      }).limit(params["numShow"]).exec(function(err, data) {
+        return callback(null, data);
+      });
+    };
+
+    EventProvider.prototype.findRest = function(params, callback) {
+      console.log("----- find rest tweet greater than 0 -----");
       return Event.find({
         tweetNum: {
           $gt: 0
         }
       }).sort({
         startedAt: -1
-      }).limit(params["numShow"]).exec(function(err, data) {
+      }).skip(params["numSkip"]).exec(function(err, data) {
         return callback(null, data);
       });
     };
@@ -172,10 +185,18 @@
   TweetProvider = (function() {
     function TweetProvider() {}
 
-    TweetProvider.prototype.findByEventIdDesc = function(params, callback) {
-      return Tweet.find({}).sort({
-        eventId: -1
+    TweetProvider.prototype.findInitByEventId = function(params, callback) {
+      return Tweet.find({
+        eventId: params['eventId']
       }).limit(params["numShow"]).exec(function(err, data) {
+        return callback(null, data);
+      });
+    };
+
+    TweetProvider.prototype.findRestByEventId = function(params, callback) {
+      return Tweet.find({
+        eventId: params['eventId']
+      }).skip(params["numSkip"] || 0).exec(function(err, data) {
         return callback(null, data);
       });
     };

@@ -13,7 +13,7 @@ else
 
 exports.getEventFromConnpass = ->
 
-  async.waterfall [
+  tasks = [
 
     (callback) ->
 
@@ -28,6 +28,8 @@ exports.getEventFromConnpass = ->
         loopNum = Math.floor(body.results_available / connpassGetLimitNum)
 
         callback null, loopNum
+
+      return
 
     , (loopNum, callback) ->
 
@@ -60,7 +62,11 @@ exports.getEventFromConnpass = ->
 
           callback null, loopNum, "got conpass"
 
-  ], (err, loopNum, arg2) ->
+      return
+      
+  ]
+
+  async.waterfall tasks, (err, loopNum, arg2) ->
     if err
       console.error err
     else

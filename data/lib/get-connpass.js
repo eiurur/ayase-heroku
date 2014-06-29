@@ -20,14 +20,15 @@
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.getEventFromConnpass = function() {
-    async.waterfall([
+    var tasks;
+    tasks = [
       function(callback) {
         var options;
         options = {
           url: 'http://connpass.com/api/v1/event/?order=2',
           json: true
         };
-        return request.get(options, function(err, res, body) {
+        request.get(options, function(err, res, body) {
           var loopNum;
           if (err) {
             return console.log(err);
@@ -36,9 +37,8 @@
           return callback(null, loopNum);
         });
       }, function(loopNum, callback) {
-        var now, num, options, p, _i, _results;
+        var now, num, options, p, _i;
         now = my.formatX();
-        _results = [];
         for (num = _i = 0; 0 <= loopNum ? _i <= loopNum : _i >= loopNum; num = 0 <= loopNum ? ++_i : --_i) {
           p = my.createParams({
             start: num * connpassGetLimitNum,
@@ -49,7 +49,7 @@
             url: "http://connpass.com/api/v1/event/?" + p,
             json: true
           };
-          _results.push(request.get(options, function(err, res, body) {
+          request.get(options, function(err, res, body) {
             var json, _j, _len, _ref;
             _ref = body.events;
             for (_j = 0, _len = _ref.length; _j < _len; _j++) {
@@ -66,11 +66,11 @@
               connpass.save(json);
             }
             return callback(null, loopNum, "got conpass");
-          }));
+          });
         }
-        return _results;
       }
-    ], function(err, loopNum, arg2) {
+    ];
+    async.waterfall(tasks, function(err, loopNum, arg2) {
       if (err) {
         return console.error(err);
       } else {

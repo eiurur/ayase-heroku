@@ -61,9 +61,13 @@ exports.serve = function() {
   app.get('/partials/:name', routes.partials);
 
   // JSON API
-  app.get('/api/readEventStartedAtDesc/', api.readEventStartedAtDesc);
+  // app.get('/api/readEventStartedAtDesc/', api.readEventStartedAtDesc);
+  app.get('/api/readInitEvent/', api.readInitEvent);
+  app.get('/api/readRestEvent/', api.readRestEvent);
   app.get('/api/readEventOnTheDay/', api.readEventOnTheDay);
+
   app.get('/api/readTweet/:eventId', api.readTweet);
+  app.get('/api/readRestTweet/:eventId', api.readRestTweet);
   app.get('/api/readEventByEventId/:eventId', api.readEventByEventId);
 
   app.get('*', routes.index);

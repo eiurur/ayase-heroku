@@ -51,8 +51,11 @@ class Tweet
     my.c "ツイートの発生国", @data.user.lang
     my.c "if @data.user.lang is ja ", @data.user.lang is "ja"
 
+    # my.c "ツイートの発生国", @data.user.time_zone
+    # my.c "ok? ", @data.user.time_zone is "Tokyo" || "Osaka" || "Sapporo"
+
     # user.langが"ja"なら日本国内からのツイートだと仮定
-    if @data.user.lang is "ja" then true else false
+    if @data.user.lang is "ja" or @data.lang is ja then true else false
 
   isNgUser: ->
 
@@ -89,11 +92,6 @@ class Tweet
     @collectionClosingTime = @addHours()
 
     do @tweetDubug
-
-    my.c "\n inInTiem 時間確認 ---------------------------"
-    my.c "@data.created_at = ", @data.created_at
-    my.c "@tweetTime = ", @tweetTime
-    my.c "\n"
 
     if @collectionBeginningTime <= @tweetTime <= @collectionClosingTime
       my.c "\n(≧▽≦) < 保存します！！！！！！！！！！！！！！！！！！\n"
@@ -162,13 +160,10 @@ class Tweet
       my.c "val.expanded_url in restoreUrl", val.expanded_url
 
   debugInAggregate: ->
-    my.c "--------------------------------------------------------------"
-    my.c "今何時? -> ", moment()
-    my.c "ツイートタイム -> ", @data.created_at
-    my.c "--------------------------------------------------------------"
+    my.c "\n--------------------------------------------------------------"
     my.c "tweet     -> ", @data.text
     my.c "hasttags  -> ", @data.hashtags
-    # my.dump @data
+    my.dump @data
 
   dump: ->
     my.dump @data

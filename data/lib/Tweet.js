@@ -64,7 +64,7 @@
     Tweet.prototype.isDomesticTweet = function() {
       my.c("ツイートの発生国", this.data.user.lang);
       my.c("if @data.user.lang is ja ", this.data.user.lang === "ja");
-      if (this.data.user.lang === "ja") {
+      if (this.data.user.lang === "ja" || this.data.lang === ja) {
         return true;
       } else {
         return false;
@@ -108,10 +108,6 @@
       this.collectionBeginningTime = this.subHours();
       this.collectionClosingTime = this.addHours();
       this.tweetDubug();
-      my.c("\n inInTiem 時間確認 ---------------------------");
-      my.c("@data.created_at = ", this.data.created_at);
-      my.c("@tweetTime = ", this.tweetTime);
-      my.c("\n");
       if ((this.collectionBeginningTime <= (_ref = this.tweetTime) && _ref <= this.collectionClosingTime)) {
         my.c("\n(≧▽≦) < 保存します！！！！！！！！！！！！！！！！！！\n");
         return true;
@@ -196,12 +192,10 @@
     };
 
     Tweet.prototype.debugInAggregate = function() {
-      my.c("--------------------------------------------------------------");
-      my.c("今何時? -> ", moment());
-      my.c("ツイートタイム -> ", this.data.created_at);
-      my.c("--------------------------------------------------------------");
+      my.c("\n--------------------------------------------------------------");
       my.c("tweet     -> ", this.data.text);
-      return my.c("hasttags  -> ", this.data.hashtags);
+      my.c("hasttags  -> ", this.data.hashtags);
+      return my.dump(this.data);
     };
 
     Tweet.prototype.dump = function() {

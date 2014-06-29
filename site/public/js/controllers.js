@@ -1,10 +1,28 @@
 function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, eventsStashService, Page) {
-  $http.get('/api/readEventStartedAtDesc/').
+
+  // パフォーマンスの都合上
+  // 最初に10ツイート以上含んだイベントデータを20件分取得し、
+  $http.get('/api/readInitEvent/').
     success(function(data) {
       $scope.events = data.events;
+
+      // 残りの全てのイベントデータを取得。
+      $http.get('/api/readRestEvent/').
+        success(function(data) {
+          _.each(data.events, function(num, index){
+            $scope.events.push(data.events[index]);
+          });
+        });
     });
+
   $http.get('/api/readEventOnTheDay/').
     success(function(data) {
+      if(data.eventsOnTheDay.length　=== 0){
+        $scope.eventsOnTheDay = [{
+            title: "開催予定のイベントはありません"
+          , eventUrl: "#"
+        }];
+      }
       $scope.eventsOnTheDay = data.eventsOnTheDay;
     });
 
@@ -19,10 +37,26 @@ function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, ev
 
 }
 
+
 function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, Page) {
+
+  // 最初の20件を取得
   $http.get('/api/readTweet/' + $routeParams.eventId).
     success(function(data) {
       $scope.tweets = data.tweets;
+
+      if(data.tweets.length !== 20) {
+        console.log(data.tweets.length);
+        return;
+      }
+
+      // 残りのツイートを取得
+      $http.get('/api/readRestTweet/' + $routeParams.eventId).
+        success(function(data) {
+          _.each(data.tweets, function(num, index){
+            $scope.tweets.push(data.tweets[index]);
+          });
+        });
     });
 
   $http.get('/api/readEventByEventId/' + $routeParams.eventId).

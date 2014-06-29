@@ -87,14 +87,24 @@ class EventProvider
          .exec (err, data) ->
            callback null, data
 
-  findStartedAtDesc: (params, callback) ->
-    console.log "------------------ find new --------------------"
+  findInit: (params, callback) ->
+    console.log "----- find init tweet greater than equal 10 -----"
 
-    Event.find tweetNum: {$gt: 0}
+    Event.find tweetNum: {$gte: 10}
          .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->
            callback null, data
+
+  findRest: (params, callback) ->
+    console.log "----- find rest tweet greater than 0 -----"
+
+    Event.find tweetNum: {$gt: 0}
+         .sort startedAt: -1
+         .skip params["numSkip"]
+         .exec (err, data) ->
+           callback null, data
+
 
   findByEventId: (params, callback) ->
     console.log "-------------------- find ----------------------"
@@ -111,7 +121,6 @@ class EventProvider
          .sort startedAt: -1
          .exec (err, data) ->
            callback null, data
-
 
   countDuplicatedEvent: (params, callback) ->
     Event.find eventId: params['eventId']
@@ -157,10 +166,15 @@ class EventProvider
 
 class TweetProvider
 
-  findByEventIdDesc: (params, callback) ->
-    Tweet.find {}
-         .sort eventId: -1
+  findInitByEventId: (params, callback) ->
+    Tweet.find eventId: params['eventId']
          .limit params["numShow"]
+         .exec (err, data) ->
+           callback null, data
+
+  findRestByEventId: (params, callback) ->
+    Tweet.find eventId: params['eventId']
+         .skip params["numSkip"] || 0
          .exec (err, data) ->
            callback null, data
 
