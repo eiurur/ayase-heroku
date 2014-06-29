@@ -6,13 +6,13 @@ div#page-content-wrapper
       ul.share-buttons.pull-right
         li
           a(href='https://www.facebook.com/sharer/sharer.php?u={{absUrl}}')
-            i.fa.fa-facebook-square.fa-3x
+            i.fa.fa-facebook-square.fa-2x
         li
           a(href='https://twitter.com/intent/tweet?hashtags={{events[0].hashTag}}&url={{absUrl}}&text={{events[0].title}}', title='Tweet')
-            i.fa.fa-twitter-square.fa-3x
+            i.fa.fa-twitter-square.fa-2x
         li
           a(href='https://plus.google.com/share?url={{absUrl}}', title='Share on Google+')
-            i.fa.fa-google-plus-square.fa-3x
+            i.fa.fa-google-plus-square.fa-2x
     p
       .sub-text
         開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
@@ -38,4 +38,4 @@ div#page-content-wrapper
                     span.pull-right
                       a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/")
                         {{tweet.createdAt}}
-                  span(ng-bind-html="tweet.text")
+                  span.tweet(ng-bind-html="tweet.text")
