@@ -11,10 +11,8 @@ exports.serve = function() {
     , util    = require('util')
     , app     = module.exports = express()
     , server  = http.createServer(app)
-    , io      = require('socket.io').listen(server)
     ;
 
-  io.set('log level', 1);
 
 
   /**
