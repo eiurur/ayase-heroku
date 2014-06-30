@@ -27,7 +27,7 @@
 
 .row.main
   .col-md-12
-  div(ng-repeat='event in events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
+  div(ng-repeat='event in events | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
     .col-md-6
       .jumbotron
         .jumbotron-contents.jumbotron-bg

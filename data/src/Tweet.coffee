@@ -49,13 +49,10 @@ class Tweet
 
   isDomesticTweet: ->
     my.c "ツイートの発生国", @data.user.lang
-    my.c "if @data.user.lang is ja ", @data.user.lang is "ja"
+    my.c "ツイートの言語 ", @data.lang
 
-    # my.c "ツイートの発生国", @data.user.time_zone
-    # my.c "ok? ", @data.user.time_zone is "Tokyo" || "Osaka" || "Sapporo"
-
-    # user.langが"ja"なら日本国内からのツイートだと仮定
-    if @data.user.lang is "ja" or @data.lang is ja then true else false
+    # user.langが"ja"か、ツイートが日本語であれば日本国内からのツイートだと仮定
+    if @data.user.lang is "ja" or @data.lang is "ja" then true else false
 
   isNgUser: ->
 
@@ -163,7 +160,7 @@ class Tweet
     my.c "\n--------------------------------------------------------------"
     my.c "tweet     -> ", @data.text
     my.c "hasttags  -> ", @data.hashtags
-    my.dump @data
+    # my.dump @data
 
   dump: ->
     my.dump @data

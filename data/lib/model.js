@@ -87,7 +87,7 @@
           $gte: 10
         }
       }).sort({
-        startedAt: -1
+        tweetNum: -1
       }).limit(params["numShow"]).exec(function(err, data) {
         return callback(null, data);
       });
@@ -100,7 +100,7 @@
           $gt: 0
         }
       }).sort({
-        startedAt: -1
+        tweetNum: -1
       }).skip(params["numSkip"]).exec(function(err, data) {
         return callback(null, data);
       });

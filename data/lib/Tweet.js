@@ -63,8 +63,8 @@
 
     Tweet.prototype.isDomesticTweet = function() {
       my.c("ツイートの発生国", this.data.user.lang);
-      my.c("if @data.user.lang is ja ", this.data.user.lang === "ja");
-      if (this.data.user.lang === "ja" || this.data.lang === ja) {
+      my.c("ツイートの言語 ", this.data.lang);
+      if (this.data.user.lang === "ja" || this.data.lang === "ja") {
         return true;
       } else {
         return false;
@@ -194,8 +194,7 @@
     Tweet.prototype.debugInAggregate = function() {
       my.c("\n--------------------------------------------------------------");
       my.c("tweet     -> ", this.data.text);
-      my.c("hasttags  -> ", this.data.hashtags);
-      return my.dump(this.data);
+      return my.c("hasttags  -> ", this.data.hashtags);
     };
 
     Tweet.prototype.dump = function() {
