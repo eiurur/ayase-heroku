@@ -23,7 +23,6 @@ exports.serve = function() {
 
   // 攻撃者にバックエンドのサーバーが何か伝えない。
   app.disable('x-powered-by');
-  
   app.set('port', process.env.PORT || 3210);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');

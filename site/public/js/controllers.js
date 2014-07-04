@@ -45,7 +45,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, Page) {
     success(function(data) {
       $scope.tweets = data.tweets;
 
-      if(data.tweets.length !== 20) {
+      if(data.tweets.length < 20) {
         console.log(data.tweets.length);
         return;
       }

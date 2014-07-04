@@ -30,6 +30,7 @@ exports.NG_USERS = [
   'RSS_hateb_Roy'
   'SEtenshoku'
   'appproject_kago'
+  'ayase_notice'
 ]
 
 TW_CONSUMER_KEY        = process.env.TW_CONSUMER_KEY

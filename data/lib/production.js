@@ -3,7 +3,7 @@
 
   exports.NG_KEYWORDS = ['konkatsu', '結婚', '婚活', '子育て', 'セラピー', 'セラピスト', 'bookathon', 'outdoor', 'ヘイムスクリングラ', 'ふりーまーけっと', 'フリーマッケット', '講座', 'アイリッシュスローセッション', '朝活', 'deai', 'seakyak', 'surf', 'jazz', 'Jazz', 'ライブ'];
 
-  exports.NG_USERS = ['upmeetup', 'CheckNAU', '_____test', 'design_manabu', '_newsrss', 'RSS_hateb_Roy', 'SEtenshoku', 'appproject_kago'];
+  exports.NG_USERS = ['upmeetup', 'CheckNAU', '_____test', 'design_manabu', '_newsrss', 'RSS_hateb_Roy', 'SEtenshoku', 'appproject_kago', 'ayase_notice'];
 
   TW_CONSUMER_KEY = process.env.TW_CONSUMER_KEY;
 

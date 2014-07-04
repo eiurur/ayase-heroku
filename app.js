@@ -1,5 +1,5 @@
 (function() {
-  var async, cronJob, cronTime, getEventFromConnpass, getTweetFromTwitter, job, moment, my, request, s, serve, tasks4Cron, tasks4startUp, _;
+  var async, cronJob, cronTime, getEventFromConnpass, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
 
   _ = require('underscore-node');
 
@@ -8,6 +8,8 @@
   request = require('request');
 
   cronJob = require('cron').CronJob;
+
+  newrelic = require('newrelic');
 
   async = require('async');
 

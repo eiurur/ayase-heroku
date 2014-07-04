@@ -2,6 +2,7 @@ _                    = require 'underscore-node'
 moment               = require 'moment'
 request              = require 'request'
 cronJob              = require('cron').CronJob
+newrelic             = require 'newrelic'
 async                = require 'async'
 my                   = require './data/lib/my'
 getEventFromConnpass = require('./data/lib/get-connpass').getEventFromConnpass
