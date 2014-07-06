@@ -1,11 +1,12 @@
-var dir           = '../../data/lib/'
-  , moment        = require('moment')
-  , _             = require('underscore-node')
-  , async         = require('async')
-  , my            = require(dir + 'my')
-  , EventProvider = require(dir + 'model').EventProvider
-  , TweetProvider = require(dir + 'model').TweetProvider
-  , settings      = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
+var dir                         = '../../data/lib/'
+  , moment                      = require('moment')
+  , _                           = require('underscore-node')
+  , async                       = require('async')
+  , my                          = require(dir + 'my')
+  , EventProvider               = require(dir + 'model').EventProvider
+  , TweetProvider               = require(dir + 'model').TweetProvider
+  , settings                    = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
+  , INIT_GET_BORDER_NUMBER_LINE = 10
   ;
 
 function tweetTrimer(t) {
@@ -17,9 +18,7 @@ function tweetTrimer(t) {
 
 exports.readInitEvent = function (req, res) {
 
-    var  dataCount = 0
-      ,  numShow   = 10
-      ;
+    var numShow = INIT_GET_BORDER_NUMBER_LINE;
 
     EventProvider.findInit({
         numShow: numShow
@@ -50,9 +49,7 @@ exports.readInitEvent = function (req, res) {
 
 exports.readRestEvent = function (req, res) {
 
-    var  dataCount = 0
-      ,  numSkip   = 10
-      ;
+    var numSkip = INIT_GET_BORDER_NUMBER_LINE;
 
     EventProvider.findRest({
       numSkip: numSkip
@@ -81,52 +78,10 @@ exports.readRestEvent = function (req, res) {
 };
 
 
-// 20件以降の残りのツイートをDBから取得してViewに渡す
-exports.readRestTweet = function (req, res) {
-
-    var eventId   = req.params.eventId
-      , numSkip   = 20
-      ;
-
-    TweetProvider.findRestByEventId({
-        eventId: eventId
-      , numSkip: numSkip
-    }, function(error, tweetDatas) {
-      var tweets = [];
-
-      if(_.isEmpty(tweetDatas)) {
-        console.log("tweetDatas ", tweetDatas);
-        return;
-      }
-
-      tweetDatas.forEach(function (tweetData) {
-        tweets.push({
-             eventId: tweetData.eventId
-          ,  tweetId: tweetData.tweetId
-          ,  tweetIdStr: tweetData.tweetIdStr
-          ,  text: tweetTrimer(tweetData.text)
-          ,  hashTag: tweetData.hashTag
-          ,  tweetUrl: tweetData.tweetUrl
-          ,  hashTag: tweetData.hashTag
-          ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-          ,  userId: tweetData.userId
-          ,  userName: tweetData.userName
-          ,  screenName: tweetData.screenName
-          ,  profileImageUrl: tweetData.profileImageUrl
-        });
-      });
-
-      res.json({
-          tweets: tweets
-      });
-    });
-};
-
-
 // 当日開催するイベントをDBから取得する。
 exports.readEventOnTheDay = function (req, res) {
 
-    var numShow = 100;
+    var numShow = 30;
 
     // 当日開催するイベントのデータを取得
     EventProvider.findOnTheDay({
@@ -202,7 +157,7 @@ exports.readEventByEventId = function (req, res) {
 exports.readTweet = function (req, res) {
 
     var eventId   = req.params.eventId
-      , numShow   = 20
+      , numShow   = INIT_GET_BORDER_NUMBER_LINE
       ;
 
     TweetProvider.findInitByEventId({
@@ -244,7 +199,7 @@ exports.readTweet = function (req, res) {
 exports.readRestTweet = function (req, res) {
 
     var eventId   = req.params.eventId
-      , numSkip   = 20
+      , numSkip   = INIT_GET_BORDER_NUMBER_LINE
       ;
 
     TweetProvider.findRestByEventId({

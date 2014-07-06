@@ -1,4 +1,4 @@
-function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, eventsStashService, Page) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, eventsStashService, Page) {
 
   // パフォーマンスの都合上
   // 最初に10ツイート以上含んだイベントデータを20件分取得し、
@@ -9,9 +9,24 @@ function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, ev
       // 残りの全てのイベントデータを取得。
       $http.get('/api/readRestEvent/').
         success(function(data) {
-          _.each(data.events, function(num, index){
-            $scope.events.push(data.events[index]);
-          });
+
+          var length = data.events.length;
+          var index = 0;
+          var process = function() {
+
+            // ブラウザをフリーズさせずにツイートを全部表示させる
+            for (; index < length;) {
+
+              // $scope.events.push(data.events[index]); より高速
+              $scope.events[$scope.events.length] = data.events[index];
+
+              $timeout(process, 5);
+              index++;
+              break;
+            }
+          };
+
+          process();
         });
     });
 
@@ -38,14 +53,14 @@ function IndexCtrl($scope, $http, $rootScope, termsService, tweetsNumService, ev
 }
 
 
-function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, Page) {
+function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page) {
 
   // 最初の20件を取得
   $http.get('/api/readTweet/' + $routeParams.eventId).
     success(function(data) {
       $scope.tweets = data.tweets;
 
-      if(data.tweets.length < 20) {
+      if(data.tweets.length < 10) {
         console.log(data.tweets.length);
         return;
       }
@@ -53,9 +68,23 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, Page) {
       // 残りのツイートを取得
       $http.get('/api/readRestTweet/' + $routeParams.eventId).
         success(function(data) {
-          _.each(data.tweets, function(num, index){
-            $scope.tweets.push(data.tweets[index]);
-          });
+          var length = data.tweets.length;
+          var index = 0;
+          var process = function() {
+
+            // ブラウザをフリーズさせずにツイートを全部表示させる
+            for (; index < length;) {
+
+              // $scope.tweets.push(data.tweets[index]); より高速
+              $scope.tweets[$scope.tweets.length] = data.tweets[index];
+
+              $timeout(process, 5);
+              index++;
+              break;
+            }
+          };
+
+          process();
         });
     });
 
