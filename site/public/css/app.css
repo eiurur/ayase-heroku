@@ -180,8 +180,8 @@ a {
 }
 
 .loading {
-  color: #37BC9B; /* パネルカラー */
-  /*color: #4FC1E9; /* リンクカラー */
+  /*color: #37BC9B; /* パネルカラー */
+  color: #4FC1E9; /* リンクカラー */
   text-align: center;
   padding: 200px 0 1000px 0;
 }

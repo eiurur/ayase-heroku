@@ -1,4 +1,4 @@
-div#page-content-wrapper
+div#page-content-wrapper(ng-show="tweets.length")
   base(target="_blank")
   div.content-header
     h3
@@ -6,13 +6,13 @@ div#page-content-wrapper
       ul.share-buttons.pull-right
         li
           a(href='https://www.facebook.com/sharer/sharer.php?u={{absUrl}}')
-            i.fa.fa-facebook-square.fa-2x
+            i.fa.fa-facebook-square.fa-3x
         li
           a(href='https://twitter.com/intent/tweet?hashtags={{events[0].hashTag}}&url={{absUrl}}&text={{events[0].title}}', title='Tweet')
-            i.fa.fa-twitter-square.fa-2x
+            i.fa.fa-twitter-square.fa-3x
         li
           a(href='https://plus.google.com/share?url={{absUrl}}', title='Share on Google+')
-            i.fa.fa-google-plus-square.fa-2x
+            i.fa.fa-google-plus-square.fa-3x
     p
       .sub-text
         開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
@@ -39,3 +39,12 @@ div#page-content-wrapper
                       a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/")
                         {{tweet.createdAt}}
                   span.tweet(ng-bind-html="tweet.text")
+
+.loading(ng-hide="tweets.length")
+  div(ng-hide="tweets.length == 0")
+    i.fa.fa-spinner.fa-5x.pull-center.fa-spin
+  div(ng-show="tweets.length == 0")
+    span.fa-stack.fa-5x
+      i.fa.fa-picture-o.fa-stack-1x.pull-left
+      i.fa.fa-ban.fa-stack-2x.pull-left.text-danger
+    .fa-5x No data ...
