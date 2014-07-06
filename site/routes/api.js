@@ -18,7 +18,7 @@ function tweetTrimer(t) {
 exports.readInitEvent = function (req, res) {
 
     var  dataCount = 0
-      ,  numShow   = 20
+      ,  numShow   = 10
       ;
 
     EventProvider.findInit({
@@ -51,7 +51,7 @@ exports.readInitEvent = function (req, res) {
 exports.readRestEvent = function (req, res) {
 
     var  dataCount = 0
-      ,  numSkip   = 20
+      ,  numSkip   = 10
       ;
 
     EventProvider.findRest({

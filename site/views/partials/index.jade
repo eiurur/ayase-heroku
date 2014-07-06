@@ -1,3 +1,5 @@
+
+
 .row.main
   .col-md-6.search-form
     .ex-title イベント件数: {{(events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件
@@ -11,22 +13,29 @@
         .col-sm-10
           select.form-control(ng-model='selectedTweetNum', ng-options='tweetNum.label for tweetNum in tweetsNum')
       .form-group
-        label.col-sm-2.control-label(for='inputPassword') 検索
+        label.col-sm-2.control-label 検索
         .col-sm-10
           .form-search.search-only
                 i.search-icon.glyphicon.glyphicon-search
                 input.form-control(type="text", ng-model="searchWord")
 
-  .col-md-6.hidden-xs
+  .col-md-6.hidden-xs.hidden-sm(ng-show="eventsOnTheDay.length")
     .panel.panel-info
       .panel-heading 本日開催予定のイベント
       base(target='_blank')
       ul.list-group(ng-repeat='eventOnTheDay in eventsOnTheDay')
         li.list-group-item
           a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
+        //- li.list-group-item(ng-hidden="$index < 3 || showHidden")
+        //-   a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
+        //- li.list-group-item(ng-show="$last && !showHidden")
+        //-   a(ng-click="showHidden = !showHidden")
+        //-     i.fa.fa-angle-down.fa-2x
+        //- li.list-group-item(ng-show="$last && showHidden")
+        //-   a(ng-click="showHidden = !showHidden")
+          //-     i.fa.fa-angle-up.fa-2x
 
-.row.main
-  .col-md-12
+.row.main(ng-show="events.length")
   div(ng-repeat='event in events | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
     .col-md-6
       .jumbotron
@@ -49,3 +58,11 @@
           span.tweet-number
             | {{event.tweetNum}}
 
+.loading(ng-hide="events.length")
+  div(ng-hide="events.length == 0")
+    i.fa.fa-spinner.fa-5x.pull-center.fa-spin
+  div(ng-show="events.length == 0")
+    span.fa-stack.fa-5x
+      i.fa.fa-picture-o.fa-stack-1x.pull-left
+      i.fa.fa-ban.fa-stack-2x.pull-left.text-danger
+    .fa-5x No data ...
