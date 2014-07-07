@@ -60,7 +60,7 @@ exports.serve = function() {
   // JSON API
   // app.get('/api/readEventStartedAtDesc/', api.readEventStartedAtDesc);
   app.get('/api/readInitEvent/', api.readInitEvent);
-  app.get('/api/readRestEvent/', api.readRestEvent);
+  app.get('/api/readAllEvent/', api.readAllEvent);
   app.get('/api/readEventOnTheDay/', api.readEventOnTheDay);
 
   app.get('/api/readTweet/:eventId', api.readTweet);

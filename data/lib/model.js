@@ -62,9 +62,15 @@
   EventProvider = (function() {
     function EventProvider() {}
 
-    EventProvider.prototype.findAll = function(callback) {
+    EventProvider.prototype.findAll = function(params, callback) {
       console.log("------------------ find all --------------------");
-      return Event.find({}, function(err, data) {
+      return Event.find({
+        tweetNum: {
+          $gt: 0
+        }
+      }).sort({
+        startedAt: -1
+      }).exec(function(err, data) {
         return callback(null, data);
       });
     };
@@ -87,7 +93,7 @@
           $gte: 10
         }
       }).sort({
-        tweetNum: -1
+        startedAt: -1
       }).limit(params["numShow"]).exec(function(err, data) {
         return callback(null, data);
       });
@@ -100,8 +106,8 @@
           $gt: 0
         }
       }).sort({
-        tweetNum: -1
-      }).skip(params["numSkip"]).exec(function(err, data) {
+        startedAt: -1
+      }).exec(function(err, data) {
         return callback(null, data);
       });
     };

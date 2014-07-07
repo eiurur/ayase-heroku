@@ -1,13 +1,13 @@
 function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, eventsStashService, Page) {
 
-  // パフォーマンスの都合上
-  // 最初に10ツイート以上含んだイベントデータを20件分取得し、
+  // パフォーマンスを考慮して
+  // 最初に10ツイート以上含んだイベントデータを10件分取得し、
   $http.get('/api/readInitEvent/').
     success(function(data) {
       $scope.events = data.events;
 
-      // 残りの全てのイベントデータを取得。
-      $http.get('/api/readRestEvent/').
+      // 全てのイベントデータを取得。
+      $http.get('/api/readAllEvent/').
         success(function(data) {
 
           var length = data.events.length;
@@ -17,8 +17,13 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
             // ブラウザをフリーズさせずにツイートを全部表示させる
             for (; index < length;) {
 
-              // $scope.events.push(data.events[index]); より高速
-              $scope.events[$scope.events.length] = data.events[index];
+              // DBから取得したイベントデータに被りがあるため、その差分を埋めていく
+              // 
+              if(!_.findWhere($scope.events, {'eventId': data.events[index].eventId})){
+
+                // $scope.events.push(data.events[index]); より高速
+                $scope.events[$scope.events.length] = data.events[index];
+              }
 
               $timeout(process, 5);
               index++;

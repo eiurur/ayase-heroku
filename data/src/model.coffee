@@ -72,11 +72,13 @@ Tweet = mongoose.model 'Tweet'
 ##
 class EventProvider
 
-  findAll: (callback) ->
+  findAll: (params, callback) ->
     console.log "------------------ find all --------------------"
 
-    Event.find {}, (err, data) ->
-      callback null, data
+    Event.find tweetNum: {$gt: 0}
+         .sort startedAt: -1
+         .exec (err, data) ->
+           callback null, data
 
   findOnTheDay: (params, callback) ->
     console.log "------------- find findOnTheDay ----------------"
@@ -91,7 +93,8 @@ class EventProvider
     console.log "----- find init tweet greater than equal 10 -----"
 
     Event.find tweetNum: {$gte: 10}
-         .sort tweetNum: -1
+         # .sort tweetNum: -1
+         .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->
            callback null, data
@@ -100,8 +103,9 @@ class EventProvider
     console.log "----- find rest tweet greater than 0 -----"
 
     Event.find tweetNum: {$gt: 0}
-         .sort tweetNum: -1
-         .skip params["numSkip"]
+         # .sort tweetNum: -1
+         .sort startedAt: -1
+         # .skip params["numSkip"]
          .exec (err, data) ->
            callback null, data
 

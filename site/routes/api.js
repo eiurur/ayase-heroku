@@ -40,6 +40,9 @@ exports.readInitEvent = function (req, res) {
         });
       });
 
+      console.log("------ initEvent ------");
+      console.log(events.length);
+
       res.json({
           events: events
       });
@@ -47,12 +50,9 @@ exports.readInitEvent = function (req, res) {
 };
 
 
-exports.readRestEvent = function (req, res) {
+exports.readAllEvent = function (req, res) {
 
-    var numSkip = INIT_GET_BORDER_NUMBER_LINE;
-
-    EventProvider.findRest({
-      numSkip: numSkip
+    EventProvider.findAll({
     }, function(error, eventDatas) {
       var events = [];
       eventDatas.forEach(function (eventData) {
@@ -70,6 +70,9 @@ exports.readRestEvent = function (req, res) {
           ,  tweetNum: eventData.tweetNum
         });
       });
+
+      console.log("------ restEvent ------");
+      console.log(events.length);
 
       res.json({
           events: events
