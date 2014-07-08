@@ -103,9 +103,8 @@ class EventProvider
     console.log "----- find rest tweet greater than 0 -----"
 
     Event.find tweetNum: {$gt: 0}
-         # .sort tweetNum: -1
          .sort startedAt: -1
-         # .skip params["numSkip"]
+         .skip params["numSkip"]
          .exec (err, data) ->
            callback null, data
 

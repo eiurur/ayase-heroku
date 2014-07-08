@@ -107,7 +107,7 @@
         }
       }).sort({
         startedAt: -1
-      }).exec(function(err, data) {
+      }).skip(params["numSkip"]).exec(function(err, data) {
         return callback(null, data);
       });
     };
