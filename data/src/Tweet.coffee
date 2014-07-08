@@ -98,7 +98,7 @@ class Tweet
     return false
 
   check: ->
-    do @restoreUrl if @isInTime()
+    if @isInTime() then @restoreUrl() else return
     do @insertTweetData
 
   isDuplicatedTweet: ->

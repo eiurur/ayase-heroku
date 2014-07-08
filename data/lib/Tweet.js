@@ -119,6 +119,8 @@
     Tweet.prototype.check = function() {
       if (this.isInTime()) {
         this.restoreUrl();
+      } else {
+        return;
       }
       return this.insertTweetData();
     };
