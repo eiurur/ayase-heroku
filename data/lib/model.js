@@ -71,7 +71,7 @@
       }).sort({
         startedAt: -1
       }).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -82,7 +82,7 @@
       }).sort({
         startedAt: -1
       }).limit(params["numShow"]).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -95,7 +95,7 @@
       }).sort({
         startedAt: -1
       }).limit(params["numShow"]).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -108,7 +108,7 @@
       }).sort({
         startedAt: -1
       }).skip(params["numSkip"]).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -117,7 +117,7 @@
       return Event.find({
         eventId: params['eventId']
       }).limit(params["numShow"]).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -128,7 +128,7 @@
       }).sort({
         startedAt: -1
       }).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -136,7 +136,7 @@
       return Event.find({
         eventId: params['eventId']
       }).count().exec(function(err, num) {
-        return callback(null, num);
+        return callback(err, num);
       });
     };
 
@@ -180,7 +180,7 @@
       return Event.remove({
         eventId: params['eventId']
       }, function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -195,7 +195,7 @@
       return Tweet.find({
         eventId: params['eventId']
       }).limit(params["numShow"]).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -203,7 +203,7 @@
       return Tweet.find({
         eventId: params['eventId']
       }).skip(params["numSkip"] || 0).exec(function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -211,7 +211,7 @@
       return Tweet.find({
         eventId: params['eventId']
       }, function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -219,7 +219,7 @@
       return Tweet.find({
         tweetId: params['tweetId']
       }, function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -227,7 +227,7 @@
       return Tweet.find({
         hashTag: params['hashTag']
       }, function(err, data) {
-        return callback(null, data);
+        return callback(err, data);
       });
     };
 
@@ -235,7 +235,7 @@
       return Tweet.find({
         tweetId: params['tweetId']
       }).count().exec(function(err, num) {
-        return callback(null, num);
+        return callback(err, num);
       });
     };
 

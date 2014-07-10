@@ -127,21 +127,24 @@ exports.readEventByEventId = function (req, res) {
       , numShow: numShow
     }, function(error, eventDatas) {
       var events = [];
-      eventDatas.forEach(function (eventData) {
-        events.push({
-             eventId: eventData.eventId
-          ,  title: eventData.title
-          ,  catch: eventData.catch
-          ,  description: eventData.description
-          ,  eventUrl: eventData.eventUrl
-          ,  hashTag: eventData.hashTag
-          ,  startedDate: moment(eventData.startedDate).format("YYYY年 MM月 DD日")
-          ,  startedDateX: moment(eventData.startedDate).format("X")
-          ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
-          ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          ,  tweetNum: eventData.tweetNum
+
+      if(_.isNull(error)) {
+        eventDatas.forEach(function (eventData) {
+          events.push({
+               eventId: eventData.eventId
+            ,  title: eventData.title
+            ,  catch: eventData.catch
+            ,  description: eventData.description
+            ,  eventUrl: eventData.eventUrl
+            ,  hashTag: eventData.hashTag
+            ,  startedDate: moment(eventData.startedDate).format("YYYY年 MM月 DD日")
+            ,  startedDateX: moment(eventData.startedDate).format("X")
+            ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
+            ,  endedAt: moment(eventData.endedAt).format("HH:mm")
+            ,  tweetNum: eventData.tweetNum
+          });
         });
-      });
+      }
 
       console.log("events = ", events);
 
@@ -165,22 +168,24 @@ exports.readTweet = function (req, res) {
     }, function(error, tweetDatas) {
       var tweets = [];
 
-      tweetDatas.forEach(function (tweetData) {
-        tweets.push({
-             eventId: tweetData.eventId
-          ,  tweetId: tweetData.tweetId
-          ,  tweetIdStr: tweetData.tweetIdStr
-          ,  text: tweetTrimer(tweetData.text)
-          ,  hashTag: tweetData.hashTag
-          ,  tweetUrl: tweetData.tweetUrl
-          ,  hashTag: tweetData.hashTag
-          ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-          ,  userId: tweetData.userId
-          ,  userName: tweetData.userName
-          ,  screenName: tweetData.screenName
-          ,  profileImageUrl: tweetData.profileImageUrl
+      if(_.isNull(error)) {
+        tweetDatas.forEach(function (tweetData) {
+          tweets.push({
+               eventId: tweetData.eventId
+            ,  tweetId: tweetData.tweetId
+            ,  tweetIdStr: tweetData.tweetIdStr
+            ,  text: tweetTrimer(tweetData.text)
+            ,  hashTag: tweetData.hashTag
+            ,  tweetUrl: tweetData.tweetUrl
+            ,  hashTag: tweetData.hashTag
+            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+            ,  userId: tweetData.userId
+            ,  userName: tweetData.userName
+            ,  screenName: tweetData.screenName
+            ,  profileImageUrl: tweetData.profileImageUrl
+          });
         });
-      });
+      }
 
       res.json({
           tweets: tweets
@@ -202,22 +207,24 @@ exports.readRestTweet = function (req, res) {
     }, function(error, tweetDatas) {
       var tweets = [];
 
-      tweetDatas.forEach(function (tweetData) {
-        tweets.push({
-             eventId: tweetData.eventId
-          ,  tweetId: tweetData.tweetId
-          ,  tweetIdStr: tweetData.tweetIdStr
-          ,  text: tweetTrimer(tweetData.text)
-          ,  hashTag: tweetData.hashTag
-          ,  tweetUrl: tweetData.tweetUrl
-          ,  hashTag: tweetData.hashTag
-          ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-          ,  userId: tweetData.userId
-          ,  userName: tweetData.userName
-          ,  screenName: tweetData.screenName
-          ,  profileImageUrl: tweetData.profileImageUrl
+      if(_.isNull(error)) {
+        tweetDatas.forEach(function (tweetData) {
+          tweets.push({
+               eventId: tweetData.eventId
+            ,  tweetId: tweetData.tweetId
+            ,  tweetIdStr: tweetData.tweetIdStr
+            ,  text: tweetTrimer(tweetData.text)
+            ,  hashTag: tweetData.hashTag
+            ,  tweetUrl: tweetData.tweetUrl
+            ,  hashTag: tweetData.hashTag
+            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+            ,  userId: tweetData.userId
+            ,  userName: tweetData.userName
+            ,  screenName: tweetData.screenName
+            ,  profileImageUrl: tweetData.profileImageUrl
+          });
         });
-      });
+      }
 
       res.json({
           tweets: tweets

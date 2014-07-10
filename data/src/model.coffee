@@ -78,7 +78,7 @@ class EventProvider
     Event.find tweetNum: {$gt: 0}
          .sort startedAt: -1
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findOnTheDay: (params, callback) ->
     console.log "------------- find findOnTheDay ----------------"
@@ -87,7 +87,7 @@ class EventProvider
          .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findInit: (params, callback) ->
     console.log "----- find init tweet greater than equal 10 -----"
@@ -97,7 +97,7 @@ class EventProvider
          .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findRest: (params, callback) ->
     console.log "----- find rest tweet greater than 0 -----"
@@ -106,7 +106,7 @@ class EventProvider
          .sort startedAt: -1
          .skip params["numSkip"]
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
 
   findByEventId: (params, callback) ->
@@ -115,7 +115,7 @@ class EventProvider
     Event.find eventId: params['eventId']
          .limit params["numShow"]
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findByStartedDate: (params, callback) ->
     console.log "----------------- find Date --------------------"
@@ -123,13 +123,13 @@ class EventProvider
     Event.find startedDate: params['startedDate']
          .sort startedAt: -1
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   countDuplicatedEvent: (params, callback) ->
     Event.find eventId: params['eventId']
          .count()
          .exec (err, num) ->
-           callback(null, num)
+           callback(err, num)
 
   save: (params, callback) ->
     console.log "-------------------- save ----------------------"
@@ -164,7 +164,7 @@ class EventProvider
     console.log "remove"
 
     Event.remove {eventId: params['eventId']}, (err, data) ->
-      callback null, data
+      callback err, data
 
 
 class TweetProvider
@@ -173,31 +173,31 @@ class TweetProvider
     Tweet.find eventId: params['eventId']
          .limit params["numShow"]
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findRestByEventId: (params, callback) ->
     Tweet.find eventId: params['eventId']
          .skip params["numSkip"] || 0
          .exec (err, data) ->
-           callback null, data
+           callback err, data
 
   findByEventId: (params, callback) ->
     Tweet.find eventId: params['eventId'], (err, data) ->
-      callback null, data
+      callback err, data
 
   findByTweetId: (params, callback) ->
     Tweet.find tweetId: params['tweetId'], (err, data) ->
-      callback null, data
+      callback err, data
 
   findByHashTag: (params, callback) ->
     Tweet.find hashTag: params['hashTag'], (err, data) ->
-      callback null, data
+      callback err, data
 
   countDuplicatedTweet: (params, callback) ->
     Tweet.find tweetId: params['tweetId']
          .count()
          .exec (err, num) ->
-           callback(null, num)
+           callback(err, num)
 
   save: (params, callback) ->
     console.log "Twitter Go ----> MongoDB"
