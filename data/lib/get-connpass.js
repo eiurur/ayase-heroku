@@ -1,5 +1,5 @@
 (function() {
-  var async, connpass, connpassGetLimitNum, connpassOrderStarted, moment, my, request, s, _;
+  var CONNPASS_GET_LIMIT_NUM, CONNPASS_ORDER_STARTED, async, connpass, moment, my, request, s, _;
 
   _ = require('underscore-node');
 
@@ -13,9 +13,9 @@
 
   async = require('async');
 
-  connpassGetLimitNum = 100;
+  CONNPASS_GET_LIMIT_NUM = 100;
 
-  connpassOrderStarted = 2;
+  CONNPASS_ORDER_STARTED = 2;
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
@@ -33,7 +33,7 @@
           if (err) {
             return console.log(err);
           }
-          loopNum = Math.floor(body.results_available / connpassGetLimitNum);
+          loopNum = Math.floor(body.results_available / CONNPASS_GET_LIMIT_NUM);
           return callback(null, loopNum);
         });
       }, function(loopNum, callback) {
@@ -41,9 +41,9 @@
         now = my.formatX();
         for (num = _i = 0; 0 <= loopNum ? _i <= loopNum : _i >= loopNum; num = 0 <= loopNum ? ++_i : --_i) {
           p = my.createParams({
-            start: num * connpassGetLimitNum,
-            count: connpassGetLimitNum,
-            order: connpassOrderStarted
+            start: num * CONNPASS_GET_LIMIT_NUM,
+            count: CONNPASS_GET_LIMIT_NUM,
+            order: CONNPASS_ORDER_STARTED
           });
           options = {
             url: "http://connpass.com/api/v1/event/?" + p,

@@ -4,8 +4,8 @@ request              = require 'request'
 my                   = require './my'
 connpass             = require './save-connpass'
 async                = require 'async'
-connpassGetLimitNum  = 100
-connpassOrderStarted = 2
+CONNPASS_GET_LIMIT_NUM  = 100
+CONNPASS_ORDER_STARTED = 2
 s                    = if process.env.NODE_ENV is "production"
   require("./production")
 else
@@ -25,7 +25,7 @@ exports.getEventFromConnpass = ->
         return console.log err if err
 
         # connpass全体のイベント数からconpassAPIのリクエスト回数を求める。
-        loopNum = Math.floor(body.results_available / connpassGetLimitNum)
+        loopNum = Math.floor(body.results_available / CONNPASS_GET_LIMIT_NUM)
 
         callback null, loopNum
 
@@ -37,9 +37,9 @@ exports.getEventFromConnpass = ->
 
       for num in [0..loopNum]
         p = my.createParams
-          start: num * connpassGetLimitNum
-          count: connpassGetLimitNum
-          order: connpassOrderStarted
+          start: num * CONNPASS_GET_LIMIT_NUM
+          count: CONNPASS_GET_LIMIT_NUM
+          order: CONNPASS_ORDER_STARTED
 
         # 196件なら2回
         options =
