@@ -7,6 +7,7 @@ var dir                         = '../../data/lib/'
   , TweetProvider               = require(dir + 'model').TweetProvider
   , settings                    = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
   , INIT_GET_BORDER_NUMBER_LINE = 10
+  , NUMBER_TWEET_TO_UPDATE_FOR_SHOWING_LIST = 10
   ;
 
 function tweetTrimer(t) {
@@ -138,11 +139,6 @@ exports.readEventByEventId = function (req, res) {
           ,  startedDateX: moment(eventData.startedDate).format("X")
           ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
           ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          // ,  series: eventData.series
-          // ,  ownerId: eventData.ownerId
-          // ,  ownerNickname: eventData.ownerNickname
-          // ,  ownerDisplayName: eventData.ownerDisplayName
-          // ,  updatedAt: moment(eventData.updatedAt).format("YYYY-MM-DD HH:mm")
           ,  tweetNum: eventData.tweetNum
         });
       });
@@ -168,11 +164,6 @@ exports.readTweet = function (req, res) {
       , numShow: numShow
     }, function(error, tweetDatas) {
       var tweets = [];
-
-      if(_.isEmpty(tweetDatas)) {
-        console.log("tweetDatas ", tweetDatas);
-        return;
-      }
 
       tweetDatas.forEach(function (tweetData) {
         tweets.push({
@@ -210,11 +201,6 @@ exports.readRestTweet = function (req, res) {
       , numSkip: numSkip
     }, function(error, tweetDatas) {
       var tweets = [];
-
-      if(_.isEmpty(tweetDatas)) {
-        console.log("tweetDatas ", tweetDatas);
-        return;
-      }
 
       tweetDatas.forEach(function (tweetData) {
         tweets.push({

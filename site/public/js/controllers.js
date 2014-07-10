@@ -18,7 +18,6 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
             for (; index < length;) {
 
               // DBから取得したイベントデータに被りがあるため、その差分を埋めていく
-              // 
               if(!_.findWhere($scope.events, {'eventId': data.events[index].eventId})){
 
                 // $scope.events.push(data.events[index]); より高速
@@ -65,6 +64,13 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     success(function(data) {
       $scope.tweets = data.tweets;
 
+      // URLから無効なページへ直接アクセスされたときはindexページへリダイレクト
+      if(data.tweets.length === 0) {
+        console.log("No tweets");
+        $location.path('/');
+      }
+
+      // FDBへ無駄なクエリは投げない
       if(data.tweets.length < 10) {
         console.log(data.tweets.length);
         return;
