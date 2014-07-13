@@ -171,12 +171,14 @@ class TweetProvider
 
   findInitByEventId: (params, callback) ->
     Tweet.find eventId: params['eventId']
+         .sort tweetId: 1
          .limit params["numShow"]
          .exec (err, data) ->
            callback err, data
 
   findRestByEventId: (params, callback) ->
     Tweet.find eventId: params['eventId']
+         .sort tweetId: 1
          .skip params["numSkip"] || 0
          .exec (err, data) ->
            callback err, data

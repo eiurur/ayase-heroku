@@ -14,13 +14,10 @@ exports.serve = function() {
     ;
 
 
-
   /**
    * Configuration
    */
-
   // all environments
-
   // 攻撃者にバックエンドのサーバーが何か伝えない。
   app.disable('x-powered-by');
   app.set('port', process.env.PORT || 3210);
@@ -30,7 +27,7 @@ exports.serve = function() {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.favicon('images/ayase.ico'));
+  app.use(express.favicon('images/ayase-favicon.svg'));
   app.use(app.router);
   app.use(function(req, res, next){
     res.status(404);

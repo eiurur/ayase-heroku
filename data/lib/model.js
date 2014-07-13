@@ -194,6 +194,8 @@
     TweetProvider.prototype.findInitByEventId = function(params, callback) {
       return Tweet.find({
         eventId: params['eventId']
+      }).sort({
+        tweetId: 1
       }).limit(params["numShow"]).exec(function(err, data) {
         return callback(err, data);
       });
@@ -202,6 +204,8 @@
     TweetProvider.prototype.findRestByEventId = function(params, callback) {
       return Tweet.find({
         eventId: params['eventId']
+      }).sort({
+        tweetId: 1
       }).skip(params["numSkip"] || 0).exec(function(err, data) {
         return callback(err, data);
       });

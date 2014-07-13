@@ -31,6 +31,18 @@ exports.NG_USERS = [
   'SEtenshoku'
   'appproject_kago'
   'ayase_notice'
+  'iNewsEnta'
+  'web_hot_news'
+  'htbtr_js'
+  'postnewshatena'
+  'pctoolnews'
+  'hatebu777'
+  'hatena_news'
+  'RSS_hateb_l_Roy'
+  'JapanTechFeeds'
+  'slidebot'
+  'interest_web'
+  'wJSnews'
 ]
 
 TW_CONSUMER_KEY        = process.env.TW_CONSUMER_KEY
