@@ -27,7 +27,8 @@ exports.serve = function() {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.favicon('images/ayase-favicon.svg'));
+  app.use(express.favicon('images/favicon.ico'));
+  // app.use(express.favicon('images/ayase-favicon.svg'));
   app.use(app.router);
   app.use(function(req, res, next){
     res.status(404);

@@ -22,7 +22,7 @@ a {
 
 .share-buttons li{
   display: inline;
-  margin-left: 5px; /* localでは間隔が空くのにheroku上では動作しないため、追加*/
+  margin-left: 7px; /* localでは間隔が空くのにheroku上では動作しないため、追加*/
 }
 /***************/
 
