@@ -11,6 +11,12 @@
     return console.log("" + desciption + ": " + str);
   };
 
+  exports.e = function(desciption, str) {
+    desciption = desciption || '';
+    str = str || '';
+    return console.error("" + desciption + ": " + str);
+  };
+
   exports.dump = function(obj) {
     return console.log(util.inspect(obj, false, null));
   };
@@ -34,10 +40,6 @@
     })()).join('&');
   };
 
-  exports.formatYMDHms = function(time) {
-    return moment(new Date(time)).format("YYYY-MM-DD HH:mm:ss");
-  };
-
   exports.formatX = function(time) {
     if (time != null) {
       return moment(time).format("X");
@@ -46,8 +48,44 @@
     }
   };
 
+  exports.formatYMD = function(time) {
+    if (time != null) {
+      return moment(new Date(time)).format("YYYY-MM-DD");
+    } else {
+      return moment().format("YYYY-MM-DD");
+    }
+  };
+
+  exports.formatYMDHms = function(time) {
+    if (time != null) {
+      return moment(new Date(time)).format("YYYY-MM-DD HH:mm:ss");
+    } else {
+      return moment().format("YYYY-MM-DD HH:mm:ss");
+    }
+  };
+
+  exports.addHoursFormatYMD = function(hours, time) {
+    if (time != null) {
+      return moment(new Date(time)).add('h', hours).format("YYYY-MM-DD");
+    } else {
+      return moment().add('h', hours).format("YYYY-MM-DD");
+    }
+  };
+
   exports.addHoursFormatYMDHms = function(hours, time) {
-    return moment(new Date(time)).add('h', hours).format("YYYY-MM-DD HH:mm:ss");
+    if (time != null) {
+      return moment(new Date(time)).add('h', hours).format("YYYY-MM-DD HH:mm:ss");
+    } else {
+      return moment().add('h', hours).format("YYYY-MM-DD HH:mm:ss");
+    }
+  };
+
+  exports.addDaysFormatYMD = function(days, time) {
+    if (time != null) {
+      return moment(new Date(time)).add('d', days).format("YYYY-MM-DD");
+    } else {
+      return moment().add('d', days).format("YYYY-MM-DD");
+    }
   };
 
 }).call(this);
