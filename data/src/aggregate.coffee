@@ -15,7 +15,8 @@ exports.aggregate = (data, eventStartAndEndTime) ->
     # ツイートのハッシュタグを一意に判定し、対応するイベントの開始時刻、終了時刻を割り当てる
     do tweet.assign
 
-    do tweet.debugInAggregate
+    # あとで消す
+    # do tweet.debugInAggregate
 
     return if _.isUndefined(tweet.eventData)
 

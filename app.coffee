@@ -1,14 +1,16 @@
-_                    = require 'underscore-node'
-moment               = require 'moment'
-request              = require 'request'
-cronJob              = require('cron').CronJob
-newrelic             = require 'newrelic'
-async                = require 'async'
-my                   = require './data/lib/my'
-getEventFromConnpass = require('./data/lib/get-connpass').getEventFromConnpass
-getTweetFromTwitter  = require('./data/lib/get-twitter').getTweetFromTwitter
-serve                = require('./site/app').serve
-s                    = if process.env.NODE_ENV is "production"
+_                      = require 'underscore-node'
+moment                 = require 'moment'
+request                = require 'request'
+cronJob                = require('cron').CronJob
+newrelic               = require 'newrelic'
+async                  = require 'async'
+dir                    = './data/lib/'
+my                     = require dir + 'my'
+getEventFromConnpass   = require(dir + 'get-connpass').getEventFromConnpass
+getEventFromDoorkeeper = require(dir + 'get-doorkeeper').getEventFromDoorkeeper
+getTweetFromTwitter    = require(dir + 'get-twitter').getTweetFromTwitter
+serve                  = require('./site/app').serve
+s                      = if process.env.NODE_ENV is "production"
   require("./data/lib/production")
 else
   require("./data/lib/development")
@@ -28,6 +30,14 @@ tasks4startUp = [
     my.c "■ Connpass task start"
     getEventFromConnpass null, "Got Event From Connpass"
     setTimeout (-> callback(null, "Done! conpass\n")), s.GRACE_TIME_CONNPASS
+    return
+
+  (callback) ->
+
+    # Doorkeeperからイベント情報を取得し、MongoDBへデータを格納
+    my.c "■ Doorkeeper task start"
+    getEventFromDoorkeeper null, "Got Event From Doorkeeper"
+    setTimeout (-> callback(null, "Done! Doorkeeper\n")), s.GRACE_TIME_DK
     return
 
   , (callback) ->

@@ -19,6 +19,50 @@ exports.NG_KEYWORDS = [
   'jazz'
   'Jazz'
   'ライブ'
+  '産後'
+  'ヘルパー'
+  'ベビーシッター'
+  'ブログセミナー'
+  '営業'
+  'ラブ'
+  '大人の'
+  '売上'
+  '情報発信'
+  '戦略'
+  'おとな'
+  '親子'
+  'ネットショップ'
+  'ワンコイン'
+  'スタンプ'
+  'ビール'
+  '話題を'
+  'ラブ'
+  'ビジネス'
+  'ヘルスケア'
+  '映画'
+  'English'
+  '牛タン'
+  '中華'
+  'シェフ'
+  '料理'
+  '魚'
+  'サラリーマン'
+  'カレー'
+  '酒'
+  '相談会'
+  '発達障害'
+  'ヨガ'
+  'トレーナー'
+  '小学生'
+  '新規事業'
+  '自治体'
+  'モノポリー'
+  '子供'
+  '子ども'
+  'こども'
+  '愛情'
+  '事業'
+  'BBQ'
 ]
 
 exports.NG_USERS = [
@@ -58,8 +102,8 @@ exports.twitter = new Twitter
   access_token_secret: TW_ACCESS_TOKEN_SECRET
 
 # イベント開始より一時間前、イベント終了から4時間後の間のツイートだけを収集する。
-exports.ALLOWED_HOURS = 4
-
-exports.GRACE_TIME_CONNPASS = 10 * 1000
-exports.GRACE_TIME_TWITTER = 1 * 1000
-exports.GRACE_TIME_SERVER = 1 * 1000
+exports.ALLOWED_HOURS         = 4
+exports.GRACE_TIME_CONNPASS   = 10 * 1000
+exports.GRACE_TIME_DOORKEEPER = 150 * 1000
+exports.GRACE_TIME_TWITTER    = 1 * 1000
+exports.GRACE_TIME_SERVER     = 1 * 1000

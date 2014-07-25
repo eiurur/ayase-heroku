@@ -10,19 +10,10 @@ else
 
 exports.save = (json, hashTag) ->
 
-  # my.c "public_url ", json.public_url
-
   # startsAtとendsAtはGMTなのでJSTにする場合は+9時間
   # new Date()を通すと自動でJSTに変わるため+9hする必要はない。
   startedDate = my.formatYMD(json.starts_at)
 
-  # my.c "startedDate ", startedDate
-
-  # 同じイベントが存在していたら … いまは何もしない。
-  #
-  # TODO:
-  # イベントの開始時刻などが後から変更される可能性もあるので
-  # それを検知してデータベース上のデータを書き換える処理が必要
   EventProvider.countDuplicatedEvent
     serviceName: 'doorkeeper'
     eventId: json.id

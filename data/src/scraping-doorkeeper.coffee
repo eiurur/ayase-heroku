@@ -13,9 +13,6 @@ else
 
 act = (json) ->
 
-  # my.c "---------- ここからスクレイピング + DBへの保存処理 ------------"
-  # my.c "params.public_url ", params.public_url
-
   # ハッシュタグを取得
   client.fetch json.public_url
   , (err, $, res) ->

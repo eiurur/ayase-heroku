@@ -30,7 +30,7 @@ exports.getEventFromDoorkeeper = ->
 
   INTERVAL_FOR_SCRAPING_IN_MS = 2000
   NUM_LIMIT_GET_EVENT_API     = 25
-  TERM_TO_GET_TARGET_EVENT    = "7"
+  TERM_TO_GET_TARGET_EVENT    = "3"
 
   page = 1
   time = 0

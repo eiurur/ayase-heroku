@@ -1,5 +1,5 @@
 (function() {
-  var async, cronJob, cronTime, getEventFromConnpass, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
+  var async, cronJob, cronTime, dir, getEventFromConnpass, getEventFromDoorkeeper, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
 
   _ = require('underscore-node');
 
@@ -13,11 +13,15 @@
 
   async = require('async');
 
-  my = require('./data/lib/my');
+  dir = './data/lib/';
 
-  getEventFromConnpass = require('./data/lib/get-connpass').getEventFromConnpass;
+  my = require(dir + 'my');
 
-  getTweetFromTwitter = require('./data/lib/get-twitter').getTweetFromTwitter;
+  getEventFromConnpass = require(dir + 'get-connpass').getEventFromConnpass;
+
+  getEventFromDoorkeeper = require(dir + 'get-doorkeeper').getEventFromDoorkeeper;
+
+  getTweetFromTwitter = require(dir + 'get-twitter').getTweetFromTwitter;
 
   serve = require('./site/app').serve;
 
@@ -30,6 +34,12 @@
       setTimeout((function() {
         return callback(null, "Done! conpass\n");
       }), s.GRACE_TIME_CONNPASS);
+    }, function(callback) {
+      my.c("■ Doorkeeper task start");
+      getEventFromDoorkeeper(null, "Got Event From Doorkeeper");
+      setTimeout((function() {
+        return callback(null, "Done! Doorkeeper\n");
+      }), s.GRACE_TIME_DK);
     }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");
