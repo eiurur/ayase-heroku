@@ -63,9 +63,9 @@ exports.serve = function() {
   app.get('/api/readAllEvent/', api.readAllEvent);
   app.get('/api/readEventOnTheDay/', api.readEventOnTheDay);
 
-  app.get('/api/readTweet/:eventId', api.readTweet);
-  app.get('/api/readRestTweet/:eventId', api.readRestTweet);
-  app.get('/api/readEventByEventId/:eventId', api.readEventByEventId);
+  app.get('/api/readTweet/:serviceName/:eventId', api.readTweet);
+  app.get('/api/readRestTweet/:serviceName/:eventId', api.readRestTweet);
+  app.get('/api/readEventByEventId/:serviceName/:eventId', api.readEventByEventId);
 
   app.get('*', routes.index);
 

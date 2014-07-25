@@ -107,6 +107,7 @@ class Tweet
 
     # 重複ツイート(リツイート)は除外
     TweetProvider.countDuplicatedTweet
+      serviceName: @eventData.serviceName
       tweetId: @data.retweeted_status.id
     , (error, num) ->
       my.c "重複したツイートです。いわゆるRT？　(๑•﹏•) < 重複の数は", num
@@ -117,6 +118,7 @@ class Tweet
 
   incrementTweetNum: ->
     EventProvider.updateTweetNum
+      serviceName: @eventData.serviceName
       eventId: @eventData.eventId
     , (error) ->
       my.c "updateTweetNum!!!"
@@ -126,6 +128,7 @@ class Tweet
 
     # ツイートデータをハッシュタグとともにMongoDBへ保存
     TweetProvider.save
+      serviceName: @eventData.serviceName
       eventId: @eventData.eventId
       tweetId: @data.id
       tweetIdStr: @data.id_str

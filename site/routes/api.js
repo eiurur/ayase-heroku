@@ -27,7 +27,8 @@ exports.readInitEvent = function (req, res) {
       var events = [];
       eventDatas.forEach(function (eventData) {
         events.push({
-             eventId: eventData.eventId
+             serviceName: eventData.serviceName
+          ,  eventId: eventData.eventId
           ,  title: eventData.title
           ,  catch: eventData.catch
           ,  description: eventData.description
@@ -58,7 +59,8 @@ exports.readAllEvent = function (req, res) {
       var events = [];
       eventDatas.forEach(function (eventData) {
         events.push({
-             eventId: eventData.eventId
+             serviceName: eventData.serviceName
+          ,  eventId: eventData.eventId
           ,  title: eventData.title
           ,  catch: eventData.catch
           ,  description: eventData.description
@@ -95,7 +97,8 @@ exports.readEventOnTheDay = function (req, res) {
       var eventsOnTheDay = [];
       eventDatas.forEach(function (eventData) {
         eventsOnTheDay.push({
-             eventId: eventData.eventId
+             serviceName: eventData.serviceName
+          ,  eventId: eventData.eventId
           ,  title: eventData.title
           ,  catch: eventData.catch
           ,  description: eventData.description
@@ -116,14 +119,17 @@ exports.readEventOnTheDay = function (req, res) {
 // イベントに関するツイート一覧表示画面で、そのイベントの詳細情報をDBから取得するためのAPI
 exports.readEventByEventId = function (req, res) {
 
-    var eventId   = req.params.eventId
+    var serviceName = req.params.serviceName
+      , eventId   = req.params.eventId
       , numShow   = 1
       ;
 
+    console.log("readEventByEventId serviceName = " + serviceName);
     console.log("readEventByEventId eventId = " + eventId);
 
     EventProvider.findByEventId({
-        eventId: eventId
+        serviceName: serviceName
+      , eventId: eventId
       , numShow: numShow
     }, function(error, eventDatas) {
       var events = [];
@@ -131,7 +137,8 @@ exports.readEventByEventId = function (req, res) {
       if(_.isNull(error)) {
         eventDatas.forEach(function (eventData) {
           events.push({
-               eventId: eventData.eventId
+               serviceName: eventData.serviceName
+            ,  eventId: eventData.eventId
             ,  title: eventData.title
             ,  catch: eventData.catch
             ,  description: eventData.description
@@ -158,12 +165,17 @@ exports.readEventByEventId = function (req, res) {
 // 最初の20件分のツイートをDBから取得してViewに渡す
 exports.readTweet = function (req, res) {
 
-    var eventId   = req.params.eventId
+    var serviceName = req.params.serviceName
+      , eventId   = req.params.eventId
       , numShow   = INIT_GET_BORDER_NUMBER_LINE
       ;
 
+    
+    console.log("readTweet serviceName = " + serviceName);
+
     TweetProvider.findInitByEventId({
-        eventId: eventId
+        serviceName: serviceName
+      , eventId: eventId
       , numShow: numShow
     }, function(error, tweetDatas) {
       var tweets = [];
@@ -197,12 +209,14 @@ exports.readTweet = function (req, res) {
 // 20件以降の残りのツイートをDBから取得してViewに渡す
 exports.readRestTweet = function (req, res) {
 
-    var eventId   = req.params.eventId
+    var serviceName = req.params.serviceName
+      , eventId   = req.params.eventId
       , numSkip   = INIT_GET_BORDER_NUMBER_LINE
       ;
 
     TweetProvider.findRestByEventId({
-        eventId: eventId
+        serviceName: serviceName
+      , eventId: eventId
       , numSkip: numSkip
     }, function(error, tweetDatas) {
       var tweets = [];

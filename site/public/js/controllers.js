@@ -10,6 +10,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
       $http.get('/api/readAllEvent/').
         success(function(data) {
 
+          // 0件() = つい消し)だとエラーで無限ローディングに陥る
           var length = data.events.length;
           var index = 0;
           var process = function() {
@@ -59,8 +60,11 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 
 function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page) {
 
+  serviceName = $routeParams.serviceName || "connpass";
+  eventId     = $routeParams.eventId || 0;
+
   // 最初の20件を取得
-  $http.get('/api/readTweet/' + $routeParams.eventId).
+  $http.get('/api/readTweet/' + serviceName + '/' + eventId).
     success(function(data) {
       $scope.tweets = data.tweets;
 
@@ -77,7 +81,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       }
 
       // 残りのツイートを取得
-      $http.get('/api/readRestTweet/' + $routeParams.eventId).
+      $http.get('/api/readRestTweet/' + serviceName + '/' + eventId).
         success(function(data) {
           var length = data.tweets.length;
           var index = 0;
@@ -99,10 +103,11 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
         });
     });
 
-  $http.get('/api/readEventByEventId/' + $routeParams.eventId).
+  $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId).
     success(function(data) {
       $scope.events = data.events;
 
+      // 0件( = つい消し)だと[0]なんてプロパティねーよって怒られる。
       Page.setTitle($scope.events[0].title);
       $rootScope.title = Page.title();
     });

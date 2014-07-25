@@ -17,11 +17,13 @@
     var startedDate;
     startedDate = moment(json.started_at).format("YYYY-MM-DD");
     return EventProvider.countDuplicatedEvent({
+      serviceName: 'connpass',
       eventId: json.event_id
     }, function(err, num) {
       if (num === 0) {
         console.log(json.hash_tag);
         return EventProvider.save({
+          serviceName: 'connpass',
           eventId: json.event_id,
           title: json.title,
           "catch": json["catch"],

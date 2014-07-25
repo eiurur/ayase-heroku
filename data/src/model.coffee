@@ -1,5 +1,5 @@
 mongoose = require 'mongoose'
-uri      = process.env.MONGOHQ_URL || 'mongodb://127.0.0.1/Ayase'
+uri      = process.env.MONGOHQ_URL || 'mongodb://127.0.0.1/app26755501'
 db       = mongoose.connect uri
 Schema   = mongoose.Schema
 ObjectId = Schema.ObjectId
@@ -14,6 +14,9 @@ SeriesSchema = new Schema
   url: String
 
 EventSchema = new Schema
+  serviceName:
+    type: String
+    default: 'connpass'
   eventId: Number
   title: String
   catch: String
@@ -28,11 +31,17 @@ EventSchema = new Schema
   ownerNickname: String
   ownerDisplayName: String
   updatedAt: Date
+  publicUrl:
+    type: String
+    default: ''
   tweetNum:
     type: Number
     default: 0
 
 TweetSchema = new Schema
+  serviceName:
+    type: String
+    default: 'connpass'
   eventId: Number
   tweetId: Number
   tweetIdStr: String
@@ -44,12 +53,6 @@ TweetSchema = new Schema
   screenName: String
   profileImageUrl: String
 
-
-# ##
-# # plumbing
-# ##
-# EventSchema.pre 'findStartedAtDesc', (next) ->
-#   if
 
 ##
 # モデルへのアクセス
@@ -112,7 +115,10 @@ class EventProvider
   findByEventId: (params, callback) ->
     console.log "-------------------- find ----------------------"
 
-    Event.find eventId: params['eventId']
+    Event.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .limit params["numShow"]
          .exec (err, data) ->
            callback err, data
@@ -126,7 +132,10 @@ class EventProvider
            callback err, data
 
   countDuplicatedEvent: (params, callback) ->
-    Event.find eventId: params['eventId']
+    Event.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .count()
          .exec (err, num) ->
            callback(err, num)
@@ -135,6 +144,7 @@ class EventProvider
     console.log "-------------------- save ----------------------"
 
     event = new Event
+      serviceName: params['serviceName']
       eventId: params['eventId']
       title: params['title']
       catch: params['catch']
@@ -154,7 +164,10 @@ class EventProvider
 
   updateTweetNum: (params, callback) ->
     Event.update
-      eventId: params['eventId']
+      "$and": [
+        serviceName: params['serviceName']
+        eventId: params['eventId']
+       ]
     ,
       $inc: tweetNum: 1
     , (err) ->
@@ -170,14 +183,20 @@ class EventProvider
 class TweetProvider
 
   findInitByEventId: (params, callback) ->
-    Tweet.find eventId: params['eventId']
+    Tweet.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .sort tweetId: 1
          .limit params["numShow"]
          .exec (err, data) ->
            callback err, data
 
   findRestByEventId: (params, callback) ->
-    Tweet.find eventId: params['eventId']
+    Tweet.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .sort tweetId: 1
          .skip params["numSkip"] || 0
          .exec (err, data) ->
@@ -196,7 +215,10 @@ class TweetProvider
       callback err, data
 
   countDuplicatedTweet: (params, callback) ->
-    Tweet.find tweetId: params['tweetId']
+    Tweet.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .count()
          .exec (err, num) ->
            callback(err, num)
@@ -204,6 +226,7 @@ class TweetProvider
   save: (params, callback) ->
     console.log "Twitter Go ----> MongoDB"
     tweet = new Tweet
+      serviceName: params['serviceName']
       eventId: params['eventId']
       tweetId: params['tweetId']
       tweetIdStr: params['tweetIdStr']

@@ -3,7 +3,7 @@
 
   mongoose = require('mongoose');
 
-  uri = process.env.MONGOHQ_URL || 'mongodb://127.0.0.1/Ayase';
+  uri = process.env.MONGOHQ_URL || 'mongodb://127.0.0.1/app26755501';
 
   db = mongoose.connect(uri);
 
@@ -18,6 +18,10 @@
   });
 
   EventSchema = new Schema({
+    serviceName: {
+      type: String,
+      "default": 'connpass'
+    },
     eventId: Number,
     title: String,
     "catch": String,
@@ -32,6 +36,10 @@
     ownerNickname: String,
     ownerDisplayName: String,
     updatedAt: Date,
+    publicUrl: {
+      type: String,
+      "default": ''
+    },
     tweetNum: {
       type: Number,
       "default": 0
@@ -39,6 +47,10 @@
   });
 
   TweetSchema = new Schema({
+    serviceName: {
+      type: String,
+      "default": 'connpass'
+    },
     eventId: Number,
     tweetId: Number,
     tweetIdStr: String,
@@ -115,7 +127,12 @@
     EventProvider.prototype.findByEventId = function(params, callback) {
       console.log("-------------------- find ----------------------");
       return Event.find({
-        eventId: params['eventId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }).limit(params["numShow"]).exec(function(err, data) {
         return callback(err, data);
       });
@@ -134,7 +151,12 @@
 
     EventProvider.prototype.countDuplicatedEvent = function(params, callback) {
       return Event.find({
-        eventId: params['eventId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }).count().exec(function(err, num) {
         return callback(err, num);
       });
@@ -144,6 +166,7 @@
       var event;
       console.log("-------------------- save ----------------------");
       event = new Event({
+        serviceName: params['serviceName'],
         eventId: params['eventId'],
         title: params['title'],
         "catch": params['catch'],
@@ -165,7 +188,12 @@
 
     EventProvider.prototype.updateTweetNum = function(params, callback) {
       return Event.update({
-        eventId: params['eventId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }, {
         $inc: {
           tweetNum: 1
@@ -193,7 +221,12 @@
 
     TweetProvider.prototype.findInitByEventId = function(params, callback) {
       return Tweet.find({
-        eventId: params['eventId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }).sort({
         tweetId: 1
       }).limit(params["numShow"]).exec(function(err, data) {
@@ -203,7 +236,12 @@
 
     TweetProvider.prototype.findRestByEventId = function(params, callback) {
       return Tweet.find({
-        eventId: params['eventId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }).sort({
         tweetId: 1
       }).skip(params["numSkip"] || 0).exec(function(err, data) {
@@ -237,7 +275,12 @@
 
     TweetProvider.prototype.countDuplicatedTweet = function(params, callback) {
       return Tweet.find({
-        tweetId: params['tweetId']
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
       }).count().exec(function(err, num) {
         return callback(err, num);
       });
@@ -247,6 +290,7 @@
       var tweet;
       console.log("Twitter Go ----> MongoDB");
       tweet = new Tweet({
+        serviceName: params['serviceName'],
         eventId: params['eventId'],
         tweetId: params['tweetId'],
         tweetIdStr: params['tweetIdStr'],

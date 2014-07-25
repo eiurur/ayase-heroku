@@ -51,6 +51,7 @@
         eventStartAndEndTime = _.map(data, function(num, key) {
           var obj;
           return obj = {
+            serviceName: num.serviceName,
             eventId: num.eventId,
             hashTag: '#' + num.hashTag,
             startedDate: num.startedDate,

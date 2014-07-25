@@ -129,6 +129,7 @@
       my.c("middle isDuplicatedTweet");
       my.c("RT text", this.data.retweeted_status.text);
       return TweetProvider.countDuplicatedTweet({
+        serviceName: this.eventData.serviceName,
         tweetId: this.data.retweeted_status.id
       }, function(error, num) {
         my.c("重複したツイートです。いわゆるRT？　(๑•﹏•) < 重複の数は", num);
@@ -148,6 +149,7 @@
 
     Tweet.prototype.incrementTweetNum = function() {
       return EventProvider.updateTweetNum({
+        serviceName: this.eventData.serviceName,
         eventId: this.eventData.eventId
       }, function(error) {
         return my.c("updateTweetNum!!!");
@@ -158,6 +160,7 @@
       var _eventId;
       _eventId = this.eventData.eventId;
       return TweetProvider.save({
+        serviceName: this.eventData.serviceName,
         eventId: this.eventData.eventId,
         tweetId: this.data.id,
         tweetIdStr: this.data.id_str,

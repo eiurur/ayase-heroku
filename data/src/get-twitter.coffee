@@ -58,6 +58,7 @@ exports.getTweetFromTwitter = ->
       # ハッシュタグの特定に必要なConnpassのイベントデータをセット
       eventStartAndEndTime = _.map data, (num, key) ->
         obj =
+          serviceName: num.serviceName
           eventId: num.eventId
           hashTag: '#'+num.hashTag
           startedDate: num.startedDate

@@ -1,12 +1,12 @@
-_                    = require 'underscore-node'
-moment               = require 'moment'
-request              = require 'request'
-my                   = require './my'
-connpass             = require './save-connpass'
-async                = require 'async'
+_                       = require 'underscore-node'
+moment                  = require 'moment'
+request                 = require 'request'
+my                      = require './my'
+connpass                = require './save-connpass'
+async                   = require 'async'
 CONNPASS_GET_LIMIT_NUM  = 100
-CONNPASS_ORDER_STARTED = 2
-s                    = if process.env.NODE_ENV is "production"
+CONNPASS_ORDER_STARTED  = 2
+s                       = if process.env.NODE_ENV is "production"
   require("./production")
 else
   require("./development")
@@ -63,7 +63,7 @@ exports.getEventFromConnpass = ->
           callback null, loopNum, "got conpass"
 
       return
-      
+
   ]
 
   async.waterfall tasks, (err, loopNum, arg2) ->

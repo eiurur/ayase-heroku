@@ -18,11 +18,13 @@ exports.save = (json) ->
   # イベントの開始時刻などが後から変更される可能性もあるので
   # それを検知してデータベース上のデータを書き換える処理が必要
   EventProvider.countDuplicatedEvent
+    serviceName: 'connpass'
     eventId: json.event_id
   , (err, num) ->
     if num is 0
       console.log json.hash_tag
       EventProvider.save
+        serviceName: 'connpass'
         eventId: json.event_id
         title: json.title
         catch: json.catch

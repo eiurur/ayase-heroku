@@ -6,7 +6,7 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 
         templateUrl: 'partials/index',
         controller: IndexCtrl
       }).
-      when('/detail/:eventId', {
+      when('/detail/:serviceName/:eventId', {
         templateUrl: 'partials/detail',
         controller: DetailCtrl
       }).
