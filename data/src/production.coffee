@@ -102,8 +102,8 @@ exports.twitter = new Twitter
   access_token_secret: TW_ACCESS_TOKEN_SECRET
 
 # イベント開始より一時間前、イベント終了から4時間後の間のツイートだけを収集する。
-exports.ALLOWED_HOURS         = 4
-exports.GRACE_TIME_CONNPASS   = 10 * 1000
-exports.GRACE_TIME_DOORKEEPER = 150 * 1000
-exports.GRACE_TIME_TWITTER    = 1 * 1000
-exports.GRACE_TIME_SERVER     = 1 * 1000
+exports.ALLOWED_HOURS       = 4
+exports.GRACE_TIME_CONNPASS = 10 * 1000
+exports.GRACE_TIME_DK       = 150 * 1000
+exports.GRACE_TIME_TWITTER  = 1 * 1000
+exports.GRACE_TIME_SERVER   = 1 * 1000

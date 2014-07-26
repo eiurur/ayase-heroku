@@ -26,7 +26,7 @@
 
   exports.GRACE_TIME_CONNPASS = 10 * 1000;
 
-  exports.GRACE_TIME_DOORKEEPER = 150 * 1000;
+  exports.GRACE_TIME_DK = 150 * 1000;
 
   exports.GRACE_TIME_TWITTER = 1 * 1000;
 
