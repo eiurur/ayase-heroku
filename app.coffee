@@ -26,6 +26,14 @@ tasks4startUp = [
 
   (callback) ->
 
+    # 閲覧用サーバーを起動 (最初に(60秒以内に)サーバーを立ち上げないとherokuから怒られる)
+    my.c "■ Server task start"
+    serve null, "Create Server"
+    setTimeout (-> callback(null, "Create! Server\n")), s.GRACE_TIME_SERVER
+    return
+
+  , (callback) ->
+
     # connpassからイベント情報を取得し、MongoDBへデータを格納
     my.c "■ Connpass task start"
     getEventFromConnpass null, "Got Event From Connpass"
@@ -47,15 +55,6 @@ tasks4startUp = [
     getTweetFromTwitter null, "Getting Tweet"
     setTimeout (-> callback(null, "Go! Twitter\n")), s.GRACE_TIME_TWITTER
     return
-
-  , (callback) ->
-
-    # 閲覧用サーバーを起動
-    my.c "■ Server task start"
-    serve null, "Create Server"
-    setTimeout (-> callback(null, "Create! Server\n")), s.GRACE_TIME_SERVER
-    return
-
 ]
 
 async.series tasks4startUp, (err, results) ->

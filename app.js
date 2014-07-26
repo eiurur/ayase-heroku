@@ -29,6 +29,12 @@
 
   tasks4startUp = [
     function(callback) {
+      my.c("■ Server task start");
+      serve(null, "Create Server");
+      setTimeout((function() {
+        return callback(null, "Create! Server\n");
+      }), s.GRACE_TIME_SERVER);
+    }, function(callback) {
       my.c("■ Connpass task start");
       getEventFromConnpass(null, "Got Event From Connpass");
       setTimeout((function() {
@@ -46,12 +52,6 @@
       setTimeout((function() {
         return callback(null, "Go! Twitter\n");
       }), s.GRACE_TIME_TWITTER);
-    }, function(callback) {
-      my.c("■ Server task start");
-      serve(null, "Create Server");
-      setTimeout((function() {
-        return callback(null, "Create! Server\n");
-      }), s.GRACE_TIME_SERVER);
     }
   ];
 
