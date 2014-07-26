@@ -38,9 +38,6 @@ exports.getEventFromDoorkeeper = ->
   nowDate = my.formatYMD()
   daysAfterDate = my.addDaysFormatYMD(TERM_TO_GET_TARGET_EVENT)
 
-  my.c "nowDate", nowDate
-  my.c "daysAfterDate", daysAfterDate
-
   async.whilst(
 
     # ループ継続判定

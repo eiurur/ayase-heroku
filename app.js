@@ -71,6 +71,12 @@
         return callback(null, "Done! conpass\n");
       }), s.GRACE_TIME_CONNPASS);
     }, function(callback) {
+      my.c("■ Doorkeeper task start");
+      getEventFromDoorkeeper(null, "Got Event From Doorkeeper");
+      setTimeout((function() {
+        return callback(null, "Done! Doorkeeper\n");
+      }), s.GRACE_TIME_DK);
+    }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");
       setTimeout((function() {

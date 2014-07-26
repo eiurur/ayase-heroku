@@ -81,6 +81,14 @@ tasks4Cron = [
     setTimeout (-> callback(null, "Done! conpass\n")), s.GRACE_TIME_CONNPASS
     return
 
+  (callback) ->
+
+    # Doorkeeperからイベント情報を取得し、MongoDBへデータを格納
+    my.c "■ Doorkeeper task start"
+    getEventFromDoorkeeper null, "Got Event From Doorkeeper"
+    setTimeout (-> callback(null, "Done! Doorkeeper\n")), s.GRACE_TIME_DK
+    return
+
   , (callback) ->
 
     # 当日開催するイベントのツイートをStreaming APIで収集する処理の開始

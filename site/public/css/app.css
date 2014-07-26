@@ -190,3 +190,8 @@ a {
 .share-addthis {
   padding: 15px 15px;
 }
+
+.panel-scroll-bar {
+  max-height: 200px;
+  overflow-y: scroll;
+}

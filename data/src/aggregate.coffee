@@ -20,6 +20,7 @@ exports.aggregate = (data, eventStartAndEndTime) ->
 
     return if _.isUndefined(tweet.eventData)
 
+    # 国内まかつ日本語のツイートだけが収集対象
     return unless tweet.isDomesticTweet()
 
     # ツイートの時刻を "YYYY-MM-DD HH:mm:ss" に整形し、

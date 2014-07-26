@@ -27,8 +27,6 @@
     isStillLeftoverNotRestoredData = true;
     nowDate = my.formatYMD();
     daysAfterDate = my.addDaysFormatYMD(TERM_TO_GET_TARGET_EVENT);
-    my.c("nowDate", nowDate);
-    my.c("daysAfterDate", daysAfterDate);
     async.whilst(function() {
       return isStillLeftoverNotRestoredData;
     }, function(callback) {

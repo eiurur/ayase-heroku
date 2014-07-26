@@ -33,7 +33,3 @@ exports.save = (json, hashTag) ->
         updatedAt: json.updated_at
       , (error, data) ->
         # my.c "イベント名", json.title
-        # my.c "ハッシュタグ", json.hash_tag
-        # my.c "開始日", startedDate
-        # my.c "開始時刻", json.started_at
-        # my.c "終了時刻", json.ended_at
