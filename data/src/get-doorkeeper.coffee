@@ -60,6 +60,7 @@ exports.getEventFromDoorkeeper = ->
       request.get options, (err, res, body) ->
         return my.e "get-DK request Error", err if err
 
+        # my.c typeof body
         my.c body.length
         my.c "page", page
         my.c "-------------------------------------------------------------"

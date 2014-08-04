@@ -59,7 +59,7 @@ exports.formatYMDHms = (time) ->
     moment().format("YYYY-MM-DD HH:mm:ss")
 
 
-# h時間後の時刻をYYYY-MM-DD　の形式で返す
+# hours時間後の時刻をYYYY-MM-DD　の形式で返す
 exports.addHoursFormatYMD = (hours, time) ->
   if time?
     moment(new Date(time)).add('h', hours).format("YYYY-MM-DD")
@@ -67,7 +67,7 @@ exports.addHoursFormatYMD = (hours, time) ->
     moment().add('h', hours).format("YYYY-MM-DD")
 
 
-# h時間後の時刻をYYYY-MM-DD HH:mm:ss　の形式で返す
+# hours時間後の時刻をYYYY-MM-DD HH:mm:ss　の形式で返す
 exports.addHoursFormatYMDHms = (hours, time) ->
   if time?
     moment(new Date(time)).add('h', hours).format("YYYY-MM-DD HH:mm:ss")
@@ -75,9 +75,34 @@ exports.addHoursFormatYMDHms = (hours, time) ->
     moment().add('h', hours).format("YYYY-MM-DD HH:mm:ss")
 
 
-# h時間後の時刻をYYYY-MM-DD HH:mm:ss　の形式で返す
+# days日後の時刻をYYYY-MM-DDの形式で返す
 exports.addDaysFormatYMD = (days, time) ->
   if time?
     moment(new Date(time)).add('d', days).format("YYYY-MM-DD")
   else
     moment().add('d', days).format("YYYY-MM-DD")
+
+
+# days日後の時刻をYYYYMMDD　の形式で返す
+exports.addDaysFormatYYYYMMDD = (days, time) ->
+  if time?
+    moment(new Date(time)).add('d', days).format("YYYYMMDD")
+  else
+    moment().add('d', days).format("YYYYMMDD")
+
+
+# 今からdays日分の日時を YYYYMMDD の形式で返す
+exports.getDaysYYYYMMDD = (days) ->
+  ymds = []
+  for day in [0...days]
+    ymds[day] = moment(new Date()).add('d', day).format("YYYYMMDD")
+    console.log ymds
+  ymds
+
+
+# hours時間後の時刻をYYYY-MM-DD HH:mm:ss　の形式で返す
+exports.endBrinkFormatYMDHms = (time) ->
+  if time?
+    moment(time + " 23:59:59").format("YYYY-MM-DD HH:mm:ss")
+  # else
+  #   moment().add('h', hours).format("YYYY-MM-DD HH:mm:ss")

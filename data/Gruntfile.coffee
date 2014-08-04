@@ -27,6 +27,8 @@ module.exports = (grunt) ->
           level: 'error'
         no_unnecessary_fat_arrows:
           level: 'ignore'
+        duplicate_key:
+          level: 'ignore'
       dist:
         files: [
           { expand: yes, cwd: 'src/', src: [ '**/*.coffee' ] }

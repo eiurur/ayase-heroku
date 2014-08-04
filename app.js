@@ -1,5 +1,5 @@
 (function() {
-  var async, cronJob, cronTime, dir, getEventFromConnpass, getEventFromDoorkeeper, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
+  var async, cronJob, cronTime, dir, getEventFromATND, getEventFromConnpass, getEventFromDoorkeeper, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
 
   _ = require('underscore-node');
 
@@ -20,6 +20,8 @@
   getEventFromConnpass = require(dir + 'get-connpass').getEventFromConnpass;
 
   getEventFromDoorkeeper = require(dir + 'get-doorkeeper').getEventFromDoorkeeper;
+
+  getEventFromATND = require(dir + 'get-atnd').getEventFromATND;
 
   getTweetFromTwitter = require(dir + 'get-twitter').getTweetFromTwitter;
 
@@ -46,6 +48,12 @@
       setTimeout((function() {
         return callback(null, "Done! Doorkeeper\n");
       }), s.GRACE_TIME_DK);
+    }, function(callback) {
+      my.c("■ ATND task start");
+      getEventFromATND(null, "Got Event From ATND");
+      setTimeout((function() {
+        return callback(null, "Done! ATND\n");
+      }), s.GRACE_TIME_ATND);
     }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");
@@ -76,6 +84,12 @@
       setTimeout((function() {
         return callback(null, "Done! Doorkeeper\n");
       }), s.GRACE_TIME_DK);
+    }, function(callback) {
+      my.c("■ ATND task start");
+      getEventFromATND(null, "Got Event From ATND");
+      setTimeout((function() {
+        return callback(null, "Done! ATND\n");
+      }), s.GRACE_TIME_ATND);
     }, function(callback) {
       my.c("■ Twitter task start");
       getTweetFromTwitter(null, "Getting Tweet");

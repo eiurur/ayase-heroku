@@ -27,14 +27,6 @@
         ul.list-group(ng-repeat='eventOnTheDay in eventsOnTheDay')
           li.list-group-item
             a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
-          //- li.list-group-item(ng-hidden="$index < 3 || showHidden")
-          //-   a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
-          //- li.list-group-item(ng-show="$last && !showHidden")
-          //-   a(ng-click="showHidden = !showHidden")
-          //-     i.fa.fa-angle-down.fa-2x
-          //- li.list-group-item(ng-show="$last && showHidden")
-          //-   a(ng-click="showHidden = !showHidden")
-            //-     i.fa.fa-angle-up.fa-2x
 
 .row.main(ng-show="events.length")
   div(ng-repeat='event in events | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')

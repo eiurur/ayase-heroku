@@ -53,6 +53,11 @@ exports.getTweetFromTwitter = ->
 
       # Twitter Streaming APIのtrack用(検索対象キーワード)ハッシュタグをDBから取得
       hashTags = _.map data, (num, key) ->
+
+        # 複数タグを含んでいた場合
+        # ex) jawsug chibadan awssummit aws
+        # unless num.indexOf(" ") === -1
+          
         '#'+num.hashTag
 
       # ハッシュタグの特定に必要なConnpassのイベントデータをセット

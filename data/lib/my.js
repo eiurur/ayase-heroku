@@ -88,4 +88,28 @@
     }
   };
 
+  exports.addDaysFormatYYYYMMDD = function(days, time) {
+    if (time != null) {
+      return moment(new Date(time)).add('d', days).format("YYYYMMDD");
+    } else {
+      return moment().add('d', days).format("YYYYMMDD");
+    }
+  };
+
+  exports.getDaysYYYYMMDD = function(days) {
+    var day, ymds, _i;
+    ymds = [];
+    for (day = _i = 0; 0 <= days ? _i < days : _i > days; day = 0 <= days ? ++_i : --_i) {
+      ymds[day] = moment(new Date()).add('d', day).format("YYYYMMDD");
+      console.log(ymds);
+    }
+    return ymds;
+  };
+
+  exports.endBrinkFormatYMDHms = function(time) {
+    if (time != null) {
+      return moment(time + " 23:59:59").format("YYYY-MM-DD HH:mm:ss");
+    }
+  };
+
 }).call(this);

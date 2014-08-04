@@ -8,6 +8,7 @@ dir                    = './data/lib/'
 my                     = require dir + 'my'
 getEventFromConnpass   = require(dir + 'get-connpass').getEventFromConnpass
 getEventFromDoorkeeper = require(dir + 'get-doorkeeper').getEventFromDoorkeeper
+getEventFromATND = require(dir + 'get-atnd').getEventFromATND
 getTweetFromTwitter    = require(dir + 'get-twitter').getTweetFromTwitter
 serve                  = require('./site/app').serve
 s                      = if process.env.NODE_ENV is "production"
@@ -18,9 +19,10 @@ else
 
 ##
 # 起動時のタスク
-# 1.イベントデータ更新
-# 2.ハッシュタグリストデータ取得
-# サーバ起動
+# 1.サーバ起動
+# 2.Connpassのイベントデータ更新
+# 3.Doorkeeperのイベントデータ更新
+# 4.ハッシュタグリストデータ取得
 ##
 tasks4startUp = [
 
@@ -48,6 +50,14 @@ tasks4startUp = [
     setTimeout (-> callback(null, "Done! Doorkeeper\n")), s.GRACE_TIME_DK
     return
 
+  (callback) ->
+
+    # ATNDからイベント情報を取得し、MongoDBへデータを格納
+    my.c "■ ATND task start"
+    getEventFromATND null, "Got Event From ATND"
+    setTimeout (-> callback(null, "Done! ATND\n")), s.GRACE_TIME_ATND
+    return
+
   , (callback) ->
 
     # 当日開催するイベントのツイートをStreaming APIで収集する処理の開始
@@ -67,8 +77,9 @@ async.series tasks4startUp, (err, results) ->
 
 ##
 # 日付変更時のタスク
-# 1.イベントデータ更新
-# 2.ハッシュタグリストデータ取得
+# 1.Connpassのイベントデータ更新
+# 2.Doorkeeperのイベントデータ更新
+# 3.ハッシュタグリストデータ取得
 ##
 tasks4Cron = [
 
@@ -86,6 +97,14 @@ tasks4Cron = [
     my.c "■ Doorkeeper task start"
     getEventFromDoorkeeper null, "Got Event From Doorkeeper"
     setTimeout (-> callback(null, "Done! Doorkeeper\n")), s.GRACE_TIME_DK
+    return
+
+  (callback) ->
+
+    # ATNDからイベント情報を取得し、MongoDBへデータを格納
+    my.c "■ ATND task start"
+    getEventFromATND null, "Got Event From ATND"
+    setTimeout (-> callback(null, "Done! ATND\n")), s.GRACE_TIME_ATND
     return
 
   , (callback) ->
