@@ -1,5 +1,5 @@
 (function() {
-  var ATND_GET_LIMIT_NUM, ATND_ORDER_STARTED, async, moment, my, request, s, scrapingATND, _;
+  var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, async, moment, my, request, s, scrapingATND, _;
 
   _ = require('underscore-node');
 
@@ -13,23 +13,18 @@
 
   async = require('async');
 
-  ATND_GET_LIMIT_NUM = 100;
+  INTERVAL_FOR_SCRAPING_IN_MS = 2000;
 
-  ATND_ORDER_STARTED = 2;
+  NUM_LIMIT_GET_EVENT_API = 100;
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.getEventFromATND = function() {
-    var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, TERM_TO_GET_TARGET_EVENT, daysAfterDate, isStillLeftoverNotRestoredData, nowDate, page, time, ymds;
-    INTERVAL_FOR_SCRAPING_IN_MS = 2000;
-    NUM_LIMIT_GET_EVENT_API = 100;
-    TERM_TO_GET_TARGET_EVENT = "3";
-    ymds = my.getDaysYYYYMMDD(3);
+    var isStillLeftoverNotRestoredData, page, time, ymds;
     page = 0;
     time = 0;
+    ymds = my.getDaysYYYYMMDD(3);
     isStillLeftoverNotRestoredData = true;
-    nowDate = my.formatYMD();
-    daysAfterDate = my.addDaysFormatYMD(TERM_TO_GET_TARGET_EVENT);
     async.whilst(function() {
       return isStillLeftoverNotRestoredData;
     }, function(callback) {

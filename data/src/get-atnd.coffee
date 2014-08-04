@@ -1,31 +1,23 @@
-_                  = require 'underscore-node'
-moment             = require 'moment'
-request            = require 'request'
-my                 = require './my'
-scrapingATND = require './scraping-atnd'
-async              = require 'async'
-ATND_GET_LIMIT_NUM = 100
-ATND_ORDER_STARTED = 2
+_                           = require 'underscore-node'
+moment                      = require 'moment'
+request                     = require 'request'
+my                          = require './my'
+scrapingATND 　　　　　　　　　　　　　= require './scraping-atnd'
+async                       = require 'async'
+INTERVAL_FOR_SCRAPING_IN_MS = 2000
+NUM_LIMIT_GET_EVENT_API     = 100
 s                  = if process.env.NODE_ENV is "production"
   require("./production")
 else
   require("./development")
 
+
 exports.getEventFromATND = ->
-
-  INTERVAL_FOR_SCRAPING_IN_MS = 2000
-  NUM_LIMIT_GET_EVENT_API     = 100
-  TERM_TO_GET_TARGET_EVENT    = "3"
-
-  ymds = my.getDaysYYYYMMDD(3)
-
-  # my.dump ymds
 
   page = 0
   time = 0
+  ymds = my.getDaysYYYYMMDD(3)
   isStillLeftoverNotRestoredData = true
-  nowDate = my.formatYMD()
-  daysAfterDate = my.addDaysFormatYMD(TERM_TO_GET_TARGET_EVENT)
 
   async.whilst(
 
