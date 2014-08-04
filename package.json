@@ -1,7 +1,6 @@
 {
   "name": "Ayase",
-  "version": "0.0.0",
-  "description": "This example app is so cool.",
+  "version": "1.0.0",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +13,6 @@
     "heroku"
   ],
   "author": "eiurur",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/eiurur/ayase-heroku/issues"
   },
