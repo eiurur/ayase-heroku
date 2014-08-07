@@ -1,18 +1,18 @@
 Ayase
 =====
 
-<a href="http://ayase.herokuapp.com" target="_blank">Ayase</a>
-
-これは何？
-------
-
 イベントや勉強会に関するツイートを集約するアプリケーションです。
 
-connpassAPIを用いて<a href="http://connpass.com/" target="_blank">connpass</a>に登録されているイベントデータを事前にデータベースへ取り込んでおき、
-イベントの開始時刻になるとTwitterStreamingAPIで指定されたハッシュタグを含むツイートを拾い始めます。
+<img src="https://dl.dropboxusercontent.com/u/31717228/images/Ayase/aayse.png" width="500">
 
-収集したツイート群はサイトでまとめて読むことができ、また、SNSにシェアすることも可能です。
+<a href="http://ayase.herokuapp.com" target="_blank">Ayase - heroku</a>
 
+対応サービス
+-----
+
+- connpass
+- Doorkeeper
+- ATND
 
 
 License
