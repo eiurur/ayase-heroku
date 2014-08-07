@@ -63,6 +63,7 @@ exports.NG_KEYWORDS = [
   '愛情'
   '事業'
   'BBQ'
+  'ランニング'
 ]
 
 exports.NG_USERS = [

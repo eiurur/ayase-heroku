@@ -30,7 +30,6 @@ exports.readInitEvent = function (req, res) {
              serviceName: eventData.serviceName
           ,  eventId: eventData.eventId
           ,  title: eventData.title
-          ,  catch: eventData.catch
           ,  description: eventData.description
           ,  eventUrl: eventData.eventUrl
           ,  hashTag: eventData.hashTag
@@ -62,7 +61,6 @@ exports.readAllEvent = function (req, res) {
              serviceName: eventData.serviceName
           ,  eventId: eventData.eventId
           ,  title: eventData.title
-          ,  catch: eventData.catch
           ,  description: eventData.description
           ,  eventUrl: eventData.eventUrl
           ,  hashTag: eventData.hashTag
@@ -100,7 +98,6 @@ exports.readEventOnTheDay = function (req, res) {
              serviceName: eventData.serviceName
           ,  eventId: eventData.eventId
           ,  title: eventData.title
-          ,  catch: eventData.catch
           ,  description: eventData.description
           ,  eventUrl: eventData.eventUrl
           ,  hashTag: eventData.hashTag
@@ -140,7 +137,6 @@ exports.readEventByEventId = function (req, res) {
                serviceName: eventData.serviceName
             ,  eventId: eventData.eventId
             ,  title: eventData.title
-            ,  catch: eventData.catch
             ,  description: eventData.description
             ,  eventUrl: eventData.eventUrl
             ,  hashTag: eventData.hashTag

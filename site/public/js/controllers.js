@@ -10,7 +10,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
       $http.get('/api/readAllEvent/').
         success(function(data) {
 
-          // 0件() = つい消し)だとエラーで無限ローディングに陥る
+          // 0件( = つい消し)だと無限ローディングに陥る
           var length = data.events.length;
           var index = 0;
           var process = function() {
