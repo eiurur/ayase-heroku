@@ -147,20 +147,16 @@ class EventProvider
       serviceName: params['serviceName']
       eventId: params['eventId']
       title: params['title']
-      catch: params['catch']
       description: params['description']
       eventUrl: params['eventUrl']
       hashTag: params['hashTag']
       startedDate: params['startedDate']
       startedAt: params['startedAt']
       endedAt: params['endedAt']
-      ownerId: params['ownerId']
-      ownerNickname: params['ownerNickname']
-      ownerDisplayName: params['ownerDisplayName']
       updatedAt: params['updatedAt']
 
     event.save (err) ->
-      callback()
+      callback(err, params)
 
   updateTweetNum: (params, callback) ->
     Event.update
