@@ -2,7 +2,7 @@ _                           = require 'underscore-node'
 moment                      = require 'moment'
 request                     = require 'request'
 my                          = require './my'
-scrapingATND 　　　　　　　　　　　　　= require './scraping-atnd'
+scraping                    = require './scraping'
 async                       = require 'async'
 INTERVAL_FOR_SCRAPING_IN_MS = 2000
 NUM_LIMIT_GET_EVENT_API     = 100
@@ -11,6 +11,15 @@ s                  = if process.env.NODE_ENV is "production"
 else
   require("./development")
 
+formatEventData = (json) ->
+  json.eventID = json.event_id
+  json.serviceName = 'atnd'
+  json.eventURL = json.event_url
+  json.startedDate = my.formatYMD(json.started_at)
+  json.startedAt = json.started_at
+  json.endedAt = json.ended_at
+  json.updatedAt = json.updated_at
+  json
 
 exports.getEventFromATND = ->
 
@@ -48,7 +57,8 @@ exports.getEventFromATND = ->
 
         for json in body.events
           time += INTERVAL_FOR_SCRAPING_IN_MS
-          scrapingATND.scraping(json.event, time)
+          jsonFormated = formatEventData(json.event)
+          scraping.scraping(jsonFormated, time)
 
         eventNum = body.results_returned
         if eventNum  < NUM_LIMIT_GET_EVENT_API || _.isEmpty body.events

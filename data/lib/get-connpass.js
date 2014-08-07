@@ -1,5 +1,5 @@
 (function() {
-  var CONNPASS_GET_LIMIT_NUM, CONNPASS_ORDER_STARTED, async, connpass, moment, my, request, s, _;
+  var CONNPASS_GET_LIMIT_NUM, CONNPASS_ORDER_STARTED, async, formatEventData, moment, my, request, s, save, _;
 
   _ = require('underscore-node');
 
@@ -9,7 +9,7 @@
 
   my = require('./my');
 
-  connpass = require('./save-connpass');
+  save = require('./save');
 
   async = require('async');
 
@@ -18,6 +18,18 @@
   CONNPASS_ORDER_STARTED = 2;
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
+
+  formatEventData = function(json) {
+    json.eventID = json.event_id;
+    json.serviceName = 'connpass';
+    json.eventURL = json.event_url;
+    json.hashTag = json.hash_tag;
+    json.startedDate = my.formatYMD(json.started_at);
+    json.startedAt = json.started_at;
+    json.endedAt = json.ended_at;
+    json.updatedAt = json.updated_at;
+    return json;
+  };
 
   exports.getEventFromConnpass = function() {
     var tasks;
@@ -63,7 +75,8 @@
               if (my.include(s.NG_KEYWORDS, json.hash_tag)) {
                 continue;
               }
-              connpass.save(json);
+              json = formatEventData(json);
+              save.save(json);
             }
             return callback(null, loopNum, "got conpass");
           });

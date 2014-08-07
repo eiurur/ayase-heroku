@@ -1,5 +1,5 @@
 (function() {
-  var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, async, moment, my, request, s, scrapingATND, _;
+  var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, async, formatEventData, moment, my, request, s, scraping, _;
 
   _ = require('underscore-node');
 
@@ -9,7 +9,7 @@
 
   my = require('./my');
 
-  scrapingATND = require('./scraping-atnd');
+  scraping = require('./scraping');
 
   async = require('async');
 
@@ -18,6 +18,17 @@
   NUM_LIMIT_GET_EVENT_API = 100;
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
+
+  formatEventData = function(json) {
+    json.eventID = json.event_id;
+    json.serviceName = 'atnd';
+    json.eventURL = json.event_url;
+    json.startedDate = my.formatYMD(json.started_at);
+    json.startedAt = json.started_at;
+    json.endedAt = json.ended_at;
+    json.updatedAt = json.updated_at;
+    return json;
+  };
 
   exports.getEventFromATND = function() {
     var isStillLeftoverNotRestoredData, page, time, ymds;
@@ -42,7 +53,7 @@
         url: "http://api.atnd.org/events/?" + p
       };
       request.get(options, function(err, res, body) {
-        var eventNum, json, _i, _len, _ref;
+        var eventNum, json, jsonFormated, _i, _len, _ref;
         if (err) {
           return my.e("get-ATND request Error", err);
         }
@@ -51,7 +62,8 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           json = _ref[_i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
-          scrapingATND.scraping(json.event, time);
+          jsonFormated = formatEventData(json.event);
+          scraping.scraping(jsonFormated, time);
         }
         eventNum = body.results_returned;
         if (eventNum < NUM_LIMIT_GET_EVENT_API || _.isEmpty(body.events)) {

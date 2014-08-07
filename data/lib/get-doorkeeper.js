@@ -1,5 +1,5 @@
 (function() {
-  var async, client, moment, my, request, s, scrapingDK, _;
+  var async, client, formatEventData, moment, my, request, s, scraping, _;
 
   _ = require('underscore-node');
 
@@ -13,9 +13,20 @@
 
   my = require('./my');
 
-  scrapingDK = require('./scraping-doorkeeper');
+  scraping = require('./scraping');
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
+
+  formatEventData = function(json) {
+    json.eventID = json.id;
+    json.serviceName = 'doorkeeper';
+    json.eventURL = json.public_url;
+    json.startedDate = my.formatYMD(json.starts_at);
+    json.startedAt = json.starts_at;
+    json.endedAt = json.ends_at;
+    json.updatedAt = json.updated_at;
+    return json;
+  };
 
   exports.getEventFromDoorkeeper = function() {
     var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, TERM_TO_GET_TARGET_EVENT, daysAfterDate, isStillLeftoverNotRestoredData, nowDate, page, time;
@@ -42,7 +53,7 @@
         json: true
       };
       request.get(options, function(err, res, body) {
-        var json, _i, _len;
+        var json, jsonFormated, _i, _len;
         if (err) {
           return my.e("get-DK request Error", err);
         }
@@ -52,7 +63,8 @@
         for (_i = 0, _len = body.length; _i < _len; _i++) {
           json = body[_i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
-          scrapingDK.scraping(json, time);
+          jsonFormated = formatEventData(json.event);
+          scraping.scraping(jsonFormated, time);
         }
         if (body.length < NUM_LIMIT_GET_EVENT_API || _.isEmpty(body)) {
           isStillLeftoverNotRestoredData = false;

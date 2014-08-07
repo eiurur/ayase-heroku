@@ -4,7 +4,7 @@ request    = require 'request'
 client     = require 'cheerio-httpcli'
 async      = require 'async'
 my         = require './my'
-scrapingDK = require './scraping-doorkeeper'
+scraping   = require './scraping'
 s          = if process.env.NODE_ENV is "production"
   require("./production")
 else
@@ -25,6 +25,16 @@ else
 # Modelにどのイベント管理サービスからなのか明記するカラム追加。
 # index.jade側では、もし空白ならconnpassってことにしておく。
 # ATND、connpass用モデルにも追加
+
+formatEventData = (json) ->
+  json.eventID = json.id
+  json.serviceName = 'doorkeeper'
+  json.eventURL = json.public_url
+  json.startedDate = my.formatYMD(json.starts_at)
+  json.startedAt = json.starts_at
+  json.endedAt = json.ends_at
+  json.updatedAt = json.updated_at
+  json
 
 exports.getEventFromDoorkeeper = ->
 
@@ -67,7 +77,8 @@ exports.getEventFromDoorkeeper = ->
 
         for json in body
           time += INTERVAL_FOR_SCRAPING_IN_MS
-          scrapingDK.scraping(json, time)
+          jsonFormated = formatEventData(json.event)
+          scraping.scraping(jsonFormated, time)
 
         if body.length < NUM_LIMIT_GET_EVENT_API || _.isEmpty body
           isStillLeftoverNotRestoredData = false
