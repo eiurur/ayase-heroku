@@ -2,7 +2,7 @@ _        = require 'underscore-node'
 request  = require 'request'
 client   = require 'cheerio-httpcli'
 my       = require './my'
-saveATND = require './save-atnd'
+save     = require './save'
 s        = if process.env.NODE_ENV is "production"
   require("./production")
 else
@@ -12,28 +12,36 @@ else
 act = (json) ->
 
   # ハッシュタグを取得
-  client.fetch json.event_url
+  client.fetch json.eventURL
   , (err, $, res) ->
 
-    # 日本語が文字化けする
-    # hashTag = $('.symbol-hash + a').html()
-    hashTag = $('.symbol-hash + a').eq(0).text()
+    if json.serviceName is 'atnd'
+      my.c "--------------  ATND  -------------"
+      hashTag = $('.symbol-hash + a').eq(0).text()
+      my.c "ハッシュタグ", hashTag
+      my.c "URL", json.eventURL
+
+    else if json.serviceName is 'doorkeeper'
+      my.c "-----------  doorkeeper  ----------"
+      hashTag = $('.client-main-links-others > a').eq(1).text()
+      my.c "ハッシュタグ", hashTag
+      my.c "URL", json.eventURL
 
     # twitter用のハッシュタグが登録されていないイベントは除外
     return if _.isEmpty(hashTag) || _.isNull(hashTag)
 
     hashTag = hashTag.replace(/[#＃\n]/g, "")
 
-    my.c "--------------  ATND  -------------"
-    my.c $("title").text()
-    my.c "url", json.event_url
-    my.c "置換後のハッシュタグ", hashTag
-
     # 収集対象外のハッシュタグを設定しているイベントは除外
     return if my.include(s.NG_KEYWORDS, hashTag)
 
-    saveATND.save(json, hashTag)
+    # for ATND
+    if _.isNull json.endedAt || _.isUndefined endedAt
+      json.endedAt = my.endBrinkFormatYMDHms(json.startedDate)
 
+    json.hashTag = hashTag
+
+    save.save json
 
 exports.scraping = (json, time) ->
   do (json, time) ->

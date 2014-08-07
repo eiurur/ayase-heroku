@@ -1,5 +1,5 @@
 (function() {
-  var act, client, my, request, s, saveATND, _;
+  var act, client, my, request, s, save, _;
 
   _ = require('underscore-node');
 
@@ -9,26 +9,36 @@
 
   my = require('./my');
 
-  saveATND = require('./save-atnd');
+  save = require('./save');
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   act = function(json) {
-    return client.fetch(json.event_url, function(err, $, res) {
+    return client.fetch(json.eventURL, function(err, $, res) {
       var hashTag;
-      hashTag = $('.symbol-hash + a').eq(0).text();
+      if (json.serviceName === 'atnd') {
+        my.c("--------------  ATND  -------------");
+        hashTag = $('.symbol-hash + a').eq(0).text();
+        my.c("ハッシュタグ", hashTag);
+        my.c("URL", json.eventURL);
+      } else if (json.serviceName === 'doorkeeper') {
+        my.c("-----------  doorkeeper  ----------");
+        hashTag = $('.client-main-links-others > a').eq(1).text();
+        my.c("ハッシュタグ", hashTag);
+        my.c("URL", json.eventURL);
+      }
       if (_.isEmpty(hashTag) || _.isNull(hashTag)) {
         return;
       }
       hashTag = hashTag.replace(/[#＃\n]/g, "");
-      my.c("--------------  ATND  -------------");
-      my.c($("title").text());
-      my.c("url", json.event_url);
-      my.c("置換後のハッシュタグ", hashTag);
       if (my.include(s.NG_KEYWORDS, hashTag)) {
         return;
       }
-      return saveATND.save(json, hashTag);
+      if (_.isNull(json.endedAt || _.isUndefined(endedAt))) {
+        json.endedAt = my.endBrinkFormatYMDHms(json.startedDate);
+      }
+      json.hashTag = hashTag;
+      return save.save(json);
     });
   };
 
