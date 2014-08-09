@@ -1,4 +1,4 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, eventsStashService, Page) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page) {
 
   // パフォーマンスを考慮して
   // 最初に10ツイート以上含んだイベントデータを10件分取得し、
@@ -60,49 +60,93 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 
 function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page) {
 
-  serviceName = $routeParams.serviceName || "connpass";
-  eventId     = $routeParams.eventId || 0;
+  function insertTweetViewList(data) {
+    var index        = 0
+      , tweetLength  = data.tweets.length
+      , process      = function() {
+
+      // ブラウザをフリーズさせずにツイートを全部表示させる
+      for (; index < tweetLength;) {
+
+        // $scope.tweets.push(data.tweets[index]); より高速
+        $scope.tweets[$scope.tweets.length] = data.tweets[index];
+        lastTweetIdStr = data.tweets[index].tweetIdStr;
+
+        $timeout(process, 5);
+        index++;
+        break;
+      }
+    };
+
+    process();
+  }
+
+
+  /**
+   * ページ描画時に最初に行う処理
+   */
+  var lastTweetIdStr
+    , serviceName = $routeParams.serviceName || "connpass"
+    , eventId     = $routeParams.eventId || 0
+    ;
 
   // 最初の20件を取得
   $http.get('/api/readTweet/' + serviceName + '/' + eventId).
     success(function(data) {
+      var tweetLength = data.tweets.length;
+
       $scope.tweets = data.tweets;
 
       // URLから無効なページへ直接アクセスされたときはindexページへリダイレクト
-      if(data.tweets.length === 0) {
+      if(tweetLength === 0) {
         console.log("No tweets");
         $location.path('/');
       }
 
       // FDBへ無駄なクエリは投げない
-      if(data.tweets.length < 10) {
-        console.log(data.tweets.length);
+      if(tweetLength < 10) {
+        console.log(tweetLength);
         return;
       }
 
       // 残りのツイートを取得
       $http.get('/api/readRestTweet/' + serviceName + '/' + eventId).
         success(function(data) {
-          var length = data.tweets.length;
-          var index = 0;
-          var process = function() {
-
-            // ブラウザをフリーズさせずにツイートを全部表示させる
-            for (; index < length;) {
-
-              // $scope.tweets.push(data.tweets[index]); より高速
-              $scope.tweets[$scope.tweets.length] = data.tweets[index];
-
-              $timeout(process, 5);
-              index++;
-              break;
-            }
-          };
-
-          process();
+          insertTweetViewList(data);
         });
     });
 
+  /**
+   * 新規ツイートがあれば自動で追加。
+   */
+  var onTimeout
+    , timer
+    , INTERVAL = 30 * 1000
+    ;
+
+  onTimeout = function() {
+    $http.get('/api/readNewTweet/' + serviceName + '/' + eventId + '/' + lastTweetIdStr).
+      success(function(data) {
+        if(data.tweets.length === 0) return;
+
+        // Update!!
+        insertTweetViewList(data);
+      });
+
+    timer = $timeout(onTimeout, INTERVAL);
+  };
+
+  timer = $timeout(onTimeout, INTERVAL);
+
+  $scope.$on("$destroy", function() {
+    if (timer) {
+      $timeout.cancel(timer);
+    }
+  });
+
+  /**
+   * イベントの情報を取得
+   */
   $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId).
     success(function(data) {
       $scope.events = data.events;
@@ -112,8 +156,9 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       $rootScope.title = Page.title();
     });
 
+  // シェアボタンのURL割り当て用
   $scope.absUrl = $location.absUrl();
 
-  // ツイート一覧の並び順を変更。
+  // ツイート一覧の並び順をtweetIDで昇順に変更。
   $scope.reverse = false;
 }

@@ -198,6 +198,18 @@ class TweetProvider
          .exec (err, data) ->
            callback err, data
 
+
+  findNewByEventId: (params, callback) ->
+    Tweet.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+          tweetIdStr:
+            $gt: params['tweetIdStr'] + ''
+         ]
+         .sort tweetId: 1
+         .exec (err, data) ->
+           callback err, data
+
   findByEventId: (params, callback) ->
     Tweet.find eventId: params['eventId'], (err, data) ->
       callback err, data

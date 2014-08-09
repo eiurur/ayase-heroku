@@ -245,6 +245,24 @@
       });
     };
 
+    TweetProvider.prototype.findNewByEventId = function(params, callback) {
+      return Tweet.find({
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId'],
+            tweetIdStr: {
+              $gt: params['tweetIdStr'] + ''
+            }
+          }
+        ]
+      }).sort({
+        tweetId: 1
+      }).exec(function(err, data) {
+        return callback(err, data);
+      });
+    };
+
     TweetProvider.prototype.findByEventId = function(params, callback) {
       return Tweet.find({
         eventId: params['eventId']

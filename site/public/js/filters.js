@@ -21,7 +21,7 @@ angular.module('myApp.filters', []).
     return function(items, term) {
       var result = [];
       angular.forEach(items, function(item) {
-        if(item.startedDateX > term) {
+        if(item.startedDateX >= term) {
           result.push(item);
         }
       });
@@ -32,7 +32,7 @@ angular.module('myApp.filters', []).
     return function(items, num) {
       var result = [];
       angular.forEach(items, function(item) {
-        if(item.tweetNum > num) {
+        if(item.tweetNum >= num) {
           result.push(item);
         }
       });

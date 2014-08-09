@@ -52,7 +52,6 @@ exports.serve = function() {
   /**
    * Routes
    */
-
   // serve index and view partials
   app.get('/', routes.index);
   app.get('/partials/:name', routes.partials);
@@ -65,6 +64,7 @@ exports.serve = function() {
 
   app.get('/api/readTweet/:serviceName/:eventId', api.readTweet);
   app.get('/api/readRestTweet/:serviceName/:eventId', api.readRestTweet);
+  app.get('/api/readNewTweet/:serviceName/:eventId/:tweetIdStr', api.readNewTweet);
   app.get('/api/readEventByEventId/:serviceName/:eventId', api.readEventByEventId);
 
   app.get('*', routes.index);

@@ -7,7 +7,6 @@ var dir                         = '../../data/lib/'
   , TweetProvider               = require(dir + 'model').TweetProvider
   , settings                    = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
   , INIT_GET_BORDER_NUMBER_LINE = 10
-  , NUMBER_TWEET_TO_UPDATE_FOR_SHOWING_LIST = 10
   ;
 
 function tweetTrimer(t) {
@@ -117,8 +116,8 @@ exports.readEventOnTheDay = function (req, res) {
 exports.readEventByEventId = function (req, res) {
 
     var serviceName = req.params.serviceName
-      , eventId   = req.params.eventId
-      , numShow   = 1
+      , eventId     = req.params.eventId
+      , numShow     = 1
       ;
 
     console.log("readEventByEventId serviceName = " + serviceName);
@@ -162,12 +161,9 @@ exports.readEventByEventId = function (req, res) {
 exports.readTweet = function (req, res) {
 
     var serviceName = req.params.serviceName
-      , eventId   = req.params.eventId
-      , numShow   = INIT_GET_BORDER_NUMBER_LINE
+      , eventId     = req.params.eventId
+      , numShow     = INIT_GET_BORDER_NUMBER_LINE
       ;
-
-    
-    console.log("readTweet serviceName = " + serviceName);
 
     TweetProvider.findInitByEventId({
         serviceName: serviceName
@@ -206,14 +202,55 @@ exports.readTweet = function (req, res) {
 exports.readRestTweet = function (req, res) {
 
     var serviceName = req.params.serviceName
-      , eventId   = req.params.eventId
-      , numSkip   = INIT_GET_BORDER_NUMBER_LINE
+      , eventId     = req.params.eventId
+      , numSkip     = INIT_GET_BORDER_NUMBER_LINE
       ;
 
     TweetProvider.findRestByEventId({
         serviceName: serviceName
       , eventId: eventId
       , numSkip: numSkip
+    }, function(error, tweetDatas) {
+      var tweets = [];
+
+      if(_.isNull(error)) {
+        tweetDatas.forEach(function (tweetData) {
+          tweets.push({
+               eventId: tweetData.eventId
+            ,  tweetId: tweetData.tweetId
+            ,  tweetIdStr: tweetData.tweetIdStr
+            ,  text: tweetTrimer(tweetData.text)
+            ,  hashTag: tweetData.hashTag
+            ,  tweetUrl: tweetData.tweetUrl
+            ,  hashTag: tweetData.hashTag
+            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+            ,  userId: tweetData.userId
+            ,  userName: tweetData.userName
+            ,  screenName: tweetData.screenName
+            ,  profileImageUrl: tweetData.profileImageUrl
+          });
+        });
+      }
+
+      res.json({
+          tweets: tweets
+      });
+    });
+};
+
+
+// 最初の20件分のツイートをDBから取得してViewに渡す
+exports.readNewTweet = function (req, res) {
+
+    var serviceName = req.params.serviceName
+      , eventId     = req.params.eventId
+      , tweetIdStr  = req.params.tweetIdStr
+      ;
+
+    TweetProvider.findNewByEventId({
+        serviceName: serviceName
+      , eventId: eventId
+      , tweetIdStr: tweetIdStr
     }, function(error, tweetDatas) {
       var tweets = [];
 
