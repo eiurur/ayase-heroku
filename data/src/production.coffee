@@ -88,6 +88,12 @@ exports.NG_USERS = [
   'slidebot'
   'interest_web'
   'wJSnews'
+  'swiftswiftjp'
+  'akio0911_news'
+  'KenichToudoh'
+  'hilbert_d'
+  'koziki33amatera'
+  'niigata_jyouhou'
 ]
 
 TW_CONSUMER_KEY        = process.env.TW_CONSUMER_KEY
