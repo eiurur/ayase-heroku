@@ -89,7 +89,10 @@ class EventProvider
   findOnTheDay: (params, callback) ->
     console.log "------------- find findOnTheDay ----------------"
 
-    Event.find 'period.startedDate': params['nowDate']
+    Event.find "$or": [
+          'period.startedDate': params['nowDate']
+          'startedDate': params['nowDate']
+         ]
          .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->

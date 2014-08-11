@@ -21,7 +21,6 @@ exports.readInitEvent = function (req, res) {
         numShow: numShow
     }, function(error, eventDatas) {
       var events = getEventData(error, eventDatas);
-      console.log("events ", events);
       console.log("--------- find init --------");
       res.json({
           events: events
@@ -167,13 +166,13 @@ function getEventData(error, eventDatas) {
     eventDatas.forEach(function (eventData) {
       var startedDate, startedDateX, startedAt, endedAt;
       if(_.isEmpty(eventData.period)) {
-        startedDate = eventData.startedDate;
+        startedDate = moment(eventData.startedDate).format("YYYY-MM-DD");
         startedDateX =  moment(eventData.startedDate).format("X");
         startedAt =  moment(eventData.startedAt).format("YYYY/MM/DD HH:mm");
         endedAt = moment(eventData.endedAt).format("HH:mm");
       } else {
         var length = eventData.period.length;
-        startedDate = eventData.startedDate;
+        startedDate = moment(eventData.startedDate).format("YYYY-MM-DD");
         startedDateX =  moment(eventData.startedDate).format("X");
         startedAt =  moment(eventData.period[0].startedAt).format("YYYY/MM/DD HH:mm");
         if(length === 1) {
@@ -182,6 +181,8 @@ function getEventData(error, eventDatas) {
           endedAt = moment(eventData.period[length-1].endedAt).format("YYYY/MM/DD HH:mm");
         }
       }
+
+      // console.log(events);
 
       events.push({
            serviceName: eventData.serviceName

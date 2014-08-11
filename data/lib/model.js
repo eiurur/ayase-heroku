@@ -94,7 +94,12 @@
     EventProvider.prototype.findOnTheDay = function(params, callback) {
       console.log("------------- find findOnTheDay ----------------");
       return Event.find({
-        'period.startedDate': params['nowDate']
+        "$or": [
+          {
+            'period.startedDate': params['nowDate'],
+            'startedDate': params['nowDate']
+          }
+        ]
       }).sort({
         startedAt: -1
       }).limit(params["numShow"]).exec(function(err, data) {
