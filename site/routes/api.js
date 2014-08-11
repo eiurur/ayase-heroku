@@ -2,20 +2,17 @@ var dir                         = '../../data/lib/'
   , moment                      = require('moment')
   , _                           = require('underscore-node')
   , async                       = require('async')
-  , my                          = require(dir + 'my')
+  , my                          = require(dir + 'my').my
   , EventProvider               = require(dir + 'model').EventProvider
   , TweetProvider               = require(dir + 'model').TweetProvider
   , settings                    = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
   , INIT_GET_BORDER_NUMBER_LINE = 10
   ;
 
-function tweetTrimer(t) {
-  var tweet = t.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!&#45;\/]))?)/g,'<a href="$1" target="_blank">$1</a>');
-  tweet = tweet.replace(/(^|\s)(@|＠)(\w+)/g,'$1<a href="http://www.twitter.com/$3" target="_blank">@$3</a>');
-  return tweet.replace(/(?:^|[^ーー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_/>]+)[#＃]([ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/ig, ' <a href="http://twitter.com/search?q=%23$1" target="_blank">#$1</a>');
-}
 
-
+/**
+ * イベント
+ */
 exports.readInitEvent = function (req, res) {
 
     var numShow = INIT_GET_BORDER_NUMBER_LINE;
@@ -23,26 +20,9 @@ exports.readInitEvent = function (req, res) {
     EventProvider.findInit({
         numShow: numShow
     }, function(error, eventDatas) {
-      var events = [];
-      eventDatas.forEach(function (eventData) {
-        events.push({
-             serviceName: eventData.serviceName
-          ,  eventId: eventData.eventId
-          ,  title: eventData.title
-          ,  description: eventData.description
-          ,  eventUrl: eventData.eventUrl
-          ,  hashTag: eventData.hashTag
-          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
-          ,  startedDateX: moment(eventData.startedDate).format("X")
-          ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
-          ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          ,  tweetNum: eventData.tweetNum
-        });
-      });
-
-      console.log("------ initEvent ------");
-      console.log(events.length);
-
+      var events = getEventData(error, eventDatas);
+      console.log("events ", events);
+      console.log("--------- find init --------");
       res.json({
           events: events
       });
@@ -54,26 +34,8 @@ exports.readAllEvent = function (req, res) {
 
     EventProvider.findAll({
     }, function(error, eventDatas) {
-      var events = [];
-      eventDatas.forEach(function (eventData) {
-        events.push({
-             serviceName: eventData.serviceName
-          ,  eventId: eventData.eventId
-          ,  title: eventData.title
-          ,  description: eventData.description
-          ,  eventUrl: eventData.eventUrl
-          ,  hashTag: eventData.hashTag
-          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
-          ,  startedDateX: moment(eventData.startedDate).format("X")
-          ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
-          ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-          ,  tweetNum: eventData.tweetNum
-        });
-      });
-
+      var events = getEventData(error, eventDatas);
       console.log("------ restEvent ------");
-      console.log(events.length);
-
       res.json({
           events: events
       });
@@ -91,20 +53,7 @@ exports.readEventOnTheDay = function (req, res) {
         numShow: numShow
       , nowDate: moment().format('YYYY-MM-DD')
     }, function(error, eventDatas) {
-      var eventsOnTheDay = [];
-      eventDatas.forEach(function (eventData) {
-        eventsOnTheDay.push({
-             serviceName: eventData.serviceName
-          ,  eventId: eventData.eventId
-          ,  title: eventData.title
-          ,  description: eventData.description
-          ,  eventUrl: eventData.eventUrl
-          ,  hashTag: eventData.hashTag
-          ,  startedDate: moment(eventData.startedDate).format('YYYY-MM-DD')
-          ,  tweetNum: eventData.tweetNum
-        });
-      });
-
+      var eventsOnTheDay = getEventData(error, eventDatas);
       res.json({
           eventsOnTheDay: eventsOnTheDay
       });
@@ -128,28 +77,7 @@ exports.readEventByEventId = function (req, res) {
       , eventId: eventId
       , numShow: numShow
     }, function(error, eventDatas) {
-      var events = [];
-
-      if(_.isNull(error)) {
-        eventDatas.forEach(function (eventData) {
-          events.push({
-               serviceName: eventData.serviceName
-            ,  eventId: eventData.eventId
-            ,  title: eventData.title
-            ,  description: eventData.description
-            ,  eventUrl: eventData.eventUrl
-            ,  hashTag: eventData.hashTag
-            ,  startedDate: moment(eventData.startedDate).format("YYYY年 MM月 DD日")
-            ,  startedDateX: moment(eventData.startedDate).format("X")
-            ,  startedAt: moment(eventData.startedAt).format("YYYY/MM/DD HH:mm")
-            ,  endedAt: moment(eventData.endedAt).format("HH:mm")
-            ,  tweetNum: eventData.tweetNum
-          });
-        });
-      }
-
-      console.log("events = ", events);
-
+      var events = getEventData(error, eventDatas);
       res.json({
           events: events
       });
@@ -157,6 +85,9 @@ exports.readEventByEventId = function (req, res) {
 };
 
 
+/**
+ * ツイート
+ */
 // 最初の20件分のツイートをDBから取得してViewに渡す
 exports.readTweet = function (req, res) {
 
@@ -170,27 +101,7 @@ exports.readTweet = function (req, res) {
       , eventId: eventId
       , numShow: numShow
     }, function(error, tweetDatas) {
-      var tweets = [];
-
-      if(_.isNull(error)) {
-        tweetDatas.forEach(function (tweetData) {
-          tweets.push({
-               eventId: tweetData.eventId
-            ,  tweetId: tweetData.tweetId
-            ,  tweetIdStr: tweetData.tweetIdStr
-            ,  text: tweetTrimer(tweetData.text)
-            ,  hashTag: tweetData.hashTag
-            ,  tweetUrl: tweetData.tweetUrl
-            ,  hashTag: tweetData.hashTag
-            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-            ,  userId: tweetData.userId
-            ,  userName: tweetData.userName
-            ,  screenName: tweetData.screenName
-            ,  profileImageUrl: tweetData.profileImageUrl
-          });
-        });
-      }
-
+      var tweets = getTweetData(error, tweetDatas);
       res.json({
           tweets: tweets
       });
@@ -211,27 +122,7 @@ exports.readRestTweet = function (req, res) {
       , eventId: eventId
       , numSkip: numSkip
     }, function(error, tweetDatas) {
-      var tweets = [];
-
-      if(_.isNull(error)) {
-        tweetDatas.forEach(function (tweetData) {
-          tweets.push({
-               eventId: tweetData.eventId
-            ,  tweetId: tweetData.tweetId
-            ,  tweetIdStr: tweetData.tweetIdStr
-            ,  text: tweetTrimer(tweetData.text)
-            ,  hashTag: tweetData.hashTag
-            ,  tweetUrl: tweetData.tweetUrl
-            ,  hashTag: tweetData.hashTag
-            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-            ,  userId: tweetData.userId
-            ,  userName: tweetData.userName
-            ,  screenName: tweetData.screenName
-            ,  profileImageUrl: tweetData.profileImageUrl
-          });
-        });
-      }
-
+      var tweets = getTweetData(error, tweetDatas);
       res.json({
           tweets: tweets
       });
@@ -252,29 +143,88 @@ exports.readNewTweet = function (req, res) {
       , eventId: eventId
       , tweetIdStr: tweetIdStr
     }, function(error, tweetDatas) {
-      var tweets = [];
-
-      if(_.isNull(error)) {
-        tweetDatas.forEach(function (tweetData) {
-          tweets.push({
-               eventId: tweetData.eventId
-            ,  tweetId: tweetData.tweetId
-            ,  tweetIdStr: tweetData.tweetIdStr
-            ,  text: tweetTrimer(tweetData.text)
-            ,  hashTag: tweetData.hashTag
-            ,  tweetUrl: tweetData.tweetUrl
-            ,  hashTag: tweetData.hashTag
-            ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
-            ,  userId: tweetData.userId
-            ,  userName: tweetData.userName
-            ,  screenName: tweetData.screenName
-            ,  profileImageUrl: tweetData.profileImageUrl
-          });
-        });
-      }
-
+      var tweets = getTweetData(error, tweetDatas);
       res.json({
           tweets: tweets
       });
     });
 };
+
+/**
+ * メソッド
+ */
+function tweetTrimer(t) {
+  var tweet = t.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!&#45;\/]))?)/g,'<a href="$1" target="_blank">$1</a>');
+  tweet = tweet.replace(/(^|\s)(@|＠)(\w+)/g,'$1<a href="http://www.twitter.com/$3" target="_blank">@$3</a>');
+  return tweet.replace(/(?:^|[^ーー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_/>]+)[#＃]([ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/ig, ' <a href="http://twitter.com/search?q=%23$1" target="_blank">#$1</a>');
+}
+
+
+function getEventData(error, eventDatas) {
+  var events = [];
+
+  if(_.isNull(error)) {
+    eventDatas.forEach(function (eventData) {
+      var startedDate, startedDateX, startedAt, endedAt;
+      if(_.isEmpty(eventData.period)) {
+        startedDate = eventData.startedDate;
+        startedDateX =  moment(eventData.startedDate).format("X");
+        startedAt =  moment(eventData.startedAt).format("YYYY/MM/DD HH:mm");
+        endedAt = moment(eventData.endedAt).format("HH:mm");
+      } else {
+        var length = eventData.period.length;
+        startedDate = eventData.startedDate;
+        startedDateX =  moment(eventData.startedDate).format("X");
+        startedAt =  moment(eventData.period[0].startedAt).format("YYYY/MM/DD HH:mm");
+        if(length === 1) {
+          endedAt = moment(eventData.period[0].endedAt).format("HH:mm");
+        } else {
+          endedAt = moment(eventData.period[length-1].endedAt).format("YYYY/MM/DD HH:mm");
+        }
+      }
+
+      events.push({
+           serviceName: eventData.serviceName
+        ,  eventId: eventData.eventId
+        ,  title: eventData.title
+        ,  description: eventData.description
+        ,  eventUrl: eventData.eventUrl
+        ,  hashTag: eventData.hashTag
+        ,  startedDate: startedDate
+        ,  startedDateX: startedDateX
+        ,  startedAt: startedAt
+        ,  endedAt: endedAt
+        ,  tweetNum: eventData.tweetNum
+        ,  period: eventData.period
+      });
+    });
+  }
+
+  return events;
+}
+
+
+function getTweetData(error, tweetDatas) {
+  var tweets = [];
+
+  if(_.isNull(error)) {
+    tweetDatas.forEach(function (tweetData) {
+      tweets.push({
+           eventId: tweetData.eventId
+        ,  tweetId: tweetData.tweetId
+        ,  tweetIdStr: tweetData.tweetIdStr
+        ,  text: tweetTrimer(tweetData.text)
+        ,  hashTag: tweetData.hashTag
+        ,  tweetUrl: tweetData.tweetUrl
+        ,  hashTag: tweetData.hashTag
+        ,  createdAt: moment(tweetData.createdAt).format("YYYY-MM-DD HH:mm:ss")
+        ,  userId: tweetData.userId
+        ,  userName: tweetData.userName
+        ,  screenName: tweetData.screenName
+        ,  profileImageUrl: tweetData.profileImageUrl
+      });
+    });
+  }
+
+  return tweets;
+}

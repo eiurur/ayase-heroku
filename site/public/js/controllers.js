@@ -150,8 +150,6 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
   $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId).
     success(function(data) {
       $scope.events = data.events;
-
-      // 0件( = つい消し)だと[0]なんてプロパティねーよって怒られる。
       Page.setTitle($scope.events[0].title);
       $rootScope.title = Page.title();
     });
