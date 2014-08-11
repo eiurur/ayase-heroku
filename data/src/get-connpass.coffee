@@ -1,7 +1,7 @@
 _                       = require 'underscore-node'
 moment                  = require 'moment'
 request                 = require 'request'
-my                      = require './my'
+my                      = require('./my').my
 save                    = require './save'
 async                   = require 'async'
 CONNPASS_GET_LIMIT_NUM  = 100
@@ -11,7 +11,7 @@ s                       = if process.env.NODE_ENV is "production"
 else
   require("./development")
 
-formatEventData = (json) ->
+formatEventData = (json, period) ->
   json.eventID = json.event_id
   json.serviceName = 'connpass'
   json.eventURL = json.event_url
@@ -20,6 +20,7 @@ formatEventData = (json) ->
   json.startedAt = json.started_at
   json.endedAt = json.ended_at
   json.updatedAt = json.updated_at
+  json.period = period
   json
 
 exports.getEventFromConnpass = ->
@@ -69,8 +70,9 @@ exports.getEventFromConnpass = ->
             # 収集対象外のハッシュタグを設定しているイベントは除外
             continue if my.include(s.NG_KEYWORDS, json.hash_tag)
 
-            json = formatEventData(json)
-            save.save(json)
+            period = my.getPeriod json.started_at, json.ended_at
+            jsonFormated = formatEventData(json, period)
+            save.save(jsonFormated)
 
           callback null, loopNum, "got conpass"
 

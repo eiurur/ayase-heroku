@@ -7,7 +7,7 @@
 
   request = require('request');
 
-  my = require('./my');
+  my = require('./my').my;
 
   EventProvider = require('./model').EventProvider;
 
@@ -20,6 +20,7 @@
     }, function(err, num) {
       if (num === 0) {
         console.log(json.hashTag);
+        console.log(json.period);
         return EventProvider.save({
           serviceName: json.serviceName,
           eventId: json.eventID,
@@ -30,8 +31,16 @@
           startedDate: json.startedDate,
           startedAt: json.startedAt,
           endedAt: json.endedAt,
-          updatedAt: json.updatedAt
-        }, function(err, data) {});
+          updatedAt: json.updatedAt,
+          period: json.period
+        }, function(err) {
+          my.dump(err);
+          return EventProvider.insertPeriod({
+            serviceName: json.serviceName,
+            eventId: json.eventID,
+            period: json.period
+          }, function(err, data) {});
+        });
       }
     });
   };

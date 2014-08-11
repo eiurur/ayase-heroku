@@ -37,6 +37,9 @@ EventSchema = new Schema
   tweetNum:
     type: Number
     default: 0
+  period:
+    type: Array
+    default: []
 
 TweetSchema = new Schema
   serviceName:
@@ -86,7 +89,7 @@ class EventProvider
   findOnTheDay: (params, callback) ->
     console.log "------------- find findOnTheDay ----------------"
 
-    Event.find {startedDate: params['nowDate']}
+    Event.find 'period.startedDate': params['nowDate']
          .sort startedAt: -1
          .limit params["numShow"]
          .exec (err, data) ->
@@ -126,7 +129,7 @@ class EventProvider
   findByStartedDate: (params, callback) ->
     console.log "----------------- find Date --------------------"
 
-    Event.find startedDate: params['startedDate']
+    Event.find 'period.startedDate': params['startedDate']
          .sort startedAt: -1
          .exec (err, data) ->
            callback err, data
@@ -139,6 +142,19 @@ class EventProvider
          .count()
          .exec (err, num) ->
            callback(err, num)
+
+  insertPeriod: (params, callback) ->
+    console.log '-------------- insert period ---------------'
+    # console.log params
+    Event.update
+      serviceName: params['serviceName']
+      eventId: params['eventId']
+    ,
+      $set:
+        period: params['period']
+    , (err) ->
+      callback(err, params)
+
 
   save: (params, callback) ->
     console.log "-------------------- save ----------------------"
@@ -156,7 +172,10 @@ class EventProvider
       updatedAt: params['updatedAt']
 
     event.save (err) ->
+      # console.log("save params = ", params)
+      # @insertPeriod params
       callback(err, params)
+
 
   updateTweetNum: (params, callback) ->
     Event.update

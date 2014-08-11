@@ -5,7 +5,7 @@
 
   exception = require('./exception');
 
-  my = require('./my');
+  my = require('./my').my;
 
   Tweet = require('./Tweet');
 

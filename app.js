@@ -15,7 +15,7 @@
 
   dir = './data/lib/';
 
-  my = require(dir + 'my');
+  my = require(dir + 'my').my;
 
   getEventFromConnpass = require(dir + 'get-connpass').getEventFromConnpass;
 

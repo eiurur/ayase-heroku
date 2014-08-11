@@ -2,7 +2,7 @@ _                    = require 'underscore-node'
 moment               = require 'moment'
 request              = require 'request'
 aggregate            = require './aggregate'
-my                   = require './my'
+my                   = require('./my').my
 EventProvider        = require('./model').EventProvider
 hashTags             = undefined
 eventStartAndEndTime = undefined
@@ -57,18 +57,18 @@ exports.getTweetFromTwitter = ->
         # 複数タグを含んでいた場合
         # ex) jawsug chibadan awssummit aws
         # unless num.indexOf(" ") === -1
-          
         '#'+num.hashTag
 
-      # ハッシュタグの特定に必要なConnpassのイベントデータをセット
+      # ハッシュタグの特定に必要なイベントデータをセット
       eventStartAndEndTime = _.map data, (num, key) ->
+        period = _.findWhere num.period, startedDate: nowDateYMD
         obj =
           serviceName: num.serviceName
           eventId: num.eventId
           hashTag: '#'+num.hashTag
-          startedDate: num.startedDate
-          startedAt: num.startedAt
-          endedAt: num.endedAt
+          startedDate: period.startedDate
+          startedAt: period.startedAt
+          endedAt: period.endedAt
 
       # イベントIDを基準として昇順に並び替え
       # 勉強会と懇談会を別のイベントとして登録した上に、同じハッシュタグを登録していた場合、

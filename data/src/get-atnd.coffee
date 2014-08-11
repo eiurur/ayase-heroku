@@ -1,7 +1,7 @@
 _                           = require 'underscore-node'
 moment                      = require 'moment'
 request                     = require 'request'
-my                          = require './my'
+my                          = require('./my').my
 scraping                    = require './scraping'
 async                       = require 'async'
 INTERVAL_FOR_SCRAPING_IN_MS = 2000
@@ -11,7 +11,8 @@ s                  = if process.env.NODE_ENV is "production"
 else
   require("./development")
 
-formatEventData = (json) ->
+
+formatEventData = (json, period) ->
   json.eventID = json.event_id
   json.serviceName = 'atnd'
   json.eventURL = json.event_url
@@ -19,7 +20,9 @@ formatEventData = (json) ->
   json.startedAt = json.started_at
   json.endedAt = json.ended_at
   json.updatedAt = json.updated_at
+  json.period = period
   json
+
 
 exports.getEventFromATND = ->
 
@@ -36,6 +39,8 @@ exports.getEventFromATND = ->
 
     # ループ処理
     , (callback) ->
+
+      # my2.t "a", "asda"
 
       termSearcheEvent = _.reduce ymds, (memo, ymd) ->
         memo + ',' + ymd
@@ -57,7 +62,8 @@ exports.getEventFromATND = ->
 
         for json in body.events
           time += INTERVAL_FOR_SCRAPING_IN_MS
-          jsonFormated = formatEventData(json.event)
+          period = my.getPeriod json.event.started_at, json.event.ended_at
+          jsonFormated = formatEventData(json.event, period)
           scraping.scraping(jsonFormated, time)
 
         eventNum = body.results_returned

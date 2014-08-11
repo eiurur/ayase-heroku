@@ -43,6 +43,10 @@
     tweetNum: {
       type: Number,
       "default": 0
+    },
+    period: {
+      type: Array,
+      "default": []
     }
   });
 
@@ -90,7 +94,7 @@
     EventProvider.prototype.findOnTheDay = function(params, callback) {
       console.log("------------- find findOnTheDay ----------------");
       return Event.find({
-        startedDate: params['nowDate']
+        'period.startedDate': params['nowDate']
       }).sort({
         startedAt: -1
       }).limit(params["numShow"]).exec(function(err, data) {
@@ -141,7 +145,7 @@
     EventProvider.prototype.findByStartedDate = function(params, callback) {
       console.log("----------------- find Date --------------------");
       return Event.find({
-        startedDate: params['startedDate']
+        'period.startedDate': params['startedDate']
       }).sort({
         startedAt: -1
       }).exec(function(err, data) {
@@ -159,6 +163,20 @@
         ]
       }).count().exec(function(err, num) {
         return callback(err, num);
+      });
+    };
+
+    EventProvider.prototype.insertPeriod = function(params, callback) {
+      console.log('-------------- insert period ---------------');
+      return Event.update({
+        serviceName: params['serviceName'],
+        eventId: params['eventId']
+      }, {
+        $set: {
+          period: params['period']
+        }
+      }, function(err) {
+        return callback(err, params);
       });
     };
 

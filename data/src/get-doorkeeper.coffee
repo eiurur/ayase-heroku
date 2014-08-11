@@ -3,7 +3,7 @@ moment     = require 'moment'
 request    = require 'request'
 client     = require 'cheerio-httpcli'
 async      = require 'async'
-my         = require './my'
+my         = require('./my').my
 scraping   = require './scraping'
 s          = if process.env.NODE_ENV is "production"
   require("./production")
@@ -26,7 +26,7 @@ else
 # index.jade側では、もし空白ならconnpassってことにしておく。
 # ATND、connpass用モデルにも追加
 
-formatEventData = (json) ->
+formatEventData = (json, period) ->
   json.eventID = json.id
   json.serviceName = 'doorkeeper'
   json.eventURL = json.public_url
@@ -34,6 +34,7 @@ formatEventData = (json) ->
   json.startedAt = json.starts_at
   json.endedAt = json.ends_at
   json.updatedAt = json.updated_at
+  json.period = period
   json
 
 exports.getEventFromDoorkeeper = ->
@@ -77,7 +78,8 @@ exports.getEventFromDoorkeeper = ->
 
         for json in body
           time += INTERVAL_FOR_SCRAPING_IN_MS
-          jsonFormated = formatEventData(json.event)
+          period = my.getPeriod json.event.starts_at, json.event.ends_at
+          jsonFormated = formatEventData(json.event, period)
           scraping.scraping(jsonFormated, time)
 
         if body.length < NUM_LIMIT_GET_EVENT_API || _.isEmpty body

@@ -1,7 +1,7 @@
 _             = require 'underscore-node'
 moment        = require 'moment'
 request       = require 'request'
-my            = require './my'
+my            = require('./my').my
 EventProvider = require('./model').EventProvider
 s             = if process.env.NODE_ENV is "production"
   require("./production")
@@ -16,6 +16,7 @@ exports.save = (json) ->
   , (err, num) ->
     if num is 0
       console.log json.hashTag
+      console.log json.period
       EventProvider.save
         serviceName: json.serviceName
         eventId: json.eventID
@@ -27,5 +28,13 @@ exports.save = (json) ->
         startedAt: json.startedAt
         endedAt: json.endedAt
         updatedAt: json.updatedAt
-      , (err, data) ->
-        # my.dump data
+        period: json.period
+      , (err) ->
+        my.dump err
+        # my.dump json
+        EventProvider.insertPeriod
+          serviceName: json.serviceName
+          eventId: json.eventID
+          period: json.period
+        , (err, data) ->
+          # my.dump data

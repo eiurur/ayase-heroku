@@ -1,7 +1,7 @@
 _             = require 'underscore-node'
 moment        = require 'moment'
 exception     = require './exception'
-my            = require './my'
+my            = require('./my').my
 model         = require './model'
 EventProvider = model.EventProvider
 TweetProvider = model.TweetProvider
@@ -75,7 +75,7 @@ class Tweet
   # デバッグ用　いつか消す？
   tweetDubug: ->
     my.c "ツイート時刻", @tweetTime
-    my.c "収集開始時刻(イベント開始時刻 + "+s.ALLOWED_HOURS+")", @collectionBeginningTime
+    my.c "収集開始時刻(イベント開始時刻 - "+s.ALLOWED_HOURS+")", @collectionBeginningTime
     my.c "収集終了時刻(イベント開始時刻 + "+s.ALLOWED_HOURS+")", @collectionClosingTime
     my.c "ツイート者", @data.user.screen_name
     my.c "ツイート内容", @data.text

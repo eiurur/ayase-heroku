@@ -7,7 +7,7 @@
 
   request = require('request');
 
-  my = require('./my');
+  my = require('./my').my;
 
   scraping = require('./scraping');
 
@@ -19,7 +19,7 @@
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
-  formatEventData = function(json) {
+  formatEventData = function(json, period) {
     json.eventID = json.event_id;
     json.serviceName = 'atnd';
     json.eventURL = json.event_url;
@@ -27,6 +27,7 @@
     json.startedAt = json.started_at;
     json.endedAt = json.ended_at;
     json.updatedAt = json.updated_at;
+    json.period = period;
     return json;
   };
 
@@ -53,7 +54,7 @@
         url: "http://api.atnd.org/events/?" + p
       };
       request.get(options, function(err, res, body) {
-        var eventNum, json, jsonFormated, _i, _len, _ref;
+        var eventNum, json, jsonFormated, period, _i, _len, _ref;
         if (err) {
           return my.e("get-ATND request Error", err);
         }
@@ -62,7 +63,8 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           json = _ref[_i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
-          jsonFormated = formatEventData(json.event);
+          period = my.getPeriod(json.event.started_at, json.event.ended_at);
+          jsonFormated = formatEventData(json.event, period);
           scraping.scraping(jsonFormated, time);
         }
         eventNum = body.results_returned;

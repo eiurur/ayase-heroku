@@ -7,7 +7,7 @@
 
   client = require('cheerio-httpcli');
 
-  my = require('./my');
+  my = require('./my').my;
 
   save = require('./save');
 

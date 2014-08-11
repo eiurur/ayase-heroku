@@ -7,7 +7,7 @@
 
   request = require('request');
 
-  my = require('./my');
+  my = require('./my').my;
 
   save = require('./save');
 
@@ -19,7 +19,7 @@
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
-  formatEventData = function(json) {
+  formatEventData = function(json, period) {
     json.eventID = json.event_id;
     json.serviceName = 'connpass';
     json.eventURL = json.event_url;
@@ -28,6 +28,7 @@
     json.startedAt = json.started_at;
     json.endedAt = json.ended_at;
     json.updatedAt = json.updated_at;
+    json.period = period;
     return json;
   };
 
@@ -62,7 +63,7 @@
             json: true
           };
           request.get(options, function(err, res, body) {
-            var json, _j, _len, _ref;
+            var json, jsonFormated, period, _j, _len, _ref;
             _ref = body.events;
             for (_j = 0, _len = _ref.length; _j < _len; _j++) {
               json = _ref[_j];
@@ -75,8 +76,9 @@
               if (my.include(s.NG_KEYWORDS, json.hash_tag)) {
                 continue;
               }
-              json = formatEventData(json);
-              save.save(json);
+              period = my.getPeriod(json.started_at, json.ended_at);
+              jsonFormated = formatEventData(json, period);
+              save.save(jsonFormated);
             }
             return callback(null, loopNum, "got conpass");
           });

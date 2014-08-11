@@ -8,7 +8,7 @@
 
   exception = require('./exception');
 
-  my = require('./my');
+  my = require('./my').my;
 
   model = require('./model');
 
@@ -96,7 +96,7 @@
 
     Tweet.prototype.tweetDubug = function() {
       my.c("ツイート時刻", this.tweetTime);
-      my.c("収集開始時刻(イベント開始時刻 + " + s.ALLOWED_HOURS + ")", this.collectionBeginningTime);
+      my.c("収集開始時刻(イベント開始時刻 - " + s.ALLOWED_HOURS + ")", this.collectionBeginningTime);
       my.c("収集終了時刻(イベント開始時刻 + " + s.ALLOWED_HOURS + ")", this.collectionClosingTime);
       my.c("ツイート者", this.data.user.screen_name);
       my.c("ツイート内容", this.data.text);

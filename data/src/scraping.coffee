@@ -1,7 +1,7 @@
 _        = require 'underscore-node'
 request  = require 'request'
 client   = require 'cheerio-httpcli'
-my       = require './my'
+my       = require('./my').my
 save     = require './save'
 s        = if process.env.NODE_ENV is "production"
   require("./production")

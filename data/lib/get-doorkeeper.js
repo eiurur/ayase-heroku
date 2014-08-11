@@ -11,13 +11,13 @@
 
   async = require('async');
 
-  my = require('./my');
+  my = require('./my').my;
 
   scraping = require('./scraping');
 
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
-  formatEventData = function(json) {
+  formatEventData = function(json, period) {
     json.eventID = json.id;
     json.serviceName = 'doorkeeper';
     json.eventURL = json.public_url;
@@ -25,6 +25,7 @@
     json.startedAt = json.starts_at;
     json.endedAt = json.ends_at;
     json.updatedAt = json.updated_at;
+    json.period = period;
     return json;
   };
 
@@ -53,7 +54,7 @@
         json: true
       };
       request.get(options, function(err, res, body) {
-        var json, jsonFormated, _i, _len;
+        var json, jsonFormated, period, _i, _len;
         if (err) {
           return my.e("get-DK request Error", err);
         }
@@ -63,7 +64,8 @@
         for (_i = 0, _len = body.length; _i < _len; _i++) {
           json = body[_i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
-          jsonFormated = formatEventData(json.event);
+          period = my.getPeriod(json.event.starts_at, json.event.ends_at);
+          jsonFormated = formatEventData(json.event, period);
           scraping.scraping(jsonFormated, time);
         }
         if (body.length < NUM_LIMIT_GET_EVENT_API || _.isEmpty(body)) {

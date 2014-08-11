@@ -9,7 +9,7 @@
 
   aggregate = require('./aggregate');
 
-  my = require('./my');
+  my = require('./my').my;
 
   EventProvider = require('./model').EventProvider;
 
@@ -49,14 +49,17 @@
           return '#' + num.hashTag;
         });
         eventStartAndEndTime = _.map(data, function(num, key) {
-          var obj;
+          var obj, period;
+          period = _.findWhere(num.period, {
+            startedDate: nowDateYMD
+          });
           return obj = {
             serviceName: num.serviceName,
             eventId: num.eventId,
             hashTag: '#' + num.hashTag,
-            startedDate: num.startedDate,
-            startedAt: num.startedAt,
-            endedAt: num.endedAt
+            startedDate: period.startedDate,
+            startedAt: period.startedAt,
+            endedAt: period.endedAt
           };
         });
         eventStartAndEndTime = _.sortBy(eventStartAndEndTime, function(o) {
