@@ -117,10 +117,13 @@ tasks4Cron = [
 
 ]
 
+
+# cronTime = "*/2 * * * *"
 cronTime = "0 0 * * *"
 
 job = new cronJob(
   cronTime: cronTime
+
   onTick: ->
     async.series tasks4Cron, (err, results) ->
       if err

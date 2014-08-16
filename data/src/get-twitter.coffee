@@ -1,6 +1,7 @@
 _                    = require 'underscore-node'
 moment               = require 'moment'
 request              = require 'request'
+cronJob              = require('cron').CronJob
 aggregate            = require './aggregate'
 my                   = require('./my').my
 EventProvider        = require('./model').EventProvider
@@ -12,6 +13,28 @@ else
   require("./development")
 
 exports.getTweetFromTwitter = ->
+
+  setTImekillStream = (stream) ->
+
+    # 一日の終わりにストリームを切断する。
+    # こうしないと日付が変わったときストリームが複数接続された状態になり、同じツイートを取得してしまう。
+    # cronTime = "*/1 * * * *"
+    cronTime = "59 23 * * *"
+    job = new cronJob(
+      cronTime: cronTime
+
+      onTick: ->
+        do stream.destroy
+        return
+
+      onComplete: ->
+        my.c "stream destroy Completed...."
+        return
+
+      start: true
+
+      timeZone: "Japan/Tokyo"
+    )
 
   getTweet = ->
 
@@ -28,15 +51,14 @@ exports.getTweetFromTwitter = ->
       stream.on "end", (response) ->
 
         # 切断された場合の処理
-        ml.cl "end"
-
-        # 自動で再起動
-        arguments_.callee()
+        my.c "end"
 
       stream.on "destroy", (response) ->
 
         # 接続が破棄された場合の処理
-        ml.cl "destroy"
+        my.c "destroy"
+
+      setTImekillStream(stream)
 
       return
 
@@ -46,7 +68,7 @@ exports.getTweetFromTwitter = ->
     # 年月日を取得
     nowDateYMD = moment().format("YYYY-MM-DD")
 
-    #　パブサをかけるハッシュタグを配列に格納
+    # パブサをかけるハッシュタグを配列に格納
     EventProvider.findByStartedDate
       startedDate: nowDateYMD
     , (err, data) ->

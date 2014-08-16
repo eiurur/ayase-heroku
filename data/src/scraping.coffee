@@ -11,7 +11,6 @@ else
 
 act = (json) ->
 
-  # ハッシュタグを取得
   client.fetch json.eventURL
   , (err, $, res) ->
 

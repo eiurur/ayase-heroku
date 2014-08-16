@@ -1,11 +1,13 @@
 (function() {
-  var EventProvider, aggregate, eventStartAndEndTime, hashTags, moment, my, request, s, _;
+  var EventProvider, aggregate, cronJob, eventStartAndEndTime, hashTags, moment, my, request, s, _;
 
   _ = require('underscore-node');
 
   moment = require('moment');
 
   request = require('request');
+
+  cronJob = require('cron').CronJob;
 
   aggregate = require('./aggregate');
 
@@ -20,7 +22,22 @@
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   exports.getTweetFromTwitter = function() {
-    var assingHasTags, getTweet;
+    var assingHasTags, getTweet, setTImekillStream;
+    setTImekillStream = function(stream) {
+      var cronTime, job;
+      cronTime = "59 23 * * *";
+      return job = new cronJob({
+        cronTime: cronTime,
+        onTick: function() {
+          stream.destroy();
+        },
+        onComplete: function() {
+          my.c("stream destroy Completed....");
+        },
+        start: true,
+        timeZone: "Japan/Tokyo"
+      });
+    };
     getTweet = function() {
       my.dump(hashTags);
       my.dump(eventStartAndEndTime);
@@ -31,12 +48,12 @@
           return aggregate.aggregate(data, eventStartAndEndTime);
         });
         stream.on("end", function(response) {
-          ml.cl("end");
-          return arguments_.callee();
+          return my.c("end");
         });
         stream.on("destroy", function(response) {
-          return ml.cl("destroy");
+          return my.c("destroy");
         });
+        setTImekillStream(stream);
       });
     };
     assingHasTags = function() {
