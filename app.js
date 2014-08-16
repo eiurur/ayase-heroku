@@ -116,7 +116,7 @@
       console.log("tasks4Cron Completed....");
     },
     start: true,
-    timeZone: "Japan/Tokyo"
+    timeZone: "Asia/Tokyo"
   });
 
 }).call(this);

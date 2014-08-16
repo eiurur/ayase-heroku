@@ -139,5 +139,5 @@ job = new cronJob(
 
   start: true
 
-  timeZone: "Japan/Tokyo"
+  timeZone: "Asia/Tokyo"
 )

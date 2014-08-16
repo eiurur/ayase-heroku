@@ -35,7 +35,7 @@
           my.c("stream destroy Completed....");
         },
         start: true,
-        timeZone: "Japan/Tokyo"
+        timeZone: "Asia/Tokyo"
       });
     };
     getTweet = function() {
