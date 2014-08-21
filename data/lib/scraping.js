@@ -34,7 +34,7 @@
       if (my.include(s.NG_KEYWORDS, hashTag)) {
         return;
       }
-      if (_.isNull(json.endedAt || _.isUndefined(endedAt))) {
+      if (_.isNull(json.endedAt || _.isUndefined(json.endedAt))) {
         json.endedAt = my.endBrinkFormatYMDHms(json.startedDate);
       }
       json.hashTag = hashTag;

@@ -37,7 +37,7 @@ act = (json) ->
     # for ATND
     # なぜか終了時刻が設定されていない(=null)イベントがある。
     # その場合は開催日が終わるまでツイートの収集をし続ける(= Y:M:D 23:59:59)
-    if _.isNull json.endedAt || _.isUndefined endedAt
+    if _.isNull json.endedAt || _.isUndefined json.endedAt
       json.endedAt = my.endBrinkFormatYMDHms(json.startedDate)
 
     json.hashTag = hashTag
