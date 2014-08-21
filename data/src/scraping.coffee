@@ -16,15 +16,15 @@ act = (json) ->
 
     if json.serviceName is 'atnd'
       my.c "--------------  ATND  -------------"
+      my.c "URL", json.eventURL
       hashTag = $('.symbol-hash + a').eq(0).text()
       my.c "ハッシュタグ", hashTag
-      my.c "URL", json.eventURL
 
     else if json.serviceName is 'doorkeeper'
       my.c "-----------  doorkeeper  ----------"
+      my.c "URL", json.eventURL
       hashTag = $('.client-main-links-others > a').eq(1).text()
       my.c "ハッシュタグ", hashTag
-      my.c "URL", json.eventURL
 
     # twitter用のハッシュタグが登録されていないイベントは除外
     return if _.isEmpty(hashTag) || _.isNull(hashTag)
@@ -47,8 +47,6 @@ act = (json) ->
 exports.scraping = (json, time) ->
   do (json, time) ->
     setTimeout (->
-
-      # my.dump(json)
 
       # イベントのタイトルや概要にNGワードが含まれているイベントは除外
       return if my.include(s.NG_KEYWORDS, json.title)

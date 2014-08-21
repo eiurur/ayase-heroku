@@ -18,14 +18,14 @@
       var hashTag;
       if (json.serviceName === 'atnd') {
         my.c("--------------  ATND  -------------");
+        my.c("URL", json.eventURL);
         hashTag = $('.symbol-hash + a').eq(0).text();
         my.c("ハッシュタグ", hashTag);
-        my.c("URL", json.eventURL);
       } else if (json.serviceName === 'doorkeeper') {
         my.c("-----------  doorkeeper  ----------");
+        my.c("URL", json.eventURL);
         hashTag = $('.client-main-links-others > a').eq(1).text();
         my.c("ハッシュタグ", hashTag);
-        my.c("URL", json.eventURL);
       }
       if (_.isEmpty(hashTag) || _.isNull(hashTag)) {
         return;

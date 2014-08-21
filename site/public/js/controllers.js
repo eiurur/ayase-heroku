@@ -1,13 +1,13 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page, Event) {
 
   // パフォーマンスを考慮して
   // 最初に10ツイート以上含んだイベントデータを10件分取得し、
-  $http.get('/api/readInitEvent/').
+  Event.getInit().
     success(function(data) {
       $scope.events = data.events;
 
       // 全てのイベントデータを取得。
-      $http.get('/api/readAllEvent/').
+      Event.getAll().
         success(function(data) {
 
           // 0件( = つい消し)だと無限ローディングに陥る
@@ -35,7 +35,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
         });
     });
 
-  $http.get('/api/readEventOnTheDay/').
+  Event.getOnTheDay().
     success(function(data) {
       if(data.eventsOnTheDay.length　=== 0){
         $scope.eventsOnTheDay = [{
@@ -58,7 +58,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 }
 
 
-function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page) {
+function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page, Event, Tweet) {
 
   function insertTweetViewList(data) {
     var index        = 0
@@ -81,6 +81,44 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     process();
   }
 
+  // 命名が意味不明
+  function getNewTweetInterval() {
+
+    /**
+     * 収集対象時間内であれば動作。
+     * 新規ツイートがあれば自動で追加。
+     */
+    var nowTimeYMDHm = moment().format("YYYY-MM-DD HH:mm");
+    var after4hFromEndedAt = moment(new Date($scope.events[0].endedAtYMDHm)).add('h', '4').format("YYYY-MM-DD HH:mm:ss");
+
+    if (nowTimeYMDHm < after4hFromEndedAt) {
+
+      var onTimeout
+        , timer
+        , INTERVAL = 30 * 1000
+        ;
+
+      onTimeout = function() {
+        Tweet.getNew(serviceName, eventId, lastTweetIdStr).
+          success(function(data) {
+            if(data.tweets.length === 0) return;
+
+            // Update!!
+            insertTweetViewList(data);
+          });
+
+        timer = $timeout(onTimeout, INTERVAL);
+      };
+
+      timer = $timeout(onTimeout, INTERVAL);
+
+      $scope.$on("$destroy", function() {
+        if (timer) {
+          $timeout.cancel(timer);
+        }
+      });
+    }
+  }
 
   /**
    * ページ描画時に最初に行う処理
@@ -91,7 +129,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     ;
 
   // 最初の20件を取得
-  $http.get('/api/readTweet/' + serviceName + '/' + eventId).
+  Tweet.getInit(serviceName, eventId).
     success(function(data) {
       var tweetLength = data.tweets.length;
 
@@ -110,48 +148,23 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       }
 
       // 残りのツイートを取得
-      $http.get('/api/readRestTweet/' + serviceName + '/' + eventId).
+      Tweet.getRest(serviceName, eventId).
         success(function(data) {
           insertTweetViewList(data);
         });
     });
 
   /**
-   * 新規ツイートがあれば自動で追加。
-   */
-  var onTimeout
-    , timer
-    , INTERVAL = 30 * 1000
-    ;
-
-  onTimeout = function() {
-    $http.get('/api/readNewTweet/' + serviceName + '/' + eventId + '/' + lastTweetIdStr).
-      success(function(data) {
-        if(data.tweets.length === 0) return;
-
-        // Update!!
-        insertTweetViewList(data);
-      });
-
-    timer = $timeout(onTimeout, INTERVAL);
-  };
-
-  timer = $timeout(onTimeout, INTERVAL);
-
-  $scope.$on("$destroy", function() {
-    if (timer) {
-      $timeout.cancel(timer);
-    }
-  });
-
-  /**
    * イベントの情報を取得
    */
-  $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId).
+  Event.getByServiceNameAndId(serviceName, eventId).
     success(function(data) {
       $scope.events = data.events;
       Page.setTitle($scope.events[0].title);
       $rootScope.title = Page.title();
+
+      // 新着ツイート収集処理開始
+      getNewTweetInterval();
     });
 
   // シェアボタンのURL割り当て用
@@ -159,4 +172,6 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
 
   // ツイート一覧の並び順をtweetIDで昇順に変更。
   $scope.reverse = false;
+
+
 }

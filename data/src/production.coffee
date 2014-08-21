@@ -64,6 +64,10 @@ exports.NG_KEYWORDS = [
   '事業'
   'BBQ'
   'ランニング'
+  '模擬試験'
+  '面接'
+  '採用担当'
+  '大学受験'
 ]
 
 exports.NG_USERS = [
@@ -94,6 +98,11 @@ exports.NG_USERS = [
   'hilbert_d'
   'koziki33amatera'
   'niigata_jyouhou'
+  'hatebu_android'
+  'koziki33tukuyom'
+  'app_news01'
+  'hounavi_android'
+  'kumechang'
 ]
 
 TW_CONSUMER_KEY        = process.env.TW_CONSUMER_KEY

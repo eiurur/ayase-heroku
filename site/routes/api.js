@@ -165,20 +165,33 @@ function getEventData(error, eventDatas) {
   if(_.isNull(error)) {
     eventDatas.forEach(function (eventData) {
       var startedDate, startedDateX, startedAt, endedAt;
+
+      // 追加ツイート自動表示機能用の時刻
+      // 現在時刻と比較し、+4時間以内なら順次新しいツイートを表示用リストに追加していく。
+      var endedAtYMDHm = moment(eventData.endedAt).format('YYYY-MM-DD HH:mm');
+
       if(_.isEmpty(eventData.period)) {
-        startedDate = moment(eventData.startedDate).format("YYYY-MM-DD");
-        startedDateX =  moment(eventData.startedDate).format("X");
-        startedAt =  moment(eventData.startedAt).format("YYYY/MM/DD HH:mm");
-        endedAt = moment(eventData.endedAt).format("HH:mm");
+
+        // periodフィールド追加前のイベントコレクションが対象
+        startedDate = moment(eventData.startedDate).format('YYYY-MM-DD');
+        startedDateX =  moment(eventData.startedDate).format('X');
+        startedAt =  moment(eventData.startedAt).format('YYYY/MM/DD HH:mm');
+        endedAt = moment(eventData.endedAt).format('HH:mm');
       } else {
+
+        // periodフィールド追加後のイベントが対象
         var length = eventData.period.length;
-        startedDate = moment(eventData.startedDate).format("YYYY-MM-DD");
-        startedDateX =  moment(eventData.startedDate).format("X");
-        startedAt =  moment(eventData.period[0].startedAt).format("YYYY/MM/DD HH:mm");
+        startedDate = moment(eventData.startedDate).format('YYYY-MM-DD');
+        startedDateX =  moment(eventData.startedDate).format('X');
+        startedAt =  moment(eventData.period[0].startedAt).format('YYYY/MM/DD HH:mm');
         if(length === 1) {
-          endedAt = moment(eventData.period[0].endedAt).format("HH:mm");
+
+          // 開催期間が一日のイベントが対象
+          endedAt = moment(eventData.period[0].endedAt).format('HH:mm');
         } else {
-          endedAt = moment(eventData.period[length-1].endedAt).format("YYYY/MM/DD HH:mm");
+
+          // 2日以上のイベントが対象
+          endedAt = moment(eventData.period[length-1].endedAt).format('YYYY/MM/DD HH:mm');
         }
       }
 
@@ -195,6 +208,7 @@ function getEventData(error, eventDatas) {
         ,  startedDateX: startedDateX
         ,  startedAt: startedAt
         ,  endedAt: endedAt
+        ,  endedAtYMDHm: endedAtYMDHm
         ,  tweetNum: eventData.tweetNum
         ,  period: eventData.period
       });
