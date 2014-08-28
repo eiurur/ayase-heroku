@@ -30,8 +30,8 @@ exports.save = (json) ->
         updatedAt: json.updatedAt
         period: json.period
       , (err) ->
-        my.dump err
-        # my.dump json
+        if err then my.dump err
+
         EventProvider.insertPeriod
           serviceName: json.serviceName
           eventId: json.eventID

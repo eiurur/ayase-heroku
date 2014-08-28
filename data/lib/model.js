@@ -222,12 +222,30 @@
       });
     };
 
-    EventProvider.prototype.remove = function(params, callback) {
+    EventProvider.prototype.removeByEventId = function(params, callback) {
       console.log("remove");
       return Event.remove({
         eventId: params['eventId']
       }, function(err, data) {
         return callback(err, data);
+      });
+    };
+
+    EventProvider.prototype.clear = function(params, callback) {
+      console.log("\nClearrrrrrrrrrrrrrrrrrrr!!!!!\n");
+      return Event.remove({
+        "$and": [
+          {
+            endedAt: {
+              $lt: params['date']
+            },
+            tweetNum: {
+              $lt: 10
+            }
+          }
+        ]
+      }, function(err) {
+        return callback(null);
       });
     };
 

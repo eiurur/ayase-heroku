@@ -191,11 +191,23 @@ class EventProvider
     , (err) ->
       callback()
 
-  remove: (params, callback) ->
+  removeByEventId: (params, callback) ->
     console.log "remove"
 
     Event.remove {eventId: params['eventId']}, (err, data) ->
       callback err, data
+
+  # 終了日時から1週間経過 + ツイート数が10未満のイベントは削除
+  clear: (params, callback) ->
+    console.log "\nClearrrrrrrrrrrrrrrrrrrr!!!!!\n"
+
+    Event.remove
+      "$and": [
+        endedAt: {$lt: params['date']}
+        tweetNum: {$lt: 10}
+       ]
+    , (err) ->
+      callback null
 
 
 class TweetProvider

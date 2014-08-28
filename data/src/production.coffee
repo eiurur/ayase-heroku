@@ -124,3 +124,4 @@ exports.GRACE_TIME_DK       = 150 * 1000
 exports.GRACE_TIME_ATND     = 150 * 1000
 exports.GRACE_TIME_TWITTER  = 1 * 1000
 exports.GRACE_TIME_SERVER   = 1 * 1000
+exports.GRACE_TIME_CLEAR    = 1 * 1000

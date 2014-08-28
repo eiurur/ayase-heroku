@@ -40,8 +40,6 @@ exports.getEventFromATND = ->
     # ループ処理
     , (callback) ->
 
-      # my2.t "a", "asda"
-
       termSearcheEvent = _.reduce ymds, (memo, ymd) ->
         memo + ',' + ymd
 
@@ -64,6 +62,7 @@ exports.getEventFromATND = ->
           time += INTERVAL_FOR_SCRAPING_IN_MS
           period = my.getPeriod json.event.started_at, json.event.ended_at
           jsonFormated = formatEventData(json.event, period)
+          # my.dump jsonFormated
           scraping.scraping(jsonFormated, time)
 
         eventNum = body.results_returned

@@ -66,6 +66,13 @@ my = ->
     else
       moment().add('h', hours).format("YYYY-MM-DD HH:mm:ss")
 
+  # days日後の時刻をYYYY-MM-DD HH:mm:ssの形式で返す
+  addDaysFormatYMDHms: (days, time) ->
+    if time?
+      moment(new Date(time)).add('d', days).format("YYYY-MM-DD HH:mm:ss")
+    else
+      moment().add('d', days).format("YYYY-MM-DD HH:mm:ss")
+
   # days日後の時刻をYYYY-MM-DDの形式で返す
   addDaysFormatYMD: (days, time) ->
     if time?

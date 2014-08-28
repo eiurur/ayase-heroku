@@ -36,6 +36,7 @@ exports.getTweetFromTwitter = ->
       timeZone: "Asia/Tokyo"
     )
 
+
   getTweet = ->
 
     my.dump hashTags

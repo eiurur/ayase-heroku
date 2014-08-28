@@ -34,7 +34,9 @@
           updatedAt: json.updatedAt,
           period: json.period
         }, function(err) {
-          my.dump(err);
+          if (err) {
+            my.dump(err);
+          }
           return EventProvider.insertPeriod({
             serviceName: json.serviceName,
             eventId: json.eventID,

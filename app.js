@@ -1,5 +1,5 @@
 (function() {
-  var async, cronJob, cronTime, dir, getEventFromATND, getEventFromConnpass, getEventFromDoorkeeper, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
+  var async, clearEventData, cronJob, cronTime, dir, getEventFromATND, getEventFromConnpass, getEventFromDoorkeeper, getTweetFromTwitter, job, moment, my, newrelic, request, s, serve, tasks4Cron, tasks4startUp, _;
 
   _ = require('underscore-node');
 
@@ -24,6 +24,8 @@
   getEventFromATND = require(dir + 'get-atnd').getEventFromATND;
 
   getTweetFromTwitter = require(dir + 'get-twitter').getTweetFromTwitter;
+
+  clearEventData = require(dir + 'clear').clearEventData;
 
   serve = require('./site/app').serve;
 
@@ -60,6 +62,12 @@
       setTimeout((function() {
         return callback(null, "Go! Twitter\n");
       }), s.GRACE_TIME_TWITTER);
+    }, function(callback) {
+      my.c("■ Event Data Clear Task start");
+      clearEventData(null, "Clearrrrrrrrrrrrrrrr ");
+      setTimeout((function() {
+        return callback(null, "Event Data CLEAR \n");
+      }), s.GRACE_TIME_CLEAR);
     }
   ];
 
@@ -96,6 +104,12 @@
       setTimeout((function() {
         return callback(null, "Go! Twitter\n");
       }), s.GRACE_TIME_TWITTER);
+    }, function(callback) {
+      my.c("■ Event Data Clear Task start");
+      clearEventData(null, "Clearrrrrrrrrrrrrrrr ");
+      setTimeout((function() {
+        return callback(null, "Event Data CLEAR \n");
+      }), s.GRACE_TIME_CLEAR);
     }
   ];
 

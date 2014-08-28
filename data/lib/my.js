@@ -72,6 +72,13 @@
           return moment().add('h', hours).format("YYYY-MM-DD HH:mm:ss");
         }
       },
+      addDaysFormatYMDHms: function(days, time) {
+        if (time != null) {
+          return moment(new Date(time)).add('d', days).format("YYYY-MM-DD HH:mm:ss");
+        } else {
+          return moment().add('d', days).format("YYYY-MM-DD HH:mm:ss");
+        }
+      },
       addDaysFormatYMD: function(days, time) {
         if (time != null) {
           return moment(new Date(time)).add('d', days).format("YYYY-MM-DD");

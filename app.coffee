@@ -10,6 +10,7 @@ getEventFromConnpass   = require(dir + 'get-connpass').getEventFromConnpass
 getEventFromDoorkeeper = require(dir + 'get-doorkeeper').getEventFromDoorkeeper
 getEventFromATND       = require(dir + 'get-atnd').getEventFromATND
 getTweetFromTwitter    = require(dir + 'get-twitter').getTweetFromTwitter
+clearEventData         = require(dir + 'clear').clearEventData
 serve                  = require('./site/app').serve
 s                      = if process.env.NODE_ENV is "production"
   require("./data/lib/production")
@@ -22,7 +23,9 @@ else
 # 1.サーバ起動
 # 2.Connpassのイベントデータ更新
 # 3.Doorkeeperのイベントデータ更新
-# 4.ハッシュタグリストデータ取得
+# 4.ATNDのイベントデータ更新
+# 5.ハッシュタグリストデータ取得
+# 6.無駄なイベントデータとツイートデータを削除
 ##
 tasks4startUp = [
 
@@ -65,6 +68,14 @@ tasks4startUp = [
     getTweetFromTwitter null, "Getting Tweet"
     setTimeout (-> callback(null, "Go! Twitter\n")), s.GRACE_TIME_TWITTER
     return
+
+  , (callback) ->
+
+    # イベントデータの定期削除処理の開始
+    my.c "■ Event Data Clear Task start"
+    clearEventData null, "Clearrrrrrrrrrrrrrrr "
+    setTimeout (-> callback(null, "Event Data CLEAR \n")), s.GRACE_TIME_CLEAR
+    return
 ]
 
 async.series tasks4startUp, (err, results) ->
@@ -79,7 +90,9 @@ async.series tasks4startUp, (err, results) ->
 # 日付変更時のタスク
 # 1.Connpassのイベントデータ更新
 # 2.Doorkeeperのイベントデータ更新
-# 3.ハッシュタグリストデータ取得
+# 3.ATNDのイベントデータ更新
+# 4.ハッシュタグリストデータ取得
+# 5.無駄なイベントデータ及びツイートデータを削除
 ##
 tasks4Cron = [
 
@@ -115,6 +128,13 @@ tasks4Cron = [
     setTimeout (-> callback(null, "Go! Twitter\n")), s.GRACE_TIME_TWITTER
     return
 
+  , (callback) ->
+
+    # イベントデータの定期削除処理の開始
+    my.c "■ Event Data Clear Task start"
+    clearEventData null, "Clearrrrrrrrrrrrrrrr "
+    setTimeout (-> callback(null, "Event Data CLEAR \n")), s.GRACE_TIME_CLEAR
+    return
 ]
 
 
