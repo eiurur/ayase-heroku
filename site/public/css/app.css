@@ -195,3 +195,7 @@ a {
   max-height: 180px;
   overflow-y: scroll;
 }
+
+.load-button-space {
+  padding: 35px 0 50px 0;
+}

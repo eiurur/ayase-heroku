@@ -60,6 +60,7 @@ exports.serve = function() {
   // app.get('/api/readEventStartedAtDesc/', api.readEventStartedAtDesc);
   app.get('/api/readInitEvent/', api.readInitEvent);
   app.get('/api/readAllEvent/', api.readAllEvent);
+  app.get('/api/readMoreEvent/:numLoaded', api.readMoreEvent);
   app.get('/api/readEventOnTheDay/', api.readEventOnTheDay);
 
   app.get('/api/readTweet/:serviceName/:eventId', api.readTweet);

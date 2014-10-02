@@ -27,6 +27,10 @@ angular.module('myApp.factories', [])
         return $http.get('/api/readAllEvent/');
       },
 
+      getMore: function(numLoaded) {
+        return $http.get('/api/readMoreEvent/' + numLoaded);
+      },
+
       getByServiceNameAndId: function(serviceName, eventId) {
         return $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId);
       }

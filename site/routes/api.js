@@ -14,9 +14,7 @@ var dir                         = '../../data/lib/'
  * イベント
  */
 exports.readInitEvent = function (req, res) {
-
     var numShow = INIT_GET_BORDER_NUMBER_LINE;
-
     EventProvider.findInit({
         numShow: numShow
     }, function(error, eventDatas) {
@@ -30,13 +28,26 @@ exports.readInitEvent = function (req, res) {
 
 
 exports.readAllEvent = function (req, res) {
-
     EventProvider.findAll({
     }, function(error, eventDatas) {
       var events = getEventData(error, eventDatas);
       console.log("------ restEvent ------");
       res.json({
           events: events
+      });
+    });
+};
+
+
+exports.readMoreEvent = function (req, res) {
+    EventProvider.findMore({
+      numSkip: req.params.numLoaded
+    }, function(error, eventDatas) {
+      var events = getEventData(error, eventDatas);
+      console.log("------ MoreEvent ------");
+      // console.log(events);
+      res.json({
+        events: events
       });
     });
 };

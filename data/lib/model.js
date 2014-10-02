@@ -111,7 +111,7 @@
       console.log("----- find init tweet greater than equal 10 -----");
       return Event.find({
         tweetNum: {
-          $gte: 10
+          $gt: 0
         }
       }).sort({
         startedAt: -1
@@ -129,6 +129,19 @@
       }).sort({
         startedAt: -1
       }).skip(params["numSkip"]).exec(function(err, data) {
+        return callback(err, data);
+      });
+    };
+
+    EventProvider.prototype.findMore = function(params, callback) {
+      console.log("----- find More tweet greater than 0 -----");
+      return Event.find({
+        tweetNum: {
+          $gt: 0
+        }
+      }).sort({
+        startedAt: -1
+      }).limit(10).skip(params.numSkip * 10).exec(function(err, data) {
         return callback(err, data);
       });
     };

@@ -1,39 +1,34 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page, Event) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, ArticleService, Page, Event) {
 
-  // パフォーマンスを考慮して
-  // 最初に10ツイート以上含んだイベントデータを10件分取得し、
-  Event.getInit().
-    success(function(data) {
-      $scope.events = data.events;
-
-      // 全てのイベントデータを取得。
-      Event.getAll().
+  _.defer(function(){
+    $scope.events = ArticleService.datas;
+    $scope.isLoadingEventData = false;
+    if(_.isEmpty($scope.events)) {
+      Event.getInit().
         success(function(data) {
-
-          // 0件( = つい消し)だと無限ローディングに陥る
-          var length = data.events.length;
-          var index = 0;
-          var process = function() {
-
-            // ブラウザをフリーズさせずにツイートを全部表示させる
-            for (; index < length;) {
-
-              // DBから取得したイベントデータに被りがあるため、その差分を埋めていく
-              if(!_.findWhere($scope.events, {'eventId': data.events[index].eventId})){
-
-                // $scope.events.push(data.events[index]); より高速
-                $scope.events[$scope.events.length] = data.events[index];
-              }
-
-              $timeout(process, 5);
-              index++;
-              break;
-            }
-          };
-
-          process();
+          $scope.events = data.events;
         });
-    });
+    }
+  });
+
+  // 更に読み込むボタンが押下された
+  $scope.moreLoad = function() {
+    $scope.isLoadingEventData = true;
+
+    // 追加
+    Event.getMore(ArticleService.numLoaded)
+      .success(function(data) {
+        $scope.events = $scope.events.concat(data.events);
+
+        // 現在の読み込みページ数？を増やす
+        ArticleService.numLoaded += 1;
+
+        // 読み込み済みページ数と、記事を更新
+        ArticleService.datas = $scope.events;
+
+        $scope.isLoadingEventData = false;
+      });
+  };
 
   Event.getOnTheDay().
     success(function(data) {

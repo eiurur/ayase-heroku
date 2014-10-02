@@ -50,10 +50,8 @@
                 i.fa.fa-angle-up.fa-3x.detail-arrow
           span.tweet-number
             | {{event.tweetNum}}
+  .col-sm-12.col-md-offset-3.col-md-6.col-md-offset-3.load-button-space
+    button.btn.btn-primary.btn-lg.btn-block(ng-click='moreLoad()', ng-disabled="isLoadingEventData") さらに読み込む
 
-.loading(ng-hide="events.length")
-  div(ng-hide="events.length == 0")
-    i.fa.fa-spinner.fa-5x.pull-center.fa-spin
-  div(ng-show="events.length == 0")
-    i.fa.fa-ban.fa-5x.pull-center.text-danger
-    .fa-5x No data ...
+.loading(ng-hide="events")
+  i.fa.fa-spinner.fa-spin.fa-5x.pull-center

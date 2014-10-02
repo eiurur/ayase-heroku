@@ -49,4 +49,8 @@ angular.module('myApp.services', [])
   })
   .service('eventsStashService', function() {
     this.eventsStash = [];
+  })
+  .service('ArticleService', function() {
+    this.datas = [];
+    this.numLoaded = 1;
   });

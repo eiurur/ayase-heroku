@@ -101,7 +101,7 @@ class EventProvider
   findInit: (params, callback) ->
     console.log "----- find init tweet greater than equal 10 -----"
 
-    Event.find tweetNum: {$gte: 10}
+    Event.find tweetNum: {$gt: 0}
          # .sort tweetNum: -1
          .sort startedAt: -1
          .limit params["numShow"]
@@ -114,6 +114,16 @@ class EventProvider
     Event.find tweetNum: {$gt: 0}
          .sort startedAt: -1
          .skip params["numSkip"]
+         .exec (err, data) ->
+           callback err, data
+
+  findMore: (params, callback) ->
+    console.log "----- find More tweet greater than 0 -----"
+
+    Event.find tweetNum: {$gt: 0}
+         .sort startedAt: -1
+         .limit 10
+         .skip params.numSkip * 10
          .exec (err, data) ->
            callback err, data
 
