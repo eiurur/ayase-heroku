@@ -48,7 +48,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
   $scope.selectedTerm = $scope.terms[3];
 
   $scope.tweetsNum = tweetsNumService.tweetsNum;
-  $scope.selectedTweetNum = $scope.tweetsNum[1];
+  $scope.selectedTweetNum = $scope.tweetsNum[0];
 
 }
 
