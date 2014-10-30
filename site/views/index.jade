@@ -1,29 +1,26 @@
 extends layout
 
 block body
-  .row
-    .col-md-12
-      .navbar.navbar-aqua.navbar-static-top
-        .header
-          .container
-              a.navbar-brand(href='/') Ayase
-              .addthis_native_toolbox.pull-right.share-addthis
+
+  .navbar.navbar-aqua.navbar-static-top
+    .header
+      .container
+          a.navbar-brand(href='/') Ayase
+          .addthis_native_toolbox.pull-right.share-addthis
 
   .container
     .container-fluid
       div(ng-view)
 
-  .row
-    .col-md-12
-      .footer
-        .container
-          .clearfix
-            .footer-logo
-              a(href='/')
-                | Ayase
-            dl.footer-nav
-              dt.nav-title CONTACT
-              dd.nav-item
-                a(href='https://www.twitter.com/eiua_') Twitter
-          .footer-copyright.text-center Copyright © 2014 eiurur.All rights reserved.
+  .footer
+    .container
+      .clearfix
+        .footer-logo
+          a(href='/')
+            | Ayase
+        dl.footer-nav
+          dt.nav-title CONTACT
+          dd.nav-item
+            a(href='https://www.twitter.com/eiua_') Twitter
+      .footer-copyright.text-center Copyright © 2014 eiurur.All rights reserved.
 
