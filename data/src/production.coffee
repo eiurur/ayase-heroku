@@ -68,6 +68,10 @@ exports.NG_KEYWORDS = [
   '面接'
   '採用担当'
   '大学受験'
+  '旅行'
+  '旅行小物'
+  '旅行用品'
+  '寝具'
 ]
 
 exports.NG_USERS = [

@@ -41,7 +41,6 @@
        */
       return this.data.entities.hashtags.forEach((function(_this) {
         return function(val) {
-          my.c("ハッシュタグ in assign", val.text);
 
           /*
           forEachはツイートに含まれるすべてのハッシュタグをチェックするため

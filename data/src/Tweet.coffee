@@ -34,7 +34,7 @@ class Tweet
     JavaScriptでは別物とみなし、結果として undefiendが返され、そこで処理が終わる。
     ###
     @data.entities.hashtags.forEach (val) =>
-      my.c "ハッシュタグ in assign", val.text
+      # my.c "ハッシュタグ in assign", val.text
 
       ###
       forEachはツイートに含まれるすべてのハッシュタグをチェックするため
