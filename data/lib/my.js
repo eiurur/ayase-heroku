@@ -10,12 +10,12 @@
       c: function(desciption, str) {
         desciption = desciption || '';
         str = str || '';
-        return console.log("" + desciption + ": " + str);
+        return console.log(desciption + ": " + str);
       },
       e: function(desciption, str) {
         desciption = desciption || '';
         str = str || '';
-        return console.error("" + desciption + ": " + str);
+        return console.error(desciption + ": " + str);
       },
       dump: function(obj) {
         return console.log(util.inspect(obj, false, null));
@@ -28,13 +28,13 @@
       createParams: function(params) {
         var k, v;
         return ((function() {
-          var _results;
-          _results = [];
+          var results;
+          results = [];
           for (k in params) {
             v = params[k];
-            _results.push("" + k + "=" + v);
+            results.push(k + "=" + v);
           }
-          return _results;
+          return results;
         })()).join('&');
       },
       formatX: function(time) {
@@ -94,9 +94,9 @@
         }
       },
       getDaysYYYYMMDD: function(days) {
-        var day, ymds, _i;
+        var day, j, ref, ymds;
         ymds = [];
-        for (day = _i = 0; 0 <= days ? _i < days : _i > days; day = 0 <= days ? ++_i : --_i) {
+        for (day = j = 0, ref = days; 0 <= ref ? j < ref : j > ref; day = 0 <= ref ? ++j : --j) {
           ymds[day] = moment(new Date()).add('d', day).format("YYYYMMDD");
           console.log(ymds);
         }
@@ -120,7 +120,7 @@
         }
       },
       getPeriod: function(startTime, endTime) {
-        var diffDays, endTimeYMD, i, middleTime, period, startTimeYMD, _i;
+        var diffDays, endTimeYMD, i, j, middleTime, period, ref, startTimeYMD;
         period = [];
         startTimeYMD = this.formatYMD(startTime);
         endTimeYMD = this.formatYMD(endTime);
@@ -132,7 +132,7 @@
           };
         } else {
           diffDays = moment(endTimeYMD).diff(moment(startTimeYMD), "days");
-          for (i = _i = 0; 0 <= diffDays ? _i <= diffDays : _i >= diffDays; i = 0 <= diffDays ? ++_i : --_i) {
+          for (i = j = 0, ref = diffDays; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
             if (i === 0) {
               period[i] = {
                 startedAt: startTime,

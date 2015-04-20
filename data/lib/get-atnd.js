@@ -1,5 +1,5 @@
 (function() {
-  var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, async, formatEventData, moment, my, request, s, scraping, _;
+  var INTERVAL_FOR_SCRAPING_IN_MS, NUM_LIMIT_GET_EVENT_API, _, async, formatEventData, moment, my, request, s, scraping;
 
   _ = require('underscore-node');
 
@@ -54,14 +54,14 @@
         url: "http://api.atnd.org/events/?" + p
       };
       request.get(options, function(err, res, body) {
-        var eventNum, json, jsonFormated, period, _i, _len, _ref;
+        var eventNum, i, json, jsonFormated, len, period, ref;
         if (err) {
           return my.e("get-ATND request Error", err);
         }
         body = JSON.parse(body);
-        _ref = body.events;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          json = _ref[_i];
+        ref = body.events;
+        for (i = 0, len = ref.length; i < len; i++) {
+          json = ref[i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
           period = my.getPeriod(json.event.started_at, json.event.ended_at);
           jsonFormated = formatEventData(json.event, period);

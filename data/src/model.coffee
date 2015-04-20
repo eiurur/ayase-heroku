@@ -57,6 +57,11 @@ TweetSchema = new Schema
   profileImageUrl: String
 
 
+
+# Indexes
+EventSchema.index eventId: -1
+TweetSchema.index eventId: -1
+
 ##
 # モデルへのアクセス
 # mongoose.model 'モデル名', 定義したスキーマクラス

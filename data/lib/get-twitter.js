@@ -1,5 +1,5 @@
 (function() {
-  var EventProvider, aggregate, cronJob, eventStartAndEndTime, hashTags, moment, my, request, s, _;
+  var EventProvider, _, aggregate, cronJob, eventStartAndEndTime, hashTags, moment, my, request, s;
 
   _ = require('underscore-node');
 

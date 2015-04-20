@@ -1,5 +1,5 @@
 (function() {
-  var act, client, my, request, s, save, _;
+  var _, act, client, my, request, s, save;
 
   _ = require('underscore-node');
 

@@ -1,5 +1,5 @@
 (function() {
-  var async, client, formatEventData, moment, my, request, s, scraping, _;
+  var _, async, client, formatEventData, moment, my, request, s, scraping;
 
   _ = require('underscore-node');
 
@@ -54,15 +54,15 @@
         json: true
       };
       request.get(options, function(err, res, body) {
-        var json, jsonFormated, period, _i, _len;
+        var i, json, jsonFormated, len, period;
         if (err) {
           return my.e("get-DK request Error", err);
         }
         my.c(body.length);
         my.c("page", page);
         my.c("-------------------------------------------------------------");
-        for (_i = 0, _len = body.length; _i < _len; _i++) {
-          json = body[_i];
+        for (i = 0, len = body.length; i < len; i++) {
+          json = body[i];
           time += INTERVAL_FOR_SCRAPING_IN_MS;
           period = my.getPeriod(json.event.starts_at, json.event.ends_at);
           jsonFormated = formatEventData(json.event, period);

@@ -1,8 +1,7 @@
-_                      = require 'underscore-node'
+_                      = require 'lodash'
 moment                 = require 'moment'
 request                = require 'request'
 cronJob                = require('cron').CronJob
-newrelic               = require 'newrelic'
 async                  = require 'async'
 dir                    = './data/lib/'
 my                     = require(dir + 'my').my

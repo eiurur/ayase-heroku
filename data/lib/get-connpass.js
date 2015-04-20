@@ -1,5 +1,5 @@
 (function() {
-  var CONNPASS_GET_LIMIT_NUM, CONNPASS_ORDER_STARTED, async, formatEventData, moment, my, request, s, save, _;
+  var CONNPASS_GET_LIMIT_NUM, CONNPASS_ORDER_STARTED, _, async, formatEventData, moment, my, request, s, save;
 
   _ = require('underscore-node');
 
@@ -50,9 +50,9 @@
           return callback(null, loopNum);
         });
       }, function(loopNum, callback) {
-        var now, num, options, p, _i;
+        var i, now, num, options, p, ref;
         now = my.formatX();
-        for (num = _i = 0; 0 <= loopNum ? _i <= loopNum : _i >= loopNum; num = 0 <= loopNum ? ++_i : --_i) {
+        for (num = i = 0, ref = loopNum; 0 <= ref ? i <= ref : i >= ref; num = 0 <= ref ? ++i : --i) {
           p = my.createParams({
             start: num * CONNPASS_GET_LIMIT_NUM,
             count: CONNPASS_GET_LIMIT_NUM,
@@ -63,10 +63,10 @@
             json: true
           };
           request.get(options, function(err, res, body) {
-            var json, jsonFormated, period, _j, _len, _ref;
-            _ref = body.events;
-            for (_j = 0, _len = _ref.length; _j < _len; _j++) {
-              json = _ref[_j];
+            var j, json, jsonFormated, len, period, ref1;
+            ref1 = body.events;
+            for (j = 0, len = ref1.length; j < len; j++) {
+              json = ref1[j];
               if (my.formatX(json.started_at) < now) {
                 return;
               }

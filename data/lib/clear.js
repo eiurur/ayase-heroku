@@ -1,5 +1,5 @@
 (function() {
-  var EventProvider, moment, my, s, _;
+  var EventProvider, _, moment, my, s;
 
   _ = require('underscore-node');
 

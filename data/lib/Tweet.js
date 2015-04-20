@@ -1,6 +1,6 @@
 (function() {
-  var EventProvider, Tweet, TweetProvider, exception, model, moment, my, s, _,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var EventProvider, Tweet, TweetProvider, _, exception, model, moment, my, s,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   _ = require('underscore-node');
 
@@ -19,10 +19,10 @@
   s = process.env.NODE_ENV === "production" ? require("./production") : require("./development");
 
   Tweet = (function() {
-    function Tweet(data, eventStartAndEndTime) {
-      this.data = data;
+    function Tweet(data1, eventStartAndEndTime) {
+      this.data = data1;
       this.eventStartAndEndTime = eventStartAndEndTime;
-      this.assign = __bind(this.assign, this);
+      this.assign = bind(this.assign, this);
       this.eventData = void 0;
       this.tweetTime = void 0;
       this.collectionBeginningTime = void 0;
@@ -103,11 +103,11 @@
     };
 
     Tweet.prototype.isInTime = function() {
-      var _ref;
+      var ref;
       this.collectionBeginningTime = this.subHours();
       this.collectionClosingTime = this.addHours();
       this.tweetDubug();
-      if ((this.collectionBeginningTime <= (_ref = this.tweetTime) && _ref <= this.collectionClosingTime)) {
+      if ((this.collectionBeginningTime <= (ref = this.tweetTime) && ref <= this.collectionClosingTime)) {
         my.c("\n(≧▽≦) < 保存します！！！！！！！！！！！！！！！！！！\n");
         return true;
       }

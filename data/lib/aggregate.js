@@ -1,5 +1,5 @@
 (function() {
-  var Tweet, exception, my, _;
+  var Tweet, _, exception, my;
 
   _ = require('underscore-node');
 
