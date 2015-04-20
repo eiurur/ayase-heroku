@@ -4,9 +4,10 @@ settings.coffee
 development.coffee
 development.js
 node_modules/grunt*
+node_modules/newrelic/node_modules/*
+site/node_modules/*
 newrelic_agent.log
 data/node_modules/*
-node_modules/newrelic/node_modules/*
 data/lib/scraping-*
 data/src/scraping-*
 data/lib/save-*

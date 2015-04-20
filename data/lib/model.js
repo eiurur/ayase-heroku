@@ -67,6 +67,14 @@
     profileImageUrl: String
   });
 
+  EventSchema.index({
+    eventId: -1
+  });
+
+  TweetSchema.index({
+    eventId: -1
+  });
+
   mongoose.model('Event', EventSchema);
 
   mongoose.model('Tweet', TweetSchema);
