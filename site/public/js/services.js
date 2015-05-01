@@ -53,4 +53,28 @@ angular.module('myApp.services', [])
   .service('ArticleService', function() {
     this.datas = [];
     this.numLoaded = 1;
+  })
+  .service('EventService', function($http) {
+
+    return {
+      getOnTheDay: function() {
+        return $http.get('/api/readEventOnTheDay/');
+      },
+
+      getInit: function() {
+        return $http.get('/api/readInitEvent/');
+      },
+
+      getAll: function() {
+        return $http.get('/api/readAllEvent/');
+      },
+
+      getMore: function(numLoaded) {
+        return $http.get('/api/readMoreEvent/' + numLoaded);
+      },
+
+      getByServiceNameAndId: function(serviceName, eventId) {
+        return $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId);
+      }
+    };
   });

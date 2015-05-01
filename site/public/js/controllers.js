@@ -1,36 +1,8 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, ArticleService, Page, Event) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, ArticleService, Page, Event, EventService) {
 
-  _.defer(function(){
-    $scope.events = ArticleService.datas;
-    $scope.isLoadingEventData = false;
-    if(_.isEmpty($scope.events)) {
-      Event.getInit().
-        success(function(data) {
-          $scope.events = data.events;
-        });
-    }
-  });
+  $scope.events = new Event();
 
-  // 更に読み込むボタンが押下された
-  $scope.moreLoad = function() {
-    $scope.isLoadingEventData = true;
-
-    // 追加
-    Event.getMore(ArticleService.numLoaded)
-      .success(function(data) {
-        $scope.events = $scope.events.concat(data.events);
-
-        // 現在の読み込みページ数？を増やす
-        ArticleService.numLoaded += 1;
-
-        // 読み込み済みページ数と、記事を更新
-        ArticleService.datas = $scope.events;
-
-        $scope.isLoadingEventData = false;
-      });
-  };
-
-  Event.getOnTheDay().
+  EventService.getOnTheDay().
     success(function(data) {
       if(data.eventsOnTheDay.length　=== 0){
         $scope.eventsOnTheDay = [{
@@ -53,7 +25,7 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 }
 
 
-function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page, Event, Tweet, Slide) {
+function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, $interval, Page, EventService, Tweet, Slide) {
 
   var slideshare_pattern = /"((http|https):\/\/www.slideshare.net\/[0-9a-zA-Z\/-]*)"\s/im;
   var speakerdeck_pattern = /"((http|https):\/\/speakerdeck.com\/[0-9a-zA-Z\/-]*)"\s/im;
@@ -65,50 +37,79 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
   }
 
   function insertSlideViewList(data, index) {
+    // TODO: 同じ処理は関数化
+
     // 正規表現を使ってスライドURLが含まれているか
     isIncludeSlideShareUrl = data.tweets[index].text.indexOf("www.slideshare.net");
     if(isIncludeSlideShareUrl !== -1) {
 
-      resultExec = slideshare_pattern.exec(data.tweets[index].text);
+      // 正規表現に一致しなかった場合はnullが返ってくる。
+      // エラー分岐をさせないと、nullに[1]なんてねーよって怒られるからそれ用の措置。
+      var resultExec = slideshare_pattern.exec(data.tweets[index].text);
       if(_.isNull(resultExec)) return;
-      slideUrl = resultExec[1];
 
-      Slide.getSlideId({url: slideUrl, serviceName: 'slideshare'})
-      .success(function(slide) {
-        console.log(slide);
-        $scope.slides.push({
-            serviceName: 'slideshare'
-          , id: slide.slideId
-          , tweet: data.tweets[index]
+      var slideUrl = resultExec[1];
+
+      // すでに一覧に表示されているスライドは表示させない
+      var sameSlide = _.findWhere($scope.slides, {url: slideUrl});
+      if(!_.isUndefined(sameSlide)) return;
+
+      (function() {
+        Slide.getSlideId({url: slideUrl, serviceName: 'slideshare'})
+        .success(function(slide) {
+
+          // スライドが削除されていたら空のオブジェクトが返る。それは一覧に表示させない
+          if(_.isEmpty(slide)) return;
+
+          $scope.slides.push({
+              serviceName: 'slideshare'
+            , id: slide.slideId
+            , url: slideUrl
+            , enbedCode: '//www.slideshare.net/slideshow/embed_code/key/' + slide.slideId
+            , tweet: data.tweets[index]
+          });
         });
-      });
+      })();
     }
 
     isIncludeSpeakerDeckUrl = data.tweets[index].text.indexOf("speakerdeck.com");
     if(isIncludeSpeakerDeckUrl !== -1) {
 
-      resultExec = speakerdeck_pattern.exec(data.tweets[index].text);
+      var resultExec = speakerdeck_pattern.exec(data.tweets[index].text);
       if(_.isNull(resultExec)) return;
-      slideUrl = resultExec[1];
+      var slideUrl = resultExec[1];
 
-      Slide.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
-      .success(function(slide) {
-        console.log(slide);
-        $scope.slides.push({
-            serviceName: 'speakerdeck'
-          , id: slide.slideId
-          , tweet: data.tweets[index]
+      // すでに一覧に表示されているスライドは表示させない
+      var sameSlide = _.findWhere($scope.slides, {url: slideUrl});
+      if(!_.isUndefined(sameSlide)) return;
+
+      (function() {
+        Slide.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
+        .success(function(slide) {
+          if(_.isEmpty(slide)) return;
+
+          $scope.slides.push({
+              serviceName: 'speakerdeck'
+            , id: slide.slideId
+            , url: slideUrl
+            , enbedCode: 'https://speakerdeck.com/assets/embed.js'
+            , tweet: data.tweets[index]
+          });
         });
-      });
+      })();
     }
   }
 
+  /**
+   * ブラウザをフリーズさせずにツイートを全部表示させる
+   */
   function IterateTweets(data) {
-    var index        = 0
-      , tweetLength  = data.tweets.length
-      , process      = function() {
+    var index       = 0
+      , tweetLength = data.tweets.length
+      , timer
+      ;
 
-      // ブラウザをフリーズさせずにツイートを全部表示させる
+    var process = function() {
       for (; index < tweetLength;) {
 
         insertTweetViewList(data, index);
@@ -140,26 +141,21 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
         , INTERVAL = 30 * 1000
         ;
 
-      onTimeout = function() {
+      var updateTweet = function() {
         Tweet.getNew(serviceName, eventId, lastTweetIdStr).
           success(function(data) {
             if(data.tweets.length === 0) return;
 
-            // Update!!
             insertTweetViewList(data, index);
             insertSlideViewList(data, index);
           });
-
-        timer = $timeout(onTimeout, INTERVAL);
       };
 
-      timer = $timeout(onTimeout, INTERVAL);
-
+      timer = $interval(updateTweet, INTERVAL);
       $scope.$on("$destroy", function() {
-        if (timer) {
-          $timeout.cancel(timer);
-        }
+        if (timer) { $interval.cancel(timer); }
       });
+
     }
   }
 
@@ -202,7 +198,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
   /**
    * イベントの情報を取得
    */
-  Event.getByServiceNameAndId(serviceName, eventId).
+  EventService.getByServiceNameAndId(serviceName, eventId).
     success(function(data) {
       $scope.events = data.events;
       Page.setTitle($scope.events[0].title);

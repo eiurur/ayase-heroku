@@ -12,29 +12,39 @@ angular.module('myApp.factories', [])
     };
 
   })
-  .factory('Event', function($http) {
-
-    return {
-      getOnTheDay: function() {
-        return $http.get('/api/readEventOnTheDay/');
-      },
-
-      getInit: function() {
-        return $http.get('/api/readInitEvent/');
-      },
-
-      getAll: function() {
-        return $http.get('/api/readAllEvent/');
-      },
-
-      getMore: function(numLoaded) {
-        return $http.get('/api/readMoreEvent/' + numLoaded);
-      },
-
-      getByServiceNameAndId: function(serviceName, eventId) {
-        return $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId);
+  .factory('Event', function($http, ArticleService, EventService) {
+    var Event = function() {
+      this.items = ArticleService.datas;
+      this.busy = false;
+      if(_.isEmpty(this.items)) {
+        EventService.getInit().
+          success(function(data) {
+            this.items = data.events;
+          }.bind(this));
       }
+      this.after = '';
     };
+
+    Event.prototype.nextPage = function() {
+      if (this.busy) return;
+      this.busy = true;
+
+
+      EventService.getMore(ArticleService.numLoaded)
+        .success(function(data) {
+          this.items = this.items.concat(data.events);
+
+          // 現在の読み込みページ数？を増やす
+          ArticleService.numLoaded += 1;
+
+          // 読み込み済みページ数と、記事を更新
+          ArticleService.datas = this.items;
+
+          this.busy = false;
+        }.bind(this));
+    };
+
+    return Event;
 
   })
   .factory('Tweet', function($http) {

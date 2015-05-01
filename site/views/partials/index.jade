@@ -2,7 +2,7 @@
 
 .row.main
   .col-md-6.search-form
-    .ex-title イベント件数: {{(events | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件
+    .ex-title イベント件数: {{(events.items | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件
     form.form-horizontal(role='form')
       .form-group
         label.col-sm-2.control-label 開催日
@@ -28,30 +28,56 @@
           li.list-group-item
             a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
 
-.row.main(ng-show="events.length")
-  div(ng-repeat='event in events | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
-    .col-md-6
-      .jumbotron
-        .jumbotron-contents.jumbotron-bg
-          h3
-            a(href="/detail/{{event.serviceName}}/{{event.eventId}}")
-             | {{event.title}}
-          p
-            p.lead.sub-text
-              span.line 開催時刻： {{event.startedAt}} ~ {{event.endedAt}}
-              span.line.hast-tag # {{event.hashTag}}
-          p
-            a(slide-toggle="#i{{$index}}")
-              i.fa.fa-angle-down.fa-3x.detail-arrow
-            .slideable(id="i{{$index}}")
-              base(target='_blank')
-              span(ng-bind-html="event.description")
-              a(slide-toggle="#i{{$index}}")
-                i.fa.fa-angle-up.fa-3x.detail-arrow
-          span.tweet-number
-            | {{event.tweetNum}}
-  .col-sm-12.col-md-offset-3.col-md-6.col-md-offset-3.load-button-space
-    button.btn.btn-primary.btn-lg.btn-block(ng-click='moreLoad()', ng-disabled="isLoadingEventData") さらに読み込む
+.row.main(ng-show="events.items.length")
+  //- div(ng-repeat='event in events | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
+  //-   .col-md-6
+  //-     .jumbotron
+  //-       .jumbotron-contents.jumbotron-bg
+  //-         h3
+  //-           a(href="/detail/{{event.serviceName}}/{{event.eventId}}")
+  //-            | {{event.title}}
+  //-         p
+  //-           p.lead.sub-text
+  //-             span.line 開催時刻： {{event.startedAt}} ~ {{event.endedAt}}
+  //-             span.line.hast-tag # {{event.hashTag}}
+  //-         p
+  //-           a(slide-toggle="#i{{$index}}")
+  //-             i.fa.fa-angle-down.fa-3x.detail-arrow
+  //-           .slideable(id="i{{$index}}")
+  //-             base(target='_blank')
+  //-             span(ng-bind-html="event.description")
+  //-             a(slide-toggle="#i{{$index}}")
+  //-               i.fa.fa-angle-up.fa-3x.detail-arrow
+  //-         span.tweet-number
+  //-           | {{event.tweetNum}}
+  //- .col-sm-12.col-md-offset-3.col-md-6.col-md-offset-3.load-button-space
+  //-   button.btn.btn-primary.btn-lg.btn-block(ng-click='moreLoad()', ng-disabled="isLoadingEventData") さらに読み込む
 
-.loading(ng-hide="events")
+  div(infinite-scroll='events.nextPage()', infinite-scroll-disabled='events.busy', infinite-scroll-distance='1')
+    div(ng-repeat='event in events.items | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
+      .col-md-6
+        .jumbotron
+          .jumbotron-contents.jumbotron-bg
+            h3
+              a(href="/detail/{{event.serviceName}}/{{event.eventId}}")
+               | {{event.title}}
+            p
+              p.lead.sub-text
+                span.line 開催時刻： {{event.startedAt}} ~ {{event.endedAt}}
+                span.line.hast-tag # {{event.hashTag}}
+            p
+              a(slide-toggle="#i{{$index}}")
+                i.fa.fa-angle-down.fa-3x.detail-arrow
+              .slideable(id="i{{$index}}")
+                base(target='_blank')
+                span(ng-bind-html="event.description")
+                a(slide-toggle="#i{{$index}}")
+                  i.fa.fa-angle-up.fa-3x.detail-arrow
+            span.tweet-number
+              | {{event.tweetNum}}
+    //- .col-md-12
+    h3.text-center(ng-show='events.busy') Loading data...
+
+
+.loading(ng-hide="events.items")
   i.fa.fa-spinner.fa-spin.fa-5x.pull-center
