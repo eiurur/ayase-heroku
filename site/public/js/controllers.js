@@ -68,12 +68,10 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     // 正規表現を使ってスライドURLが含まれているか
     isIncludeSlideShareUrl = data.tweets[index].text.indexOf("www.slideshare.net");
     if(isIncludeSlideShareUrl !== -1) {
-      slideUrl = slideshare_pattern.exec(data.tweets[index].text)[1];
-      // Slide.getEmbedCode({url: slideUrl, serviceName: 'slideshare'})
-      // .success(function(data) {
-      //   console.log(data);
-      //   $scope.slides.push(data.enbedCode);
-      // });
+
+      resultExec = slideshare_pattern.exec(data.tweets[index].text);
+      if(_.isNull(resultExec)) return;
+      slideUrl = resultExec[1];
 
       Slide.getSlideId({url: slideUrl, serviceName: 'slideshare'})
       .success(function(slide) {
@@ -84,17 +82,14 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
           , tweet: data.tweets[index]
         });
       });
-      // return;
     }
 
     isIncludeSpeakerDeckUrl = data.tweets[index].text.indexOf("speakerdeck.com");
     if(isIncludeSpeakerDeckUrl !== -1) {
-      slideUrl = speakerdeck_pattern.exec(data.tweets[index].text)[1];
-      // Slide.getEmbedCode({url: slideUrl, serviceName: 'speakerdeck'})
-      // .success(function(data) {
-      //   console.log(data);
-      //   $scope.slides.push(data.enbedCode);
-      // });
+
+      resultExec = speakerdeck_pattern.exec(data.tweets[index].text);
+      if(_.isNull(resultExec)) return;
+      slideUrl = resultExec[1];
 
       Slide.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
       .success(function(slide) {
@@ -105,7 +100,6 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
           , tweet: data.tweets[index]
         });
       });
-      // return;
     }
   }
 
