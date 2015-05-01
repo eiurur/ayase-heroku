@@ -56,6 +56,11 @@ TweetSchema = new Schema
   screenName: String
   profileImageUrl: String
 
+SlideSchema = new Schema
+  tweet:
+    type: Schema.Types.ObjectId
+    ref : 'Tweet'
+  url: String
 
 
 # Indexes
@@ -69,6 +74,7 @@ TweetSchema.index eventId: -1
 ##
 mongoose.model 'Event', EventSchema
 mongoose.model 'Tweet', TweetSchema
+mongoose.model 'Slide', SlideSchema
 
 
 ##
@@ -76,6 +82,7 @@ mongoose.model 'Tweet', TweetSchema
 ##
 Event = mongoose.model 'Event'
 Tweet = mongoose.model 'Tweet'
+Slide = mongoose.model 'Slide'
 
 
 ##
@@ -299,5 +306,29 @@ class TweetProvider
       callback()
 
 
+class SlideProvider
+
+  findSlidesByEventId: (params, callback) ->
+    console.log "\n============> Slide findSlidesByEventId\n"
+    Slide.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+        ]
+        .populate 'tweet'
+        .sort createdAt: -1
+         .exec (err, data) ->
+           callback err, data
+
+  save: (params, callback) ->
+    console.log "\n============> Slide save\n"
+    console.log params
+    slide = new Slide
+      tweetId: params['tweetId']
+      tweetIdStr: params['tweetIdStr']
+      url: params['url']
+    slide.save (err, slide) ->
+      callback err, slide
+
 exports.EventProvider = new EventProvider()
 exports.TweetProvider = new TweetProvider()
+exports.SlideProvider = new SlideProvider()

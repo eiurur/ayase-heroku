@@ -19,7 +19,9 @@ div#page-content-wrapper(ng-show="tweets.length")
         span.hast-tag ハッシュタグ: # {{events[0].hashTag}}
   div.page-content.inset
     div.row
-      div.col-md-12.panel-padding-bottom
+
+      // tweet
+      div.col-md-6.col-sm-6.panel-padding-bottom
         .panel.panel-primary
           .panel-heading
             .panel-title Tweets: {{tweets.length}}
@@ -39,6 +41,30 @@ div#page-content-wrapper(ng-show="tweets.length")
                       a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/")
                         {{tweet.createdAt}}
                   span.tweet(ng-bind-html="tweet.text")
+
+      // slide
+      div.col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")
+        .panel.panel-primary
+          .panel-heading
+            .panel-title Slides: {{slides.length}}
+          ul.list-group.panel-scroll-bar-tweet
+            li.list-group-item(ng-repeat='slide in slides')
+              div(ng-switch="slide.serviceName")
+                div(ng-switch-when="slideshare")
+                  iframe(ng-src='//www.slideshare.net/slideshow/embed_code/key/{{slide.id}}', width='100%', height='355', frameborder='0', marginwidth='0', marginheight='0', scrolling='no', style='border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;', allowfullscreen='allowfullscreen')
+                div(ng-switch-when="speakerdeck")
+                  script.speakerdeck-embed(async='async', data-id='{{slide.id}}', data-ratio='1.33333333333333', src='https://speakerdeck.com/assets/embed.js', sandbox='allow-forms')
+                div(ng-switch-default)
+                  {{slide.serviceName}}
+
+              .media
+                a.pull-left(href="https://www.twitter.com/{{slide.tweet.screenName}}/")
+                  img.media-object.img-rounded.thumnail-icon.fade(img-preload, ng-src="{{slide.tweet.profileImageUrl}}", alt="{{slide.tweet.screenName}}")
+                .media-body
+                  h4.user-data.media-heading.username {{slide.tweet.userName}}
+                    span
+                      　@{{slide.tweet.screenName}}
+                  span.tweet(ng-bind-html="slide.tweet.text")
 
 .loading(ng-hide="tweets.length")
   i.fa.fa-spinner.fa-5x.pull-center.fa-spin

@@ -53,4 +53,17 @@ angular.module('myApp.factories', [])
       }
     };
 
+  })
+  .factory('Slide', function($http) {
+
+    return {
+      getEmbedCode: function(params) {
+        return $http.post('/api/getEmbedCode', params);
+      },
+
+      getSlideId: function(params) {
+        return $http.post('/api/getSlideId', params);
+      }
+    };
+
   });

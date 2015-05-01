@@ -3,6 +3,8 @@ var dir                         = '../../data/lib/'
   , _                           = require('underscore-node')
   , async                       = require('async')
   , my                          = require(dir + 'my').my
+  , getEmbedCode                = require(dir + 'get-embed-code')
+  , getSlideId                  = require(dir + 'get-slide-id')
   , EventProvider               = require(dir + 'model').EventProvider
   , TweetProvider               = require(dir + 'model').TweetProvider
   , settings                    = process.env.NODE_ENV === 'production' ? require(dir + 'production') : require(dir + 'development')
@@ -158,6 +160,31 @@ exports.readNewTweet = function (req, res) {
           tweets: tweets
       });
     });
+};
+
+exports.getEmbedCode = function (req, res) {
+  console.log(req.body);
+  getEmbedCode.getEmbedCode({
+      url: req.body.url
+    , serviceName: req.body.serviceName
+  }, function(err, embedCode) {
+    res.json({
+      embedCode: embedCode
+    });
+  });
+};
+
+
+exports.getSlideId = function (req, res) {
+  console.log(req.body);
+  getSlideId.getSlideId({
+      url: req.body.url
+    , serviceName: req.body.serviceName
+  }, function(err, slideId) {
+    res.json({
+      slideId: slideId
+    });
+  });
 };
 
 /**

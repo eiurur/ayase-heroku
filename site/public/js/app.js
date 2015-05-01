@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'myApp.factories', 'ngSanitize']).
-  config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+angular.module('myApp', ['ngSanitize', 'myApp.filters', 'myApp.services', 'myApp.directives', 'myApp.factories'])
+  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.
       when('/', {
         templateUrl: 'partials/index',

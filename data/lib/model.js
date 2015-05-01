@@ -1,5 +1,5 @@
 (function() {
-  var Event, EventProvider, EventSchema, ObjectId, Schema, SeriesSchema, Tweet, TweetProvider, TweetSchema, db, mongoose, uri;
+  var Event, EventProvider, EventSchema, ObjectId, Schema, SeriesSchema, Slide, SlideProvider, SlideSchema, Tweet, TweetProvider, TweetSchema, db, mongoose, uri;
 
   mongoose = require('mongoose');
 
@@ -67,6 +67,14 @@
     profileImageUrl: String
   });
 
+  SlideSchema = new Schema({
+    tweet: {
+      type: Schema.Types.ObjectId,
+      ref: 'Tweet'
+    },
+    url: String
+  });
+
   EventSchema.index({
     eventId: -1
   });
@@ -79,9 +87,13 @@
 
   mongoose.model('Tweet', TweetSchema);
 
+  mongoose.model('Slide', SlideSchema);
+
   Event = mongoose.model('Event');
 
   Tweet = mongoose.model('Tweet');
+
+  Slide = mongoose.model('Slide');
 
   EventProvider = (function() {
     function EventProvider() {}
@@ -387,8 +399,47 @@
 
   })();
 
+  SlideProvider = (function() {
+    function SlideProvider() {}
+
+    SlideProvider.prototype.findSlidesByEventId = function(params, callback) {
+      console.log("\n============> Slide findSlidesByEventId\n");
+      return Slide.find({
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
+      }).populate('tweet').sort({
+        createdAt: -1
+      }).exec(function(err, data) {
+        return callback(err, data);
+      });
+    };
+
+    SlideProvider.prototype.save = function(params, callback) {
+      var slide;
+      console.log("\n============> Slide save\n");
+      console.log(params);
+      slide = new Slide({
+        tweetId: params['tweetId'],
+        tweetIdStr: params['tweetIdStr'],
+        url: params['url']
+      });
+      return slide.save(function(err, slide) {
+        return callback(err, slide);
+      });
+    };
+
+    return SlideProvider;
+
+  })();
+
   exports.EventProvider = new EventProvider();
 
   exports.TweetProvider = new TweetProvider();
+
+  exports.SlideProvider = new SlideProvider();
 
 }).call(this);

@@ -53,9 +53,63 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 }
 
 
-function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page, Event, Tweet) {
+function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, Page, Event, Tweet, Slide) {
 
-  function insertTweetViewList(data) {
+  var slideshare_pattern = /"((http|https):\/\/www.slideshare.net\/[0-9a-zA-Z\/-]*)"\s/im;
+  var speakerdeck_pattern = /"((http|https):\/\/speakerdeck.com\/[0-9a-zA-Z\/-]*)"\s/im;
+
+  function insertTweetViewList(data, index) {
+    // $scope.tweets.push(data.tweets[index]); より高速
+    $scope.tweets[$scope.tweets.length] = data.tweets[index];
+    lastTweetIdStr = data.tweets[index].tweetIdStr;
+  }
+
+  function insertSlideViewList(data, index) {
+    // 正規表現を使ってスライドURLが含まれているか
+    isIncludeSlideShareUrl = data.tweets[index].text.indexOf("www.slideshare.net");
+    if(isIncludeSlideShareUrl !== -1) {
+      slideUrl = slideshare_pattern.exec(data.tweets[index].text)[1];
+      // Slide.getEmbedCode({url: slideUrl, serviceName: 'slideshare'})
+      // .success(function(data) {
+      //   console.log(data);
+      //   $scope.slides.push(data.enbedCode);
+      // });
+
+      Slide.getSlideId({url: slideUrl, serviceName: 'slideshare'})
+      .success(function(slide) {
+        console.log(slide);
+        $scope.slides.push({
+            serviceName: 'slideshare'
+          , id: slide.slideId
+          , tweet: data.tweets[index]
+        });
+      });
+      // return;
+    }
+
+    isIncludeSpeakerDeckUrl = data.tweets[index].text.indexOf("speakerdeck.com");
+    if(isIncludeSpeakerDeckUrl !== -1) {
+      slideUrl = speakerdeck_pattern.exec(data.tweets[index].text)[1];
+      // Slide.getEmbedCode({url: slideUrl, serviceName: 'speakerdeck'})
+      // .success(function(data) {
+      //   console.log(data);
+      //   $scope.slides.push(data.enbedCode);
+      // });
+
+      Slide.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
+      .success(function(slide) {
+        console.log(slide);
+        $scope.slides.push({
+            serviceName: 'speakerdeck'
+          , id: slide.slideId
+          , tweet: data.tweets[index]
+        });
+      });
+      // return;
+    }
+  }
+
+  function IterateTweets(data) {
     var index        = 0
       , tweetLength  = data.tweets.length
       , process      = function() {
@@ -63,9 +117,8 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       // ブラウザをフリーズさせずにツイートを全部表示させる
       for (; index < tweetLength;) {
 
-        // $scope.tweets.push(data.tweets[index]); より高速
-        $scope.tweets[$scope.tweets.length] = data.tweets[index];
-        lastTweetIdStr = data.tweets[index].tweetIdStr;
+        insertTweetViewList(data, index);
+        insertSlideViewList(data, index);
 
         $timeout(process, 5);
         index++;
@@ -99,7 +152,8 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
             if(data.tweets.length === 0) return;
 
             // Update!!
-            insertTweetViewList(data);
+            insertTweetViewList(data, index);
+            insertSlideViewList(data, index);
           });
 
         timer = $timeout(onTimeout, INTERVAL);
@@ -123,6 +177,8 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     , eventId     = $routeParams.eventId || 0
     ;
 
+  $scope.slides = [];
+
   // 最初の20件を取得
   Tweet.getInit(serviceName, eventId).
     success(function(data) {
@@ -145,7 +201,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       // 残りのツイートを取得
       Tweet.getRest(serviceName, eventId).
         success(function(data) {
-          insertTweetViewList(data);
+          IterateTweets(data);
         });
     });
 

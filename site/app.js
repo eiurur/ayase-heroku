@@ -68,6 +68,9 @@ exports.serve = function() {
   app.get('/api/readNewTweet/:serviceName/:eventId/:tweetIdStr', api.readNewTweet);
   app.get('/api/readEventByEventId/:serviceName/:eventId', api.readEventByEventId);
 
+  app.post('/api/getSlideId', api.getSlideId);
+  app.post('/api/getEmbedCode', api.getEmbedCode);
+
   app.get('*', routes.index);
 
 

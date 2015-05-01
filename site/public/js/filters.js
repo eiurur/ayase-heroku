@@ -58,4 +58,9 @@ angular.module('myApp.filters', []).
       });
       return result;
     }
-  });
+  })
+  .filter('trusted', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsResourceUrl(val);
+    };
+  }]);
