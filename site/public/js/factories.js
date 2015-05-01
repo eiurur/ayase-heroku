@@ -14,7 +14,9 @@ angular.module('myApp.factories', [])
   })
   .factory('Event', function($http, ArticleService, EventService) {
     var Event = function() {
-      this.items = ArticleService.datas;
+      (function() {
+        this.items = ArticleService.datas;
+      }).call(this);
       this.busy = false;
       if(_.isEmpty(this.items)) {
         EventService.getInit().
@@ -29,19 +31,21 @@ angular.module('myApp.factories', [])
       if (this.busy) return;
       this.busy = true;
 
+      (function() {
+        EventService.getMore(ArticleService.numLoaded)
+          .success(function(data) {
+            this.items = this.items.concat(data.events);
 
-      EventService.getMore(ArticleService.numLoaded)
-        .success(function(data) {
-          this.items = this.items.concat(data.events);
+            // 現在の読み込みページ数？を増やす
+            ArticleService.numLoaded += 1;
 
-          // 現在の読み込みページ数？を増やす
-          ArticleService.numLoaded += 1;
+            // 読み込み済みページ数と、記事を更新
+            ArticleService.datas = this.items;
 
-          // 読み込み済みページ数と、記事を更新
-          ArticleService.datas = this.items;
+            this.busy = false;
+          }.bind(this));
 
-          this.busy = false;
-        }.bind(this));
+      }).call(this);
     };
 
     return Event;

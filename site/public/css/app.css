@@ -1,6 +1,16 @@
-* {
+/** {
 　font-family: 'Source Sans Pro','Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'Meiryo', 'メイリオ', sans-serif;
+}*/
+
+html, body {
+  font-family: YuGothic, 'Yu Gothic', '游ゴシック体', '游ゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', 'MSPゴシック', 'Osaka', 'MS PGothic', 'Arial', 'Helvetica', 'Verdana', 'sans-serif';
+  margin-top: 0;
+  /*font-size: 22px;*/
+  color: #000;
+  height: 100%;
+  line-height: 1.6;
 }
+
 
 .bg {
   /*background-image: url(../images/e0e0e0.png);*/
@@ -184,7 +194,7 @@ a {
   /*color: #37BC9B; /* パネルカラー */
   color: #4FC1E9; /* リンクカラー */
   text-align: center;
-  padding: 200px 0 1000px 0;
+  padding: 200px 0 200px 0;
 }
 
 .share-addthis {
@@ -198,4 +208,26 @@ a {
 
 .load-button-space {
   padding: 35px 0 50px 0;
+}
+
+/**
+ * Event
+ */
+/*.event-title {
+  line-height: 1.4;
+}
+*/
+/**
+ * jumbotron
+ */
+
+/* 縦のサイズを合わせるために最低高を設定 */
+.jumbotron {
+  min-height: 280px;
+}
+
+/* それに伴い。、descriptionを展開するための矢印を上からの距離ではなく、底からの距離で位置づける */
+.description-arrow {
+  /*position: absolute;*/
+  /*top: 42px;*/
 }
