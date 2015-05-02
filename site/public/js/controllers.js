@@ -146,8 +146,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
           success(function(data) {
             if(data.tweets.length === 0) return;
 
-            insertTweetViewList(data, index);
-            insertSlideViewList(data, index);
+             IterateTweets(data);
           });
       };
 
@@ -182,7 +181,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
         $location.path('/');
       }
 
-      // FDBへ無駄なクエリは投げない
+      // DBへ無駄なクエリは投げない
       if(tweetLength < 10) {
         console.log(tweetLength);
         return;
