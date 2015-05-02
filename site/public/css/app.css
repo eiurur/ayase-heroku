@@ -11,14 +11,13 @@ html, body {
   line-height: 1.6;
 }
 
+a {
+  text-decoration: none;
+}
 
 .bg {
   /*background-image: url(../images/e0e0e0.png);*/
   background-color: #F1F2F6;
-}
-
-a {
-  text-decoration: none;
 }
 
 /*.jumbotron-bg {
@@ -213,10 +212,10 @@ a {
 /**
  * Event
  */
-/*.event-title {
-  line-height: 1.4;
+.event-title {
+  line-height: 1.6;
 }
-*/
+
 /**
  * jumbotron
  */
