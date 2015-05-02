@@ -77,4 +77,21 @@ angular.module('myApp.services', [])
         return $http.get('/api/readEventByEventId/' + serviceName + '/' + eventId);
       }
     };
+  })
+  .factory('SlideService', function($http) {
+
+    return {
+      getEmbedCode: function(params) {
+        return $http.post('/api/getEmbedCode', params);
+      },
+
+      getSlideId: function(params) {
+        return $http.post('/api/getSlideId', params);
+      },
+
+      slideshare_pattern: /"((http|https):\/\/www.slideshare.net\/[0-9a-zA-Z\/-]*)"\s/im,
+
+      speakerdeck_pattern: /"((http|https):\/\/speakerdeck.com\/[0-9a-zA-Z\/-]*)"\s/im
+    };
+
   });

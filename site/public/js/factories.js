@@ -13,21 +13,39 @@ angular.module('myApp.factories', [])
 
   })
   .factory('Event', function($http, ArticleService, EventService) {
+
     var Event = function() {
+
       (function() {
         this.items = ArticleService.datas;
       }).call(this);
+
       this.busy = false;
+
       if(_.isEmpty(this.items)) {
         EventService.getInit().
           success(function(data) {
             this.items = data.events;
           }.bind(this));
       }
-      this.after = '';
+
+      // 当日開催するイベントの一覧を取得
+      EventService.getOnTheDay().
+        success(function(data) {
+          if(data.eventsOnTheDay.length　=== 0){
+            this.eventsOnTheDay =[{
+                title: "開催予定のイベントはありません"
+              , eventUrl: "#"
+            }];
+          } else {
+            this.eventsOnTheDay = data.eventsOnTheDay;
+          }
+        }.bind(this));
+
     };
 
     Event.prototype.nextPage = function() {
+
       if (this.busy) return;
       this.busy = true;
 
@@ -44,8 +62,8 @@ angular.module('myApp.factories', [])
 
             this.busy = false;
           }.bind(this));
-
       }).call(this);
+
     };
 
     return Event;
@@ -64,19 +82,6 @@ angular.module('myApp.factories', [])
 
       getNew: function(serviceName, eventId, lastTweetIdStr) {
         return $http.get('/api/readNewTweet/' + serviceName + '/' + eventId + '/' + lastTweetIdStr);
-      }
-    };
-
-  })
-  .factory('Slide', function($http) {
-
-    return {
-      getEmbedCode: function(params) {
-        return $http.post('/api/getEmbedCode', params);
-      },
-
-      getSlideId: function(params) {
-        return $http.post('/api/getSlideId', params);
       }
     };
 

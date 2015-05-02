@@ -15,7 +15,7 @@ div#page-content-wrapper(ng-show="tweets.length")
             i.fa.fa-google-plus-square.fa-2x
     p
       .sub-text
-        開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
+        span 開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
         span.hast-tag ハッシュタグ: # {{events[0].hashTag}}
   div.page-content.inset
     div.row
@@ -35,11 +35,9 @@ div#page-content-wrapper(ng-show="tweets.length")
                   img.media-object.img-rounded.thumnail-icon.fade(img-preload, ng-src="{{tweet.profileImageUrl}}", alt="{{tweet.screenName}}")
                 .media-body
                   h4.user-data.media-heading.username {{tweet.userName}}
-                    span
-                      　@{{tweet.screenName}}
+                    span @{{tweet.screenName}}
                     span.pull-right
-                      a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/")
-                        {{tweet.createdAt}}
+                      a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/") {{tweet.createdAt}}
                   span.tweet(ng-bind-html="tweet.text")
 
       // slide
@@ -62,8 +60,7 @@ div#page-content-wrapper(ng-show="tweets.length")
                   img.media-object.img-rounded.thumnail-icon.fade(img-preload, ng-src="{{slide.tweet.profileImageUrl}}", alt="{{slide.tweet.screenName}}")
                 .media-body
                   h4.user-data.media-heading.username {{slide.tweet.userName}}
-                    span
-                      　@{{slide.tweet.screenName}}
+                    span @{{slide.tweet.screenName}}
                   span.tweet(ng-bind-html="slide.tweet.text")
 
 .loading(ng-hide="tweets.length")

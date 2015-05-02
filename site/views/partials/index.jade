@@ -1,5 +1,3 @@
-
-
 .row.main
   .col-md-6.search-form
     .ex-title イベント件数: {{(events.items | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num).length}}件
@@ -19,12 +17,12 @@
                 i.search-icon.glyphicon.glyphicon-search
                 input.form-control(type="text", ng-model="searchWord")
 
-  .col-md-6.hidden-xs.hidden-sm(ng-show="eventsOnTheDay.length")
+  .col-md-6.hidden-xs.hidden-sm(ng-show="events.eventsOnTheDay.length")
     .panel.panel-info
       .panel-heading 本日開催予定のイベント
       base(target='_blank')
       .panel-scroll-bar
-        ul.list-group(ng-repeat='eventOnTheDay in eventsOnTheDay')
+        ul.list-group(ng-repeat='eventOnTheDay in events.eventsOnTheDay')
           li.list-group-item
             a(ng-href='{{eventOnTheDay.eventUrl}}') {{eventOnTheDay.title}}
 
@@ -40,7 +38,6 @@
             p
               p.lead.sub-text
                 span.line 開催時刻： {{event.startedAt}} ~ {{event.endedAt}}
-                //- span.line.hast-tag # {{event.hashTag}}
               p.lead.sub-text
                 span.line # {{event.hashTag}}
             p

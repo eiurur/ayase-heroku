@@ -1,17 +1,6 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, ArticleService, Page, Event, EventService) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page, Event) {
 
   $scope.events = new Event();
-
-  EventService.getOnTheDay().
-    success(function(data) {
-      if(data.eventsOnTheDay.length　=== 0){
-        $scope.eventsOnTheDay = [{
-            title: "開催予定のイベントはありません"
-          , eventUrl: "#"
-        }];
-      }
-      $scope.eventsOnTheDay = data.eventsOnTheDay;
-    });
 
   Page.setTitle("Ayase");
   $rootScope.title = Page.title();
@@ -24,11 +13,65 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 
 }
 
+function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, $interval, EventService, SlideService, Page, Tweet) {
 
-function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, $interval, Page, EventService, Tweet, Slide) {
+  /**
+   * ページ描画時に最初に行う処理
+   */
+  var lastTweetIdStr
+    , serviceName = $routeParams.serviceName || "connpass"
+    , eventId     = $routeParams.eventId || 0
+    ;
 
-  var slideshare_pattern = /"((http|https):\/\/www.slideshare.net\/[0-9a-zA-Z\/-]*)"\s/im;
-  var speakerdeck_pattern = /"((http|https):\/\/speakerdeck.com\/[0-9a-zA-Z\/-]*)"\s/im;
+  $scope.slides = [];
+
+  /**
+   * ツイートを取得
+   */
+  Tweet.getInit(serviceName, eventId).
+    success(function(data) {
+      var tweetLength = data.tweets.length;
+
+      $scope.tweets = data.tweets;
+
+      // URLから無効なページへ直接アクセスされたときはindexページへリダイレクト
+      if(tweetLength === 0) {
+        console.log("No tweets");
+        $location.path('/');
+      }
+
+      // DBへ無駄なクエリは投げない
+      if(tweetLength < 10) {
+        console.log(tweetLength);
+        return;
+      }
+
+      // 残りのツイートを取得
+      Tweet.getRest(serviceName, eventId).
+        success(function(data) {
+          IterateTweets(data);
+        });
+
+      // 新着ツイート収集処理開始
+      getNewTweetInterval();
+    });
+
+  /**
+   * イベントの情報を取得
+   */
+  EventService.getByServiceNameAndId(serviceName, eventId).
+    success(function(data) {
+      $scope.events = data.events;
+      Page.setTitle($scope.events[0].title);
+      $rootScope.title = Page.title();
+    });
+
+  // シェアボタンのURL割り当て用
+  $scope.absUrl = $location.absUrl();
+
+  // ツイート一覧の並び順をtweetIDで昇順に変更。
+  $scope.reverse = false;
+
 
   function insertTweetViewList(data, index) {
     // $scope.tweets.push(data.tweets[index]); より高速
@@ -45,7 +88,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
 
       // 正規表現に一致しなかった場合はnullが返ってくる。
       // エラー分岐をさせないと、nullに[1]なんてねーよって怒られるからそれ用の措置。
-      var resultExec = slideshare_pattern.exec(data.tweets[index].text);
+      var resultExec = SlideService.slideshare_pattern.exec(data.tweets[index].text);
       if(_.isNull(resultExec)) return;
 
       var slideUrl = resultExec[1];
@@ -55,7 +98,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       if(!_.isUndefined(sameSlide)) return;
 
       (function() {
-        Slide.getSlideId({url: slideUrl, serviceName: 'slideshare'})
+        SlideService.getSlideId({url: slideUrl, serviceName: 'slideshare'})
         .success(function(slide) {
 
           // スライドが削除されていたら空のオブジェクトが返る。それは一覧に表示させない
@@ -75,7 +118,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     isIncludeSpeakerDeckUrl = data.tweets[index].text.indexOf("speakerdeck.com");
     if(isIncludeSpeakerDeckUrl !== -1) {
 
-      var resultExec = speakerdeck_pattern.exec(data.tweets[index].text);
+      var resultExec = SlideService.speakerdeck_pattern.exec(data.tweets[index].text);
       if(_.isNull(resultExec)) return;
       var slideUrl = resultExec[1];
 
@@ -84,7 +127,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       if(!_.isUndefined(sameSlide)) return;
 
       (function() {
-        Slide.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
+        SlideService.getSlideId({url: slideUrl, serviceName: 'speakerdeck'})
         .success(function(slide) {
           if(_.isEmpty(slide)) return;
 
@@ -157,61 +200,5 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
 
     }
   }
-
-  /**
-   * ページ描画時に最初に行う処理
-   */
-  var lastTweetIdStr
-    , serviceName = $routeParams.serviceName || "connpass"
-    , eventId     = $routeParams.eventId || 0
-    ;
-
-  $scope.slides = [];
-
-  // 最初の20件を取得
-  Tweet.getInit(serviceName, eventId).
-    success(function(data) {
-      var tweetLength = data.tweets.length;
-
-      $scope.tweets = data.tweets;
-
-      // URLから無効なページへ直接アクセスされたときはindexページへリダイレクト
-      if(tweetLength === 0) {
-        console.log("No tweets");
-        $location.path('/');
-      }
-
-      // DBへ無駄なクエリは投げない
-      if(tweetLength < 10) {
-        console.log(tweetLength);
-        return;
-      }
-
-      // 残りのツイートを取得
-      Tweet.getRest(serviceName, eventId).
-        success(function(data) {
-          IterateTweets(data);
-        });
-    });
-
-  /**
-   * イベントの情報を取得
-   */
-  EventService.getByServiceNameAndId(serviceName, eventId).
-    success(function(data) {
-      $scope.events = data.events;
-      Page.setTitle($scope.events[0].title);
-      $rootScope.title = Page.title();
-
-      // 新着ツイート収集処理開始
-      getNewTweetInterval();
-    });
-
-  // シェアボタンのURL割り当て用
-  $scope.absUrl = $location.absUrl();
-
-  // ツイート一覧の並び順をtweetIDで昇順に変更。
-  $scope.reverse = false;
-
 
 }

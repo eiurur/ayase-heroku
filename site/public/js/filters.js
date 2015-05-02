@@ -40,9 +40,6 @@ angular.module('myApp.filters', []).
     }
   })
   .filter('timeago', function(){
-
-    // Source: http://www.jonathanrowny.com/journal/timeago-directive-and-filter-angular-momentjs
-    // <span>{{someDate | timeago}}</span>
     return function(date){
       return moment(date).fromNow();
     };
