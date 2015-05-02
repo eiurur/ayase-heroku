@@ -30,7 +30,7 @@
 
 .row.main(ng-show="events.items.length")
   div(infinite-scroll='events.nextPage()', infinite-scroll-disabled='events.busy', infinite-scroll-distance='1')
-    div(ng-repeat='event in events.items | orderBy: "startedAt": true | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
+    div(ng-repeat='event in events.items | filter:searchWord | extractionTime:selectedTerm.time | extractionTweetNum:selectedTweetNum.num')
       .col-lg-4.col-md-6.col-sm-6
         .jumbotron
           .jumbotron-contents.jumbotron-bg
@@ -53,8 +53,8 @@
                   i.fa.fa-angle-up.fa-3x.detail-arrow
             span.tweet-number
               | {{event.tweetNum}}
-    //- .col-md-12
-    h3.text-center(ng-show='events.busy') Loading data...
+    //- .col-md-12(ng-show='events.busy')
+    div.text-center(ng-show='events.busy') Loading data...
 
 
 .loading(ng-hide="events.items.length")
