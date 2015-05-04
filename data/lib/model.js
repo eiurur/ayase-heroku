@@ -191,6 +191,20 @@
       });
     };
 
+    EventProvider.prototype.getTweetNumByEventId = function(params, callback) {
+      console.log("----------------- find tweetNum --------------------");
+      return Event.find({
+        "$and": [
+          {
+            serviceName: params['serviceName'],
+            eventId: params['eventId']
+          }
+        ]
+      }).exec(function(err, data) {
+        return callback(err, data);
+      });
+    };
+
     EventProvider.prototype.countDuplicatedEvent = function(params, callback) {
       return Event.find({
         "$and": [

@@ -139,7 +139,6 @@ class EventProvider
          .exec (err, data) ->
            callback err, data
 
-
   findByEventId: (params, callback) ->
     console.log "-------------------- find ----------------------"
 
@@ -156,6 +155,16 @@ class EventProvider
 
     Event.find 'period.startedDate': params['startedDate']
          .sort startedAt: -1
+         .exec (err, data) ->
+           callback err, data
+
+  getTweetNumByEventId: (params, callback) ->
+    console.log "----------------- find tweetNum --------------------"
+
+    Event.find "$and": [
+          serviceName: params['serviceName']
+          eventId: params['eventId']
+         ]
          .exec (err, data) ->
            callback err, data
 
@@ -195,12 +204,8 @@ class EventProvider
       startedAt: params['startedAt']
       endedAt: params['endedAt']
       updatedAt: params['updatedAt']
-
     event.save (err) ->
-      # console.log("save params = ", params)
-      # @insertPeriod params
       callback(err, params)
-
 
   updateTweetNum: (params, callback) ->
     Event.update

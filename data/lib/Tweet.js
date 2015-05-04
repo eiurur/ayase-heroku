@@ -155,9 +155,29 @@
       });
     };
 
+    Tweet.prototype.isOverNumTweet = function() {
+      return console.log("WIP");
+    };
+
+    Tweet.prototype.notify2Twitter = function() {
+      return EventProvider.getTweetNumByEventId({
+        serviceName: this.eventData.serviceName,
+        eventId: this.eventData.eventId
+      }, (function(_this) {
+        return function(error, data) {
+          console.log(data.tweetNum);
+          if (data.tweetNum < 50) {
+            return;
+          }
+          return my.c("n2T ===> " + _this.eventData.serviceName + "/" + _this.eventData.eventId);
+        };
+      })(this));
+    };
+
     Tweet.prototype.insertTweetData = function() {
       var _eventId;
       _eventId = this.eventData.eventId;
+      this.notify2Twitter();
       return TweetProvider.save({
         serviceName: this.eventData.serviceName,
         eventId: this.eventData.eventId,
@@ -172,6 +192,10 @@
         profileImageUrl: this.data.user.profile_image_url
       }, (function(_this) {
         return function(error, data) {
+          if (error) {
+            my.c('error insertTweetData: ', error);
+            return;
+          }
 
           /*
           ツイートの一覧をページに表示するときの手がかりがない
@@ -180,6 +204,10 @@
           -> tweetNumをインクリメントするための処理をここで行う
            */
           return _this.incrementTweetNum();
+
+          /*
+          #
+           */
         };
       })(this));
     };

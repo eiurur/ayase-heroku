@@ -123,8 +123,30 @@ class Tweet
     , (error) ->
       my.c "updateTweetNum!!!"
 
+  isOverNumTweet: ->
+    console.log "WIP"
+
+  notify2Twitter: ->
+
+    # ここで数の確認
+    # if @isOverNumTweet()
+    EventProvider.getTweetNumByEventId
+      serviceName: @eventData.serviceName
+      eventId: @eventData.eventId
+    , (error, data) =>
+      console.log data.tweetNum
+      return if data.tweetNum < 50
+      my.c "n2T ===> #{@eventData.serviceName}/#{@eventData.eventId}"
+
+    # 50ならツイート
+
+
+
+
   insertTweetData: ->
     _eventId = @eventData.eventId
+    do @notify2Twitter
+
 
     # ツイートデータをハッシュタグとともにMongoDBへ保存
     TweetProvider.save
@@ -140,6 +162,9 @@ class Tweet
       screenName: @data.user.screen_name
       profileImageUrl: @data.user.profile_image_url
     , (error, data) =>
+      if error
+        my.c 'error insertTweetData: ', error
+        return
 
       ###
       ツイートの一覧をページに表示するときの手がかりがない
@@ -147,7 +172,13 @@ class Tweet
       -> それ用に、Eventsに"tweetNum"を追加
       -> tweetNumをインクリメントするための処理をここで行う
       ###
+      # TODO: Promise使ってnotify2Twitterと直列処理を行う
       do @incrementTweetNum
+
+      ###
+      #
+      ###
+      # do @notify2Twitter
 
   restoreUrl: ->
 
