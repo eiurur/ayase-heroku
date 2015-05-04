@@ -2,23 +2,10 @@ extends layout
 
 block body
 
-  .navbar.navbar-aqua.navbar-static-top
-    .header
-      .container
-          a.navbar-brand(href='/') Ayase
+  include parts/_nav
 
   .container
     div(ng-view)
 
-  .footer
-    .container
-      .clearfix
-        .footer-logo
-          a(href='/')
-            | Ayase
-        dl.footer-nav
-          dt.nav-title CONTACT
-          dd.nav-item
-            a(href='https://www.twitter.com/eiua_') Twitter
-      .footer-copyright.text-center Copyright © 2014 eiurur.All rights reserved.
+  include parts/_footer
 
