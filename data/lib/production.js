@@ -36,4 +36,6 @@
 
   exports.GRACE_TIME_CLEAR = 1 * 1000;
 
+  exports.SITE_URL = 'http://ayase.herokuapp.com';
+
 }).call(this);
