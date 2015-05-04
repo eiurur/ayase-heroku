@@ -146,7 +146,7 @@ class EventProvider
           serviceName: params['serviceName']
           eventId: params['eventId']
          ]
-         .limit params["numShow"]
+         .limit params["numShow"] || 0
          .exec (err, data) ->
            callback err, data
 
@@ -158,15 +158,15 @@ class EventProvider
          .exec (err, data) ->
            callback err, data
 
-  getTweetNumByEventId: (params, callback) ->
-    console.log "----------------- find tweetNum --------------------"
+  # getTweetNumByEventId: (params, callback) ->
+  #   console.log "----------------- find tweetNum --------------------"
 
-    Event.find "$and": [
-          serviceName: params['serviceName']
-          eventId: params['eventId']
-         ]
-         .exec (err, data) ->
-           callback err, data
+  #   Event.find "$and": [
+  #         serviceName: params['serviceName']
+  #         eventId: params['eventId']
+  #        ]
+  #        .exec (err, data) ->
+  #          callback err, data
 
   countDuplicatedEvent: (params, callback) ->
     Event.find "$and": [

@@ -175,7 +175,7 @@
             eventId: params['eventId']
           }
         ]
-      }).limit(params["numShow"]).exec(function(err, data) {
+      }).limit(params["numShow"] || 0).exec(function(err, data) {
         return callback(err, data);
       });
     };
@@ -186,20 +186,6 @@
         'period.startedDate': params['startedDate']
       }).sort({
         startedAt: -1
-      }).exec(function(err, data) {
-        return callback(err, data);
-      });
-    };
-
-    EventProvider.prototype.getTweetNumByEventId = function(params, callback) {
-      console.log("----------------- find tweetNum --------------------");
-      return Event.find({
-        "$and": [
-          {
-            serviceName: params['serviceName'],
-            eventId: params['eventId']
-          }
-        ]
       }).exec(function(err, data) {
         return callback(err, data);
       });

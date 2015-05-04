@@ -147,37 +147,60 @@
     };
 
     Tweet.prototype.incrementTweetNum = function() {
-      return EventProvider.updateTweetNum({
-        serviceName: this.eventData.serviceName,
-        eventId: this.eventData.eventId
-      }, function(error) {
-        return my.c("updateTweetNum!!!");
-      });
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return EventProvider.updateTweetNum({
+            serviceName: _this.eventData.serviceName,
+            eventId: _this.eventData.eventId
+          }, function(error) {
+            if (error) {
+              return reject(error);
+            }
+            my.c("updateTweetNum!!!");
+            return resolve("");
+          });
+        };
+      })(this));
     };
 
     Tweet.prototype.isOverNumTweet = function() {
-      return console.log("WIP");
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return EventProvider.findByEventId({
+            serviceName: _this.eventData.serviceName,
+            eventId: _this.eventData.eventId
+          }, function(error, data) {
+            if (data[0].tweetNum !== 50) {
+              return reject(data[0].tweetNum);
+            }
+            my.c("n2T ===> " + _this.eventData.serviceName + "/" + _this.eventData.eventId);
+            return resolve(data[0]);
+          });
+        };
+      })(this));
+    };
+
+    Tweet.prototype.tweet = function(event) {
+      return s.twitter.verifyCredentials(function(err, data) {
+        return console.log(data);
+      }).updateStatus(event.title + " " + s.SITE_URL + "/detail/" + event.serviceName + "/" + event.eventId + " #" + event.hashTag, function(err, data) {
+        return console.log(data);
+      });
     };
 
     Tweet.prototype.notify2Twitter = function() {
-      return EventProvider.getTweetNumByEventId({
-        serviceName: this.eventData.serviceName,
-        eventId: this.eventData.eventId
-      }, (function(_this) {
-        return function(error, data) {
-          console.log(data.tweetNum);
-          if (data.tweetNum < 50) {
-            return;
-          }
-          return my.c("n2T ===> " + _this.eventData.serviceName + "/" + _this.eventData.eventId);
+      return this.isOverNumTweet().then((function(_this) {
+        return function(event) {
+          return _this.tweet(event)();
         };
-      })(this));
+      })(this))["catch"](function(tweetNum) {
+        return console.log("まだですー : " + tweetNum + "ツイート");
+      });
     };
 
     Tweet.prototype.insertTweetData = function() {
       var _eventId;
       _eventId = this.eventData.eventId;
-      this.notify2Twitter();
       return TweetProvider.save({
         serviceName: this.eventData.serviceName,
         eventId: this.eventData.eventId,
@@ -203,11 +226,11 @@
           -> それ用に、Eventsに"tweetNum"を追加
           -> tweetNumをインクリメントするための処理をここで行う
            */
-          return _this.incrementTweetNum();
-
-          /*
-          #
-           */
+          return _this.incrementTweetNum().then(function(data) {
+            return _this.notify2Twitter();
+          })["catch"](function(error) {
+            return my.c("@incrementTweetNum error: ", error);
+          });
         };
       })(this));
     };
