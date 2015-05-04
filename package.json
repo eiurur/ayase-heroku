@@ -1,6 +1,6 @@
 {
   "name": "Ayase",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,6 +36,6 @@
     "underscore-node": "^0.1.2"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.12.x"
   }
 }
