@@ -84,6 +84,7 @@ exports.NG_USERS = [
   'SEtenshoku'
   'appproject_kago'
   'ayase_notice'
+  'ayase_notify'
   'iNewsEnta'
   'web_hot_news'
   'htbtr_js'
