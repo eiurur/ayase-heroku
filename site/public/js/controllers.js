@@ -26,6 +26,16 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
   $scope.slides = [];
 
   /**
+   * イベントの情報を取得
+   */
+  EventService.getByServiceNameAndId(serviceName, eventId).
+    success(function(data) {
+      $scope.events = data.events;
+      Page.setTitle($scope.events[0].title);
+      $rootScope.title = Page.title();
+    });
+
+  /**
    * ツイートを取得
    */
   Tweet.getInit(serviceName, eventId).
@@ -52,18 +62,11 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
           IterateTweets(data);
         });
 
-      // 新着ツイート収集処理開始
+      // イベントが終了して4時間経っているなら新規ツイートはViewに反映させない。
+      var nowTimeYMDHm = moment().format("YYYY-MM-DD HH:mm");
+      var after4hFromEndedAt = moment(new Date($scope.events[0].endedAtYMDHm)).add('h', '4').format("YYYY-MM-DD HH:mm:ss");
+      if(nowTimeYMDHm > after4hFromEndedAt) return;
       getNewTweetInterval();
-    });
-
-  /**
-   * イベントの情報を取得
-   */
-  EventService.getByServiceNameAndId(serviceName, eventId).
-    success(function(data) {
-      $scope.events = data.events;
-      Page.setTitle($scope.events[0].title);
-      $rootScope.title = Page.title();
     });
 
   // シェアボタンのURL割り当て用
@@ -153,7 +156,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       ;
 
     var process = function() {
-      for (; index < tweetLength;) {
+      for(; index < tweetLength;) {
 
         insertTweetViewList(data, index);
         insertSlideViewList(data, index);
@@ -177,7 +180,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     var nowTimeYMDHm = moment().format("YYYY-MM-DD HH:mm");
     var after4hFromEndedAt = moment(new Date($scope.events[0].endedAtYMDHm)).add('h', '4').format("YYYY-MM-DD HH:mm:ss");
 
-    if (nowTimeYMDHm < after4hFromEndedAt) {
+    if(nowTimeYMDHm < after4hFromEndedAt) {
 
       var onTimeout
         , timer
@@ -195,7 +198,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
 
       timer = $interval(updateTweet, INTERVAL);
       $scope.$on("$destroy", function() {
-        if (timer) { $interval.cancel(timer); }
+        if(timer) { $interval.cancel(timer); }
       });
 
     }
