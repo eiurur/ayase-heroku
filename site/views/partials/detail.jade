@@ -1,6 +1,6 @@
-div#page-content-wrapper(ng-show="tweets.length")
+#page-content-wrapper(ng-show="tweets.length")
   base(target="_blank")
-  div.content-header
+  .content-header
     h3
       a(href="{{events[0].eventUrl}}") {{events[0].title}}
       ul.share-buttons.pull-right
@@ -17,11 +17,11 @@ div#page-content-wrapper(ng-show="tweets.length")
       .sub-text
         span 開催時刻： {{events[0].startedAt}} ~ {{events[0].endedAt}}
         span.hast-tag ハッシュタグ: # {{events[0].hashTag}}
-  div.page-content.inset
-    div.row
+  .page-content.inset
+    .row
 
       // tweet
-      div.col-md-6.col-sm-6.panel-padding-bottom
+      .col-md-6.col-sm-6.panel-padding-bottom
         .panel.panel-primary
           .panel-heading
             .panel-title Tweets: {{tweets.length}}
@@ -41,11 +41,11 @@ div#page-content-wrapper(ng-show="tweets.length")
                   span.tweet(ng-bind-html="tweet.text")
 
       // slide
-      div.col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")
-        .panel.panel-primary
+      .col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")
+        .panel.panel-primary(sticky-nav)
           .panel-heading
             .panel-title Slides: {{slides.length}}
-          ul.list-group.panel-scroll-bar-tweet
+          ul.list-group.scrollable.stylish-scrollbar
             li.list-group-item(ng-repeat='slide in slides')
               div(ng-switch="slide.serviceName")
                 div(ng-switch-when="slideshare")

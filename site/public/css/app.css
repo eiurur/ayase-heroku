@@ -100,8 +100,6 @@ a {
   .tweet-number {
     font-size: 100px;
     position: absolute;
-/*    right: 12px;
-    bottom: 5px;*/
     right: 12px;
     bottom: 9px;
     font-weight: bold;
@@ -121,8 +119,6 @@ a {
   .tweet-number {
     font-size: 100px;
     position: absolute;
-/*    right: 12px;
-    bottom: 25px;*/
     right: 12px;
     bottom: 29px;
     font-weight: bold;
@@ -219,7 +215,6 @@ a {
 /**
  * jumbotron
  */
-
 /* 縦のサイズを合わせるために最低高を設定 */
 .jumbotron {
   min-height: 300px;
@@ -229,4 +224,34 @@ a {
 .description-arrow {
   /*position: absolute;*/
   /*top: 42px;*/
+}
+
+/**
+ * Affix
+ */
+
+@media (min-width: 768px) {
+  .slide__panel-affix {
+    margin-right: 10px;
+    position:fixed;
+    top: 10px;
+  }
+
+  .slide__panel--list {
+    overflow-y: scroll;
+  }
+
+  .scrollable {
+    height: 95vh;
+    overflow-y: auto;
+  }
+
+  .stylish-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    background-color: transparant;
+  }
+
+  .stylish-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4FC1E9;
+  }
 }
