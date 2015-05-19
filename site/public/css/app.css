@@ -95,6 +95,9 @@ a {
   margin-bottom: 20px;
 }
 
+.media-img {
+  margin-top: 8px;
+}
 
 @media (max-width: 767px) {
   .tweet-number {
@@ -135,8 +138,10 @@ a {
 
   .tweet {
     font-size: 16px;
+    line-height: 1.7;
   }
 }
+
 .header {
 /*  position: fixed;
   width: 100%;
@@ -229,7 +234,6 @@ a {
 /**
  * Affix
  */
-
 @media (min-width: 768px) {
   .slide__panel-affix {
     margin-right: 10px;

@@ -39,6 +39,10 @@
                     span.pull-right
                       a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/") {{tweet.createdAt}}
                   span.tweet(ng-bind-html="tweet.text")
+                  //- pre
+                  //-   {{tweet|json}}
+                  .media-img(ng-if="tweet.mediaUrl")
+                    img(ng-src="{{tweet.mediaUrl}}")
 
       // slide
       .col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")

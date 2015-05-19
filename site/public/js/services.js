@@ -54,8 +54,21 @@ angular.module('myApp.services', [])
     this.datas = [];
     this.numLoaded = 1;
   })
-  .service('EventService', function($http) {
+  .service('TweetService', function() {
+    return {
+      getExpandedURLFromURL: function(entities) {
+        if (!_.has(entities, 'url')) { return ''; }
+        return entities.url.urls;
+      },
 
+      getExpandedURLFromDescription: function(entities) {
+        if (!_.has(entities, 'description')) { return ''; }
+        if (!_.has(entities.description, 'urls')) { return ''; }
+        return entities.description.urls;
+      }
+    }
+  })
+  .service('EventService', function($http) {
     return {
       getOnTheDay: function() {
         return $http.get('/api/readEventOnTheDay/');
@@ -79,7 +92,6 @@ angular.module('myApp.services', [])
     };
   })
   .factory('SlideService', function($http) {
-
     return {
       getEmbedCode: function(params) {
         return $http.post('/api/getEmbedCode', params);

@@ -267,6 +267,8 @@ function getTweetData(error, tweetDatas) {
         ,  tweetId: tweetData.tweetId
         ,  tweetIdStr: tweetData.tweetIdStr
         ,  text: tweetTrimer(tweetData.text)
+        ,  mediaUrl: tweetData.mediaUrl
+        ,  displayUrl: tweetData.displayUrl
         ,  hashTag: tweetData.hashTag
         ,  tweetUrl: tweetData.tweetUrl
         ,  hashTag: tweetData.hashTag
