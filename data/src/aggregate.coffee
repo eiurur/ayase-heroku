@@ -12,6 +12,9 @@ exports.aggregate = (data, eventStartAndEndTime) ->
     # 告知botなどのツイートはまとめに含めない
     do tweet.isNgUser
 
+    # イベント内容に関係のないツイート(セキココなど)は含めない
+    do tweet.isNgTweet
+
     # ツイートのハッシュタグを一意に判定し、対応するイベントの開始時刻、終了時刻を割り当てる
     do tweet.assign
 

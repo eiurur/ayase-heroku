@@ -14,6 +14,11 @@
     this.message = "Contained NG user";
   };
 
+  exports.NGTweetException = function() {
+    this.errorHappendAt = new Date();
+    this.message = "Contained NG word in the tweet";
+  };
+
   exports.isUnofficialRTException = function() {
     this.errorHappendAt = new Date();
     this.message = "Unofficial RT is excluded";

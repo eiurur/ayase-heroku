@@ -54,6 +54,11 @@ class Tweet
     # user.langが"ja"か、ツイートが日本語であれば日本国内からのツイートだと仮定
     if @data.user.lang is "ja" or @data.lang is "ja" then true else false
 
+  isNgTweet: ->
+    ng_tweet_keyword_pattern = new RegExp "(#{s.NG_TWEET_KEYWORDS.join('|')})", 'gmi'
+    if ng_tweet_keyword_pattern.test(@data.text)
+      throw new exception.NGTweetException()
+
   isNgUser: ->
 
     ###

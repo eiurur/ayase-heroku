@@ -14,6 +14,7 @@
     try {
       tweet = new Tweet.Tweet(data, eventStartAndEndTime);
       tweet.isNgUser();
+      tweet.isNgTweet();
       tweet.assign();
       if (_.isUndefined(tweet.eventData)) {
         return;

@@ -13,6 +13,11 @@ exports.NGUserException = ->
   @message = "Contained NG user"
   return
 
+exports.NGTweetException = ->
+  @errorHappendAt = new Date()
+  @message = "Contained NG word in the tweet"
+  return
+
 exports.isUnofficialRTException = ->
   @errorHappendAt = new Date()
   @message = "Unofficial RT is excluded"

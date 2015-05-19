@@ -110,6 +110,11 @@ exports.NG_USERS = [
   'kumechang'
 ]
 
+exports.NG_TWEET_KEYWORDS = [
+  '#sekicoco'
+  'セキココ'
+]
+
 TW_CONSUMER_KEY        = process.env.TW_CONSUMER_KEY
 TW_CONSUMER_SECRET     = process.env.TW_CONSUMER_SECRET
 TW_ACCESS_TOKEN_KEY    = process.env.TW_ACCESS_TOKEN_KEY

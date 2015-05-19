@@ -70,6 +70,14 @@
       }
     };
 
+    Tweet.prototype.isNgTweet = function() {
+      var ng_tweet_keyword_pattern;
+      ng_tweet_keyword_pattern = new RegExp("(" + (s.NG_TWEET_KEYWORDS.join('|')) + ")", 'gmi');
+      if (ng_tweet_keyword_pattern.test(this.data.text)) {
+        throw new exception.NGTweetException();
+      }
+    };
+
     Tweet.prototype.isNgUser = function() {
 
       /*
