@@ -56,6 +56,17 @@ angular.module('myApp.filters', []).
       return result;
     }
   })
+  .filter("noHTML", function() {
+    return function(text) {
+      if (text != null) {
+        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/, '&amp;');
+      }
+    };
+  }).filter('newlines', ['$sce', function($sce) {
+    return function(text) {
+      return $sce.trustAsHtml(text != null ? text.replace(/\n/g, '<br />') : '');
+    };
+  }])
   .filter('trusted', ['$sce', function($sce) {
     return function(val) {
         return $sce.trustAsResourceUrl(val);

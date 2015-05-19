@@ -38,7 +38,7 @@
                     span @{{tweet.screenName}}
                     span.pull-right
                       a.post-date(href="https://www.twitter.com/{{tweet.screenName}}/status/{{tweet.tweetIdStr}}/") {{tweet.createdAt}}
-                  span.tweet(ng-bind-html="tweet.text")
+                  span.tweet(ng-bind-html='tweet.text | newlines')
                   //- pre
                   //-   {{tweet|json}}
                   .media-img(ng-if="tweet.mediaUrl")
