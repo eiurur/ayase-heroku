@@ -16,6 +16,7 @@
       tweet.isNgUser();
       tweet.isNgTweet();
       tweet.assign();
+      tweet.debugInAggregate();
       if (_.isUndefined(tweet.eventData)) {
         return;
       }

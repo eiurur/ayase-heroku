@@ -49,6 +49,8 @@ TweetSchema = new Schema
   tweetId: Number
   tweetIdStr: String
   text: String
+  mediaUrl: String
+  displayUrl: String
   hashTag: String
   createdAt: Date
   userId: String
@@ -290,6 +292,8 @@ class TweetProvider
       tweetId: params['tweetId']
       tweetIdStr: params['tweetIdStr']
       text: params['text']
+      mediaUrl: params['mediaUrl']
+      displayUrl: params['displayUrl']
       hashTag: params['hashTag']
       createdAt: params['createdAt']
       userId: params['userId']

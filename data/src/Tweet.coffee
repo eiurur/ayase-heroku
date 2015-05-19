@@ -155,23 +155,35 @@ class Tweet
     .catch (tweetNum) ->
       console.log "まだですー : #{tweetNum}ツイート"
 
+  hasMediaProperty: ->
+    console.log @data.entities
+    _.has @data.entities, 'media'
+
   insertTweetData: ->
     _eventId = @eventData.eventId
 
-    # ツイートデータをハッシュタグとともにMongoDBへ保存
-    TweetProvider.save
+    params =
       serviceName: @eventData.serviceName
       eventId: @eventData.eventId
       tweetId: @data.id
       tweetIdStr: @data.id_str
       text: @data.text
+      mediaUrl: null
+      displayUrl: null
       hashTag: @eventData.hashTag
       createdAt: @tweetTime
       userId: @data.user.id
       userName: @data.user.name
       screenName: @data.user.screen_name
       profileImageUrl: @data.user.profile_image_url
-    , (error, data) =>
+
+    if @hasMediaProperty()
+      console.log 'aaa'
+      params.mediaUrl = @data.entities.media[0].media_url
+      params.displayUrl = @data.entities.media[0].display_url
+
+    # ツイートデータをハッシュタグとともにMongoDBへ保存
+    TweetProvider.save params, (error, data) =>
       if error
         my.c 'error insertTweetData: ', error
         return

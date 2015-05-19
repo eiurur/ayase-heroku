@@ -206,22 +206,35 @@
       });
     };
 
+    Tweet.prototype.hasMediaProperty = function() {
+      console.log(this.data.entities);
+      return _.has(this.data.entities, 'media');
+    };
+
     Tweet.prototype.insertTweetData = function() {
-      var _eventId;
+      var _eventId, params;
       _eventId = this.eventData.eventId;
-      return TweetProvider.save({
+      params = {
         serviceName: this.eventData.serviceName,
         eventId: this.eventData.eventId,
         tweetId: this.data.id,
         tweetIdStr: this.data.id_str,
         text: this.data.text,
+        mediaUrl: null,
+        displayUrl: null,
         hashTag: this.eventData.hashTag,
         createdAt: this.tweetTime,
         userId: this.data.user.id,
         userName: this.data.user.name,
         screenName: this.data.user.screen_name,
         profileImageUrl: this.data.user.profile_image_url
-      }, (function(_this) {
+      };
+      if (this.hasMediaProperty()) {
+        console.log('aaa');
+        params.mediaUrl = this.data.entities.media[0].media_url;
+        params.displayUrl = this.data.entities.media[0].display_url;
+      }
+      return TweetProvider.save(params, (function(_this) {
         return function(error, data) {
           if (error) {
             my.c('error insertTweetData: ', error);
