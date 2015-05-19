@@ -24,6 +24,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
     ;
 
   $scope.slides = [];
+  $scope.events = [];
 
   /**
    * イベントの情報を取得
