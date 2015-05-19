@@ -42,8 +42,7 @@
                   //- pre
                   //-   {{tweet|json}}
                   .media-img(ng-if="tweet.mediaUrl")
-                    a(href="https://{{tweet.displayUrl}}")
-                      img.img-rounded(ng-src="{{tweet.mediaUrl}}", img-preload)
+                    img.fade.img-rounded(ng-src="{{tweet.mediaUrl}}", img-preload, zoom-image="zoom-image", data-img-src="{{tweet.mediaUrl}}")
 
       // slide
       .col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")
