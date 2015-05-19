@@ -42,7 +42,8 @@
                   //- pre
                   //-   {{tweet|json}}
                   .media-img(ng-if="tweet.mediaUrl")
-                    img(ng-src="{{tweet.mediaUrl}}")
+                    a(href="https://{{tweet.displayUrl}}")
+                      img.img-rounded(ng-src="{{tweet.mediaUrl}}", img-preload)
 
       // slide
       .col-md-6.col-sm-6.panel-padding-bottom(ng-show="slides.length")
@@ -65,6 +66,8 @@
                 .media-body
                   h4.user-data.media-heading.username {{slide.tweet.userName}}
                     span @{{slide.tweet.screenName}}
+                    span.pull-right
+                      a.post-date(href="https://www.twitter.com/{{slide.tweet.screenName}}/status/{{slide.tweet.tweetIdStr}}/") {{slide.tweet.createdAt}}
                   span.tweet(ng-bind-html="slide.tweet.text")
 
 .loading(ng-hide="tweets.length")

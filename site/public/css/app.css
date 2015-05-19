@@ -96,7 +96,12 @@ a {
 }
 
 .media-img {
-  margin-top: 8px;
+  margin: 10px 0 0; /* Twitter Webでもツイートと画像の間隔が10pxなので */
+}
+
+/* @Override */
+.img-rounded {
+  width: 100%;
 }
 
 @media (max-width: 767px) {
