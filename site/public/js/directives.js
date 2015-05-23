@@ -107,9 +107,10 @@ angular.module('myApp.directives', [])
   })
   .directive("stickyNav", ['$window', function stickyNav($window){
     function stickyNavLink(scope, element){
-      var w = angular.element($window),
-          size = element[0].clientHeight,
-          top = 0;
+      var w            = angular.element($window),
+          size         = element[0].clientHeight,
+          footerHeight = 186, // .slide__panel-affix-bottomのbottomの値(footerのHeight)
+          top          = 0;
 
       /*
        * on scroll we just check the page offset
@@ -117,10 +118,21 @@ angular.module('myApp.directives', [])
        * otherwise we display them inline
        */
       function toggleStickyNav(){
-        if(!element.hasClass('slide__panel-affix') && $window.pageYOffset > top + size){
+        var pageYOffset = $window.pageYOffset;  // ページ上部からスクロールした長さ(一番上なら0)
+        var scrollHeight = document.body.scrollHeight; // スクロールできるページ全体の長さ
+
+        // 上から距離を元にStickyするかどうかの判定
+        if(!element.hasClass('slide__panel-affix') && pageYOffset > top){
           element.addClass('slide__panel-affix');
-        } else if(element.hasClass('slide__panel-affix') && $window.pageYOffset <= top + size){
+        } else if(element.hasClass('slide__panel-affix') && pageYOffset <= top){
           element.removeClass('slide__panel-affix');
+        }
+
+        // 下からの距離を元に'slide__panel-affix-bottom'を付与するかどうかの判定
+        if(!element.hasClass('slide__panel-affix-bottom') && pageYOffset + size + footerHeight > scrollHeight){
+          element.addClass('slide__panel-affix-bottom');
+        } else if(element.hasClass('slide__panel-affix-bottom') &&　pageYOffset + size + footerHeight <= scrollHeight){
+          element.removeClass('slide__panel-affix-bottom');
         }
       }
 

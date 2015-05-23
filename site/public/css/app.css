@@ -46,10 +46,10 @@ a {
   box-shadow: 0 3px 6px rgba(0,0,0,0.4), 5px 5px 10px rgba(255,255,255,0.3) inset, -5px -5px 10px rgba(255,255,255,0.3) inset;
   margin-bottom: 20px;
 }
-
+/*
 .panel-padding-bottom {
   padding-bottom: 20px;
-}
+}*/
 
 .no-li {
   margin-left: 0px;
@@ -251,12 +251,19 @@ a {
     top: 10px;
   }
 
+  .slide__panel-affix-bottom {
+    bottom: 186px;  /* footerのHeight */
+    top: auto;  /* 打消し */
+  }
+
+
   .slide__panel--list {
     overflow-y: scroll;
   }
 
   .scrollable {
     height: 95vh;
+    /*height: 100%;*/
     overflow-y: auto;
   }
 
