@@ -4,7 +4,9 @@
 
 html,
 body {
-  font-family: YuGothic, "Yu Gothic", "游ゴシック体", "游ゴシック", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", "MSPゴシック", "Osaka", "MS PGothic", "Arial", "Helvetica", "Verdana", "sans-serif";
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, "Arial", "游ゴ
+シック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+"メイリオ", Meiryo, sans-serif;
   margin-top: 0;
   /*font-size: 22px;*/
   color: #000;
@@ -248,6 +250,8 @@ a {
   .slide__panel-affix {
     margin-right: 10px;
     position:fixed;
+    margin: 0 7% 20px 51%;
+    right: 0px;
     top: 10px;
   }
 
