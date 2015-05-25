@@ -19,7 +19,7 @@ exports.aggregate = (data, eventStartAndEndTime) ->
     do tweet.assign
 
     # あとで消す
-    do tweet.debugInAggregate
+    # do tweet.debugInAggregate
 
     return if _.isUndefined(tweet.eventData)
 
