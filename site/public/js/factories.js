@@ -41,7 +41,6 @@ angular.module('myApp.factories', [])
             this.eventsOnTheDay = data.eventsOnTheDay;
           }
         }.bind(this));
-
     };
 
     Event.prototype.nextPage = function() {

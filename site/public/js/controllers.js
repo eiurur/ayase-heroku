@@ -1,4 +1,4 @@
-function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, Page, Event) {
+function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumService, searchService, Page, Event) {
 
   $scope.events = new Event();
 
@@ -6,10 +6,27 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
   $rootScope.title = Page.title();
 
   $scope.terms = termsService.terms;
-  $scope.selectedTerm = $scope.terms[3];
+  $scope.selectedTerm = termsService.terms[termsService.idx];
 
   $scope.tweetsNum = tweetsNumService.tweetsNum;
-  $scope.selectedTweetNum = $scope.tweetsNum[0];
+  $scope.selectedTweetNum = tweetsNumService.tweetsNum[tweetsNumService.idx];
+
+  $scope.searchWord = searchService.word;
+
+  $scope.$watch('selectedTerm', function(val) {
+    termsService.idx = _.findIndex(termsService.terms, {label: val.label});
+    console.log(termsService.idx);
+  });
+
+  $scope.$watch('selectedTweetNum', function(val) {
+    tweetsNumService.idx = _.findIndex(tweetsNumService.tweetsNum, {label: val.label});
+    console.log(tweetsNumService.idx);
+  });
+
+  $scope.$watch('searchWord', function(val) {
+    searchService.word = val;
+  });
+
 
 }
 
@@ -62,6 +79,8 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
         success(function(data) {
           IterateTweets(data);
         });
+
+      console.log('$scope.events[0]', $scope.events);
 
       // イベントが終了して4時間経っているなら新規ツイートはViewに反映させない。
       var nowTimeYMDHm = moment().format("YYYY-MM-DD HH:mm");

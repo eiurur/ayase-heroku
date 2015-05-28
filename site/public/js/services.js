@@ -26,6 +26,8 @@ angular.module('myApp.services', [])
         , "time": 0
       }
     ];
+
+    this.idx = 3;
   })
   .service('tweetsNumService', function() {
     this.tweetsNum = [
@@ -46,6 +48,11 @@ angular.module('myApp.services', [])
         , "num": 100
       }
     ];
+
+    this.idx = 0;
+  })
+  .service('searchService', function() {
+    this.word = '';
   })
   .service('eventsStashService', function() {
     this.eventsStash = [];
