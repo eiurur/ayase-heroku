@@ -32,9 +32,6 @@ function IndexCtrl($scope, $http, $rootScope, $timeout, termsService, tweetsNumS
 
 function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout, $interval, EventService, SlideService, Page, Tweet) {
 
-  /**
-   * ページ描画時に最初に行う処理
-   */
   var lastTweetIdStr
     , serviceName = $routeParams.serviceName || "connpass"
     , eventId     = $routeParams.eventId || 0
@@ -42,6 +39,7 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
 
   $scope.slides = [];
   $scope.events = [];
+
 
   /**
    * イベントの情報を取得
@@ -51,6 +49,15 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
       $scope.events = data.events;
       Page.setTitle($scope.events[0].title);
       $rootScope.title = Page.title();
+
+
+      // イベントが終了して4時間経っているなら新規ツイートはViewに反映させない。
+      if(isPassed4hoursAfterEventFinished()) return;
+
+      console.log('$scope.events[0]', $scope.events);
+
+      getNewTweetInterval();
+
     });
 
   /**
@@ -79,14 +86,6 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
         success(function(data) {
           IterateTweets(data);
         });
-
-      console.log('$scope.events[0]', $scope.events);
-
-      // イベントが終了して4時間経っているなら新規ツイートはViewに反映させない。
-      var nowTimeYMDHm = moment().format("YYYY-MM-DD HH:mm");
-      var after4hFromEndedAt = moment(new Date($scope.events[0].endedAtYMDHm)).add('h', '4').format("YYYY-MM-DD HH:mm:ss");
-      if(nowTimeYMDHm > after4hFromEndedAt) return;
-      getNewTweetInterval();
     });
 
   // シェアボタンのURL割り当て用
@@ -95,6 +94,18 @@ function DetailCtrl($scope, $http, $rootScope, $routeParams, $location, $timeout
   // ツイート一覧の並び順をtweetIDで昇順に変更。
   $scope.reverse = false;
 
+
+  /**
+   * 関数群
+   */
+  function isPassed4hoursAfterEventFinished() {
+    var nowTimeYMDHm       = moment().format("YYYY-MM-DD HH:mm");
+    var after4hFromEndedAt = moment(new Date($scope.events[0].endedAtYMDHm)).add('h', '4').format("YYYY-MM-DD HH:mm:ss");
+
+    if(nowTimeYMDHm > after4hFromEndedAt) return true;
+
+    return false;
+  }
 
   function insertTweetViewList(data, index) {
     // $scope.tweets.push(data.tweets[index]); より高速
