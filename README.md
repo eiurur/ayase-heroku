@@ -15,7 +15,7 @@ DEMO
 Site
 -----
 
-<a href="http://ayase.herokuapp.com" target="_blank">Ayase - heroku</a>
+<s><a href="#">Ayase - heroku</a></s>
 
 
 対応サービス
